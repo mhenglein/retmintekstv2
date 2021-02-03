@@ -1,0 +1,26 @@
+{
+  "name": "retmintekst",
+  "version": "1.0.0",
+  "description": "Automatisk redskab til at forbedre dansk tekst",
+  "main": "index.js",
+  "dependencies": {
+    "@editorjs/editorjs": "^2.19.1",
+    "@editorjs/header": "^2.6.1",
+    "@editorjs/list": "^1.6.1",
+    "express": "^4.17.1",
+    "papaparse": "^5.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhenglein/retmintekst-app.git"
+  },
+  "author": "Marcus Henglein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mhenglein/retmintekst-app/issues"
+  },
+  "homepage": "https://github.com/mhenglein/retmintekst-app#readme"
+}

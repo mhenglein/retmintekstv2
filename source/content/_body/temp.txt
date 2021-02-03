@@ -1,0 +1,100 @@
+<header id="header">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <!-- * Brand (Emoji-as-a-Logo)-->
+      <a href="/index.html" class="navbar-brand">🤖 RetMinTekst</a>
+
+      <!-- TODO Consider FontAwesome usage with  <i class="fas fa-align-justify"></i>-->
+
+      <!-- * Hamburger menu -->
+      <button
+        class="navbar-toggler ms-2 me-5"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- * Main menu :: Collapsible -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="/kom-igang.html">Kom igang</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/om-os.html">Lær mere</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- * Button to collapse the sidebar -->
+      <button type="button" id="sidebarCollapse" class="btn btn-info order-3 align-self-end ms-auto">
+        <span>Sidebar</span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<-- Old sidebar -->
+<!-- <div class="list-group list-group-flush">
+  <a
+    href="#"
+    data-toggle="modal"
+    data-target="#redModal"
+    class="list-group-item list-group-item-action list-group-item-red d-flex justify-content-between align-items-center"
+    >🤯 Røde fejl <span id="badge-red" class="badge badge-primary badge-pill">0</span></a
+  >
+
+  <a
+    data-toggle="modal"
+    data-target="#yellowModal"
+    class="list-group-item list-group-item-action list-group-item-yellow d-flex justify-content-between align-items-center"
+    >🤔 Gule fejl <span id="badge-yellow" class="badge badge-primary badge-pill">0</span></a
+  >
+  <a
+    data-toggle="modal"
+    data-target="#blueModal"
+    class="list-group-item list-group-item-action list-group-item-blue d-flex justify-content-between align-items-center"
+    >😇 Blå forslag <span id="badge-blue" class="badge badge-primary badge-pill">0</span></a
+  >
+
+  <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+    >Lette sætninger<span id="badge-easy" class="badge badge-primary badge-pill">0</span></a
+  >
+  <a
+    class="list-group-item list-group-item-action list-group-item-hard d-flex justify-content-between align-items-center"
+    >Svære sætninger<span id="badge-hard" class="badge badge-primary badge-pill">0</span></a
+  >
+  <a
+    class="list-group-item list-group-item-action list-group-item-vhard d-flex justify-content-between align-items-center"
+    >Meget svære sætninger<span id="badge-vhard" class="badge badge-primary badge-pill">0</span></a
+  >
+
+  <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    Sætninger<span id="span-sent" class="badge badge-primary badge-pill">0</span>
+  </a>
+  <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    Ord<span id="span-words" class="badge badge-primary badge-pill">0</span>
+  </a>
+  <a
+    data-toggle="modal"
+    data-target="#lixModal"
+    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+  >
+    LIX<span id="span-lix" class="badge badge-primary badge-pill">0</span>
+  </a>
+  <a
+    data-toggle="modal"
+    data-target="#lixModal"
+    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+  >
+    Sværhedsgrad<span id="span-diff" class="badge badge-primary badge-pill">n/a</span>
+  </a>
+  <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    Læsetid<span id="span-time" class="badge badge-primary badge-pill">00:00</span>
+  </a>
+</div> -->

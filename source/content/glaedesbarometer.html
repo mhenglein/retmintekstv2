@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta-tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- SEO meta tags -->
+    <meta name="description" content="Find glæden i ordene" />
+
+    <meta name="robots" content="index, follow" />
+
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <meta name="google-site-verification" content="oGx1TFX_w--Q5dj88i0Pd7wa8Rhyttu4FjJLIltvF_4" />
+
+    <!-- Charts.js & css -->
+    <link rel="stylesheet" href="css/Chart.min.css" />
+    <script src="js/Chart.bundle.min.js"></script>
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" />
+    <link rel="manifest" href="assets/site.webmanifest" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/hedonometer.css" />
+
+    <!-- Hotjar Tracking Code -->
+    <script>
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 1783177, hjsv: 6 };
+        a = o.getElementsByTagName("head")[0];
+        r = o.createElement("script");
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164525458-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-164525458-1");
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@5.2.3"></script>
+
+    <title>Glædesbarometer | Find glæden i ordene</title>
+  </head>
+  <body>
+    <div class="container-fluid" id="main">
+      <div class="row">
+        <div class="mx-auto text-center">
+          <h1 class="display-4">🎭 Glædesbarometer</h1>
+          <p class="lead">Find glæden i ordene</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="input-group input-group-lg mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="inputString"
+              name="checkWord"
+              placeholder="Skriv et ord eller en sætning her"
+              aria-label="Skriv et ord eller en sætning her"
+              aria-describedby="button-addon2"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-lg btn-primary btn-search" type="button" id="lookUp">
+                <i class="fa fa-search" aria-hidden="true"></i> Søg
+              </button>
+            </div>
+          </div>
+          <p class="small ml-3 mt-0">
+            <code id="tip">Tip: Klik her for at prøve med "terror, corona, virus og coronavirus"</code>
+          </p>
+          <p>
+            <button
+              class="btn btn-outline-primary"
+              type="button"
+              data-toggle="collapse"
+              data-target="#collapseExample"
+              aria-expanded="false"
+              aria-controls="collapseExample"
+            >
+              Hvad er det her for noget?
+            </button>
+          </p>
+
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <p>
+                Kan man måle og veje vores glæde ved at analysere de ord, vi bruger? Glædesbarometeret er lavet på
+                baggrund af det amerikanske projekt,
+                <a target="_blank" href="http://hedonometer.org/about.html">Hedonometer</a>. Selve ordet 'Hedonometer'
+                (løst oversat til glædesbarometer) stammer fra 1800-tallet, hvor økonomen Francis Edgeworth beskrev
+                ideen som en psykologisk-fysisk maskine, der kontant målte glæden, en person oplevede ved hver
+                aktivitet.
+              </p>
+              <h5>Hvor kommer tallene fra?</h5>
+              <p>
+                Forskerne fandt de 10,000 mest anvendte ord i et bredt (engelsk) korpus. De blev hver tildelt
+                vurderinger på en skala fra 1 til 9 ved hjælp af Amazon's Mechanical Turk. Ordene er blevet
+                maskinoversat til dansk og er forsynet med en gennemsnitsværdi og standardafvigelse.
+              </p>
+              <h5>Hvordan gør jeg?</h5>
+              <p>
+                Skriv et ord eller en sætningen ind i søgebaren ovenfor. Resultatet er en liste af ord med en værdi fra
+                1 til 9, hvor 1 er det laveste og 9 er det højeste. Ikke alle ord er lige "åbenlyse", og deres placering
+                på skalaen afhænger af, hvem man spørger. Den effekt kan du se til højre i afsnittet "glædesfordeling" -
+                en meget bred kurve betyder, at svarene var både positive og negative (f.eks. "økonomi"), mens en mere
+                snæver kurve er et tegn på enighed (f.eks. "coronavirus")
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-lg-6 col-12">
+          <div class="text-output p-4">
+            <h4>Resultat <span id="totalScore"></span></h4>
+            <hr />
+            <div id="output_text">
+              Her vil dit ord eller sætning stå med emojis, der angiver hvor ordene ligger på glædesbarometeret 🚀
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-12">
+          <div class="p-4">
+            <h4>Glædesfordeling</h4>
+            <hr />
+            <canvas id="gaussChart" width="400" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- container -->
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"
+  ></script>
+
+  <script type="module">
+    import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@6.0.0/dist/fuse.esm.js";
+  </script>
+
+  <script src="js/hedonometer.js"></script>
+</html>

@@ -1,0 +1,86 @@
+//   --blue6: #6f8fb2;
+//   --blue5: #7fa4cc;
+//   --blue4: #8fb8e5;
+//   --blue3: #9fcdff;
+//   --blue2: #b2d7ff;
+//   --blue1: #c5e1ff;
+//   --blue0: #d8ebff;
+
+//   --red6: #78585b;
+//   --red5: #a87b7f;
+//   --red4: #c08c91;
+//   --red3: #d89ea3de;
+//   --red2: #f1b0b6;
+//   --red1: #f5c7cb;
+//   --red0: #f8d7da;
+
+//   --yellow6: #998b6f;
+//   --yellow5: #ccba94d2;
+//   --yellow4: #e5d1a6f1;
+//   --yellow3: #ffebc0dc;
+//   --yellow2: #ffefce;
+//   --yellow1: #fff4dc;
+//   --yellow0: #fdf6e7;
+
+//   --default-text: #373a3e;
+
+//   --txt-light: whitesmoke;
+//   --txt-dark: #1f1f20;
+//   --dark: rgb(4, 52, 65);
+
+//   --caret-light: blue;
+//   --caret-dark: white;
+
+//   --bg-light: white;
+//   --bg-dark: rgb(4, 52, 65);
+
+//   --blur: transparent;
+
+//   --nav-grey1: rgb(200, 200, 200);
+//   --shadow0: rgb(35, 35, 35) 0px 0px 15px;
+//   --shadow1: rgb(220, 220, 220) 0px 0px 15px;
+//   --radius: 20%;
+
+// .light {
+//   --bg: var(--bg-light);
+//   --text: var(--txt-dark);
+//   --caret: var(--caret-light);
+//   --nav-text: var(--nav-grey0);
+//   --nav-text-hover: var(--nav-grey1);
+//   --shadow: var(--shadow0);
+//   --red: var(--red5);
+//   --red-light: var(--red3);
+//   --red-vlight: var(--red1);
+//   --yellow: var(--yellow4);
+//   --yellow-light: var(--yellow3);
+//   --yellow-vlight: var(--yellow1);
+//   --blue: var(--blue5);
+//   --blue-light: var(--blue3);
+//   --blue-vlight: var(--blue1);
+//   --hard-light: var(--yellow0);
+//   --hard: var(--yellow1);
+//   --veryhard-light: var(--red0);
+//   --veryhard: var(--red1);
+// }
+
+// .dark {
+//   --bg: var(--bg-dark);
+//   --text: var(--txt-light);
+//   --caret: var(--caret-dark);
+//   --nav-text: var(--txt-light);
+//   --nav-text-hover: var(--txt-light);
+//   --shadow: var(--shadow1);
+//   --red: var(--red6);
+//   --red-light: var(--red4);
+//   --red-vlight: var(--red2);
+//   --yellow: var(--yellow6);
+//   --yellow-light: var(--yellow4);
+//   --yellow-vlight: var(--yellow2);
+//   --blue: var(--blue6);
+//   --blue-light: var(--blue4);
+//   --blue-vlight: var(--blue2);
+//   --hard-light: var(--yellow1);
+//   --hard: var(--yellow2);
+//   --veryhard-light: var(--red1);
+//   --veryhard: var(--red2);
+// }

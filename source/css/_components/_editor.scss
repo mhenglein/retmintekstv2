@@ -1,0 +1,57 @@
+#content {
+  width: calc(100% - 250px);
+  padding: 40px;
+  min-height: 100vh;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#content.mobile {
+  width: 100%;
+}
+
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: unset;
+}
+
+.ce-paragraph {
+  line-height: 1.8em !important;
+}
+
+.red {
+  border-bottom: 3px solid $red-border-bottom-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $red-bg;
+  }
+}
+
+.yellow {
+  border-bottom: 3px solid $yellow-border-bottom-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $yellow-bg;
+  }
+}
+
+.blue {
+  border-bottom: 3px solid $blue-border-bottom-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $blue-bg;
+  }
+}
+
+.hard {
+  @include highlight($hard);
+}
+
+.vhard {
+  @include highlight($vhard);
+}

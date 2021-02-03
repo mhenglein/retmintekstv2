@@ -1,0 +1,65 @@
+/* Mobile */
+// .editor {
+//   min-height: 100vh;
+//   margin-bottom: 5%;
+//   margin-top: 5%;
+//   background-color: var(--bg);
+//   border-radius: 10px;
+// }
+
+/* Only kicks in if width is at least 992px - Desktop */
+// @media screen and (min-width: 992px) {
+//   .editor {
+//     min-height: 100vh;
+//     margin-bottom: 5%;
+//     background-color: var(--bg);
+//     box-shadow: 0 1px 3px 1px rgba(60, 60, 60, 0.13);
+//     box-sizing: border-box;
+//     margin-top: 0%;
+//   }
+// }
+
+// [contenteditable]:focus {
+//   outline: 0px solid transparent;
+// }
+
+// textarea {
+//   display: none;
+// }
+
+// .blur-text {
+//   color: var(--blur);
+//   text-shadow: var(--shadow);
+//   z-index: 0;
+//   transition: all 250ms ease-in-out 0s;
+// }
+
+// .popover-header {
+//   color: var(--default-text);
+// }
+
+// * Span tags in .editor
+
+.red {
+  @include tag($red);
+}
+
+.red {
+  @include tag($yellow);
+}
+
+.blue {
+  @include tag($blue);
+}
+
+.grey {
+  @include tag($grey0);
+}
+
+.hard {
+  @include tag($hard, -2);
+}
+
+.veryhard {
+  @include tag($veryhard, -1);
+}
