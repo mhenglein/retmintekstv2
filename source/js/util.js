@@ -29,7 +29,7 @@ function countCharacters(p) {
 // TODO Assess if this is needed at all?
 function cleanText(dirtyText) {
   return dirtyText.replace("&nbsp;", " ").replace("  ", " ");
-
+  // TODO More cleaning required? More test cases needed.
   // return dirtyText.replace(/[\?!;:]/g, ".").replace(/[\,()"'!;\n\r]/g, " ");
 }
 
@@ -57,7 +57,7 @@ function lixDifficulty(lix, words, sentences) {
     return "Ukendt";
   }
 
-  if (lix >= 55) return "Meget svær";
+  if (lix >= 55) return "Mellemsvær";
   else if (lix >= 45 && lix < 55) return "Svær";
   else if (lix >= 35 && lix < 45) return "Middel";
   else if (lix >= 25 && lix < 35) return "Let";
@@ -98,16 +98,15 @@ function calculateLevel(letters, words, sentences) {
 function evaluateSentence(words, level, s) {
   // Evaluates difficulty of a sentence
   // Returns a string
+
   if (words < 15) {
-    return s;
+    return { newSentence: s, hard: 0, vhard: 0 };
   } else if (level >= 15 && level < 21) {
-    // assistantData.hard++;
-    return `<span class="hard">${s}</span>`;
+    return { newSentence: `<span class="hard">${s}</span>`, hard: 1, vhard: 0 };
   } else if (level >= 21) {
-    // assistantData.vhard++;
-    return `<span class="vhard">${s}</span>`;
+    return { newSentence: `<span class="vhard">${s}</span>`, hard: 0, vhard: 1 };
   } else {
-    return s;
+    return { newSentence: s, hard: 0, vhard: 0 };
   }
 }
 
@@ -127,12 +126,13 @@ function getSentencesFromText(p) {
 }
 
 function lemmafy(inputString) {
-  let processedString;
+  let processedString, i;
 
   processedString = removeTags(inputString); // 1. Remove all tags
-  processedString = processedString.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase(); // 2. Remove all punctuation & convert to lowercase
+  processedString = processedString.replace(/[.,\/#!?"'$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase(); // 2. Remove all punctuation & convert to lowercase
   let processedWordsArray = processedString.split(/\s+/).filter((s) => s.length > 0); // 3. Split by words
-  for (let i = 0; i < processedWordsArray.length; i++) {
+  const arrLength = processedWordsArray.length;
+  for (i = 0; i < arrLength; i++) {
     // 4. Compare against lemma file
     processedWordsArray[i] = lemmafyWord(processedWordsArray[i]);
   }
@@ -150,4 +150,110 @@ function lemmafyWord(inputWord) {
   } else {
     return lookUp[0][1];
   }
+}
+
+// ! Statistical functions
+
+function calculateMean(inputArray) {
+  let sum,
+    i,
+    arrLength = inputArray.length;
+  for (i = 0; i < arrLength; i++) {
+    const number = inputArray[i];
+    sum += number;
+  }
+  return sum / inputArray.length;
+}
+
+function calculateVariance(inputArray, mean) {
+  let variance = 0,
+    i,
+    arrLength = inputArray.length;
+
+  for (i = 0; i < arrLength; i++) {
+    const number = inputArray[i];
+    const difference_squared = Math.pow(number - mean, 2);
+    variance += difference_squared;
+  }
+
+  variance = Math.round(variance / inputArray.length);
+  return variance;
+}
+
+function getUniqueWords(inputStringArray) {
+  if (inputStringArray.length <= 1) {
+    return inputStringArray;
+  } else {
+    if (inputStringArray[0].length > 1) {
+      let set = new Set(inputStringArray.map(JSON.stringify));
+      let arr2 = Array.from(set).map(JSON.parse);
+      return arr2.sort(compareSecondColumn);
+    } else {
+      return inputStringArray.sort().filter(function (v, i, o) {
+        return v !== o[i - 1];
+      });
+    }
+  }
+
+  function compareSecondColumn(a, b) {
+    if (a[1] === b[1]) {
+      return 0;
+    } else {
+      return a[1] > b[1] ? -1 : 1;
+    }
+  }
+}
+
+function getRareWords(inputStringArray) {
+  // frequencyFile from global scope
+  let rareWordsArray = [];
+
+  // * Loop through each word in the array
+  let i,
+    arrLength = inputStringArray.length;
+  for (i = 0; i < arrLength; i++) {
+    const word = inputStringArray[i];
+    if (word !== undefined) {
+      // * Check the word against the frequency file
+      let rarity = [];
+      rarity = frequencyFile.filter(function (value, index) {
+        return value[1] == word;
+      });
+
+      // * If there is a match, rarity.length will be >0
+      if (rarity !== [] && rarity.length > 0) {
+        // * Allow it to be considered rare if it's not in the top 5000
+        const rareScore = rarity[0][3];
+        if (parseInt(rareScore) > 5000) rareWordsArray.push(word);
+      } else {
+        // * If there is no match, consider it a rare word
+        rareWordsArray.push(word);
+      }
+    }
+  }
+  return rareWordsArray;
+}
+
+function rateHappyWords(inputStringArray) {
+  // hedonometerFile from global scope
+  let happyWordsArray = [];
+
+  // * Loop through each word in the array
+  let i;
+  const arrLength = inputStringArray.length;
+  for (i = 0; i < arrLength; i++) {
+    const word = inputStringArray[i];
+
+    // * Check the word against the hedonometer file [Cols: ID, Original, EN, DA, Val, Std]
+    const foundValue = hedonometerFile.filter(function (value, index) {
+      return value[3] == word;
+    });
+
+    // * Check if there is a match
+    if (foundValue.length > 0 && foundValue !== undefined) {
+      happyWordsArray.push([foundValue[0][3], foundValue[0][4], foundValue[0][5]]);
+    }
+  }
+
+  return happyWordsArray;
 }

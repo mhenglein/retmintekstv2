@@ -84,3 +84,99 @@
     </div>
   </div>
 </div>
+
+<!-- Modal: Unique -->
+<div class="modal fade" id="uniqueModal" tabindex="-1" aria-labelledby="uniqueModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uniqueModalLabel">Unikke ord</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Ved 'unikt' ord forstås, at det kun er anvendt én gang i din tekst. Få unikke ord kan være et udtryk for, at
+          du anvender et monotont sprog. Dog vil en kortere tekst vil naturligvis have flere unikke ord. Se derfor også
+          på procenten, altså antallet af unikke ord i forhold til alle ord.
+        </p>
+        <p>
+          Vær opmærksom på at ordene i din tekst er forsøgt forvandlet til deres 'lemma', sådan så bøjninger mv. ikke
+          tæller for to forskellige ord
+        </p>
+        <p>
+          <span class="uniquewords"
+            ><button class="btn btn-sm btn-info">Analysér</button> din tekst for at se dine unikke ord</span
+          >
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Rare -->
+<div class="modal fade" id="rareModal" tabindex="-1" aria-labelledby="rareModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rareModalLabel">Sjældne ord</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Ved et 'sjældent' ord forstås ord, der ikke figurerer på de 5.000 mest anvendte ord i det danske sprog.</p>
+        <p><span class="rarewords"><button class="btn btn-sm btn-info">Analysér</button> din tekst for at se dine sjældne ord</span
+          ></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: LIX -->
+<div class="modal fade" id="lixModal" tabindex="-1" aria-labelledby="lixModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="lixModalLabel">LIX (Læsbarhedsindex)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          LIX (læsbarhedsindeks) giver et mål for en teksts læsbarhed. LIX-tallet for din tekst er nedenfor: LIX: 44
+          Sværhedsgrad: Middel Formlen tager hensyn til længden af sætningerne og antallet af lange ord, men der tages
+          ikke hensyn til, om der anvendes komplicerede sætningsstrukturer, fremmedord og lignende. LIX kan give et
+          fingerpeg om, hvorvidt din tekst er en tand for kompliceret. Et lavt LIX-tal giver ingen garanti for, at
+          teksten er letlæselig.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Happy -->
+<div class="modal fade" id="happyModal" tabindex="-1" aria-labelledby="happyModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="happyModalLabel">🎭 Glædesbarometer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+         Glædesbarometeret er lavet på baggrund af det amerikanske projekt, Hedonometer. Selve ordet 'Hedonometer' (løst oversat til glædesbarometer) stammer fra 1800-tallet, hvor økonomen Francis Edgeworth beskrev ideen som en psykologisk-fysisk maskine, der kontant målte glæden, en person oplevede ved hver aktivitet.
+        </p>
+        <p><ul id="happyWords"></ul></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>

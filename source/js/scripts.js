@@ -3,14 +3,14 @@
 // TODO Modals el. lign hvori den præcise nedbrydning af fx "rød fejl" ses ("Stavefejl, etc.")
 
 // Popover
-// TODO Use the 'container option' instead :: https://getbootstrap.com/docs/5.0/components/popovers/
 function initializePopovers() {
   var popoverTriggerList = [].slice.call(document.querySelectorAll('.editor [data-bs-toggle="popover"]'));
   var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl, {
       trigger: "hover focus",
-      placement: "top",
-      container: "body",
+      placement: "auto",
+      container: "#editorjs",
+      html: true,
     });
   });
 }
@@ -48,12 +48,21 @@ const unique = document.getElementById("unique");
 const rare = document.getElementById("rare");
 const wlength = document.getElementById("wlength");
 const slength = document.getElementById("slength");
+const svariance = document.getElementById("svariance");
 const chars = document.getElementById("chars");
 const charsplus = document.getElementById("charsplus");
 const words = document.getElementById("words");
 const sentences = document.getElementById("sentences");
 const readingtime = document.getElementById("readingtime");
 const speakingtime = document.getElementById("speakingtime");
+const happiness = document.getElementById("happiness");
+
+const modalReds = document.querySelector("span.rederrors");
+const modalYellows = document.querySelector("span.yellowerrors");
+const modalBlues = document.querySelector("span.blueerrors");
+const modalUniques = document.querySelector("span.uniquewords");
+const modalRares = document.querySelector("span.rarewords");
+const modalHappy = document.querySelector("span.happyWords");
 
 // Window onload
 window.onload = function () {
@@ -82,6 +91,7 @@ window.onload = function () {
     sentences.innerText = assistantData.sentences;
     readingtime.innerText = assistantData.readingtime;
     speakingtime.innerText = assistantData.speakingtime;
+    happiness.innerText = `${convertValToEmoji(assistantData.happyScore)} ${assistantData.happyScore}/7`;
   } catch (err) {
     console.log("Error on load with the assistant", err);
   }
@@ -91,9 +101,6 @@ window.onload = function () {
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
-
-// TODO Saved data should go to the back-end, not localStorage
-// Can do both? Ot at least start w localstorage until db and auth is set up
 
 // Retrieve data from storage
 const editorData = JSON.parse(localStorage.getItem("editor"));
@@ -165,8 +172,6 @@ const editor = new EditorJS({
     editor.save().then((data) => {
       localStorage.setItem("editor", JSON.stringify(data));
     });
-
-    // TODO Update button to show that user needs to re-analyze the text
   },
 
   autofocus: false,
@@ -178,12 +183,11 @@ const editor = new EditorJS({
 async function analyzeText() {
   editor.save().then((outputData) => {
     for (let i = 0; i < outputData.blocks.length; i++) {
-      outputData.blocks[i].data.text = prepareText(outputData.blocks[i].data.text);
+      outputData.blocks[i].data.text = cleanText(prepareText(outputData.blocks[i].data.text));
     }
 
     localStorage.setItem("editor", JSON.stringify(outputData));
 
-    const proxyURL = "https://cors-anywhere.herokuapp.com/";
     const endpoint = "http://localhost:3000";
     const path = `${endpoint}/api`;
 
@@ -194,6 +198,7 @@ async function analyzeText() {
 
       const newAssistant = data.assistantData; // Get assistant data
       localStorage.setItem("assistant", JSON.stringify(newAssistant)); // Upload assistant to Local Storage
+      localStorage.setItem("editor", JSON.stringify(data.editorJSON));
 
       // Update sidebar
       polarity.innerText = newAssistant.polarity;
@@ -210,6 +215,7 @@ async function analyzeText() {
       rare.innerText = newAssistant.rare;
       wlength.innerText = newAssistant.wlength;
       slength.innerText = newAssistant.slength;
+      svariance.innerText = newAssistant.svariance;
       chars.innerText = newAssistant.chars;
       charsplus.innerText = newAssistant.charsplus;
       words.innerText = newAssistant.words;
@@ -224,27 +230,53 @@ async function analyzeText() {
 
           setTimeout(() => {
             initializePopovers();
-            const modalReds = document.querySelector("span.rederrors");
-            const modalYellows = document.querySelector("span.yellowerrors");
-            const modalBlues = document.querySelector("span.blueerrors");
 
             const redErrors = document.querySelectorAll(".editor span.red");
             const yellowErrors = document.querySelectorAll(".editor span.yellow");
             const blueErrors = document.querySelectorAll(".editor span.blue");
 
-            for (let i = 0; i < redErrors.length; i++) {
+            let i;
+
+            for (i = 0; i < redErrors.length; i++) {
               const txt = redErrors[i].innerText;
               modalReds.innerHTML += `<span class="badge bg-danger me-1 ms-1">${txt}</span>`;
             }
 
-            for (let i = 0; i < yellowErrors.length; i++) {
+            for (i = 0; i < yellowErrors.length; i++) {
               const txt = yellowErrors[i].innerText;
               modalYellows.innerHTML += `<span class="badge bg-warning me-1 ms-1">${txt}</span>`;
             }
 
-            for (let i = 0; i < blueErrors.length; i++) {
+            for (i = 0; i < blueErrors.length; i++) {
               const txt = blueErrors[i].innerText;
               modalBlues.innerHTML += `<span class="badge bg-primary me-1 ms-1">${txt}</span>`;
+            }
+
+            const uniqueWordsLength = data.uniqueWords.length;
+            modalUniques.innerHTML = "";
+            for (i = 0; i < uniqueWordsLength; i++) {
+              const txt = data.uniqueWords[i];
+              modalUniques.innerHTML += `<span class="badge bg-light text-dark me-1 ms-1">${txt}</span>`;
+            }
+
+            const rareWordsLength = data.distinctRareWords.length;
+            modalRares.innerHTML = "";
+            for (i = 0; i < rareWordsLength; i++) {
+              const txt = data.distinctRareWords[i];
+              modalRares.innerHTML += `<span class="badge bg-light text-dark me-1 ms-1">${txt}</span>`;
+            }
+
+            // Happy words
+            const happyWordsLength = data.distinctHappyWords.length;
+            console.log("Look here")
+            console.log(happyWordsLength)
+
+            for (i = 0; i < happyWordsLength; i++) {
+              const happyWord = data.happyWordsLength[i][0];
+              const happyValue = parseFloat(data.happyWordsLength[i][1]);
+              const happyStd = parseFloat(data.happyWordsLength[i][2]);
+              const emoji = convertValToEmoji(parseFloat(happyValue));
+              modalHappy.innerHTML += `<li><span class="badge bg-light text-dark font-monospace">${emoji} ${happyWord} - ${happyValue}/7 (σ=${happyStd})</span></li>`;
             }
           }, 2000);
         });
@@ -272,7 +304,15 @@ async function postRequest(url, data) {
 }
 
 function prepareText(dirtyText) {
-  return dirtyText.replace(/<span.*>/g, "").replace("</span>", "");
+  if (dirtyText !== undefined) {
+    return dirtyText.replace(/<span.*>/g, "").replace("</span>", "");
+  }
+}
+
+function cleanText(dirtyText) {
+  if (dirtyText !== undefined) {
+    return dirtyText.replace("&nbsp;", "");
+  }
 }
 
 function resetSidebar() {
@@ -298,6 +338,11 @@ function resetSidebar() {
     sentences.innerText = 0;
     readingtime.innerText = 0;
     speakingtime.innerText = 0;
+    modalReds.innerText = "";
+    modalYellows.innerText = "";
+    modalBlues.innerText = "";
+    modalUniques.innerText = "";
+    modalRares.innerText = "";
   } catch (err) {
     console.log("Error on load with the assistant", err);
   }
@@ -312,4 +357,44 @@ function removeEmptyBlocks() {
     }
     editor.render(savedData);
   });
+}
+
+function convertValToEmoji(inputScore) {
+  try {
+    let meanValue = Number(inputScore);
+    let emoji = "";
+    switch (true) {
+      case meanValue < 2:
+        emoji = "🤬";
+        break;
+      case meanValue < 3:
+        emoji = "😡";
+        break;
+      case meanValue < 4:
+        emoji = "😠";
+        break;
+      case meanValue < 5:
+        emoji = "😐";
+        break;
+      case meanValue < 6:
+        emoji = "🙂";
+        break;
+      case meanValue < 7:
+        emoji = "😄";
+        break;
+      case meanValue < 8:
+        emoji = "😁";
+        break;
+      case meanValue < 9:
+        emoji = "🤩";
+        break;
+      default:
+        emoji = "🤷‍♂️";
+    }
+    return emoji;
+  } catch (err) {
+    console.log(err);
+    emoji = "🤷‍♂️";
+    return emoji;
+  }
 }
