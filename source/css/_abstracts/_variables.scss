@@ -3,22 +3,22 @@ $color-text: #0e101a;
 $black: #0e101a;
 $bg: #f8f9fa;
 $radius: 20%;
-$red: #ff99ab63; /*#f5c7cb;*/
-$yellow: #ffebc0dc;
-$blue: #c5e1ff;
 $grey0: rgb(100, 100, 100);
 
 // * Typography
 $font-sans: Lato, sans-serif;
 
 // TODO From Grammarly (Combine with 'realistic-highlight-marker?
-$red-border-bottom-color: rgb(234, 21, 55);
+$red:rgb(234, 21, 55);
+$red-border-bottom-color: $red;
 $red-bg: rgb(255, 153, 171);
 
-$yellow-border-bottom-color: #ffae00;
+$yellow: #ffae00;
+$yellow-border-bottom-color: $yellow;
 $yellow-bg: #ffebc0dc;
 
-$blue-border-bottom-color: rgb(74, 110, 224);
+$blue:rgb(74, 110, 224);
+$blue-border-bottom-color: $blue;
 $blue-bg: rgb(153, 194, 255);
 
 $hard: $yellow-bg;

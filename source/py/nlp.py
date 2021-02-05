@@ -1,5 +1,6 @@
-from danlp.models import load_bert_emotion_model
-classifier = load_bert_emotion_model()
-
-# using the classifier
-classifier.predict('bilen er flot')
+import sys
+# Takes first name and last name via command
+# line arguments and then display them
+print("Output from Python")
+print("First name: " + sys.argv[1])
+print("Last name: " + sys.argv[2])

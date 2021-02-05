@@ -1,3 +1,4 @@
+"use strict";
 // @codekit-prepend "array.js";
 
 function analyzeText(text, dict, replacementPairs) {
@@ -32,7 +33,6 @@ function analyzeText(text, dict, replacementPairs) {
       return value[0] == word; // 0: Incorrect spelling, 1: Correctly spelled
     });
 
-    console.log(lookupWord);
     let replacementString = "";
 
     // * If there was a match, proceed to generate the replacement span
@@ -88,7 +88,9 @@ function analyzeText(text, dict, replacementPairs) {
       function replacePhrase() {
         // Regex "Last Match" (Works on Node v10.0+ :: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastMatch)
         let textMatch = RegExp["$&"];
-        textMatch = textMatch.trim();
+        textMatch = textMatch.trim()
+
+        textForPopoverTitle = textMatch.replace(/[.,\/#!?"'$%\^&\*;:{}=\_`~()]/g, "")
 
         // Colour
         let colour = typeSwitch(type);
@@ -96,15 +98,18 @@ function analyzeText(text, dict, replacementPairs) {
         if (colour === "red") red++;
         if (colour === "blue") blue++;
 
+        let popoverTitle = `${type} <span class='badge bg-${colour} ms-2'>${textForPopoverTitle}</span>`
+
         let replacementPhrase = ` <span class="${colour}" 
         data-bs-toggle="popover" 
-        data-bs-original-title="${type}" 
+        data-bs-original-title="${popoverTitle}"
+        data-bs-html="true" 
         data-bs-content="${popover}">${textMatch}</span> `;
 
         // Create array with unique IDs and replacement HTML strings, with spaces surrounding it
         let id = ` ${String(randomIdGenerator())} `;
         replacementPairs.push([id, replacementPhrase]);
-
+       
         // Replace the offending bit of text with an ID so as to avoid re-running this process on the popover text.
         text = text.replace(regexString, id);
 
@@ -116,6 +121,7 @@ function analyzeText(text, dict, replacementPairs) {
     }
 
     // ! Step 3 - Reconvert
+     console.log(replacementPairs)
     text = reconvertText(text, replacementPairs);
 
     // ! Step 4 - Return JSON
@@ -131,11 +137,11 @@ function reconvertText(inputText, replacementArray) {
   if (replacementArray !== undefined && arrayLength > 0) {
     // * Loop through replacements
     for (let i = 0; i < arrayLength; i++) {
+     
       const replacementPhrase = new RegExp(replacementArray[i][0], "g"); // 0 is the ID, 1 is the <span>text</span>
-
       // Test if the text contains the offending ID
       const regexTest = replacementPhrase.test(inputText);
-      if (regexTest) outputText = inputText.replace(replacementPhrase, replacementArray[i][1]);
+      if (regexTest) outputText = outputText.replace(replacementPhrase, replacementArray[i][1]);
     }
   }
   return outputText;

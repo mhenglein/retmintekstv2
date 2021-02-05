@@ -26,12 +26,12 @@ function countCharacters(p) {
 }
 
 // * For analysis purposes we replace typical punctuation with full stops and other symbols with whitespace.
-// TODO Assess if this is needed at all?
-function cleanText(dirtyText) {
-  return dirtyText.replace("&nbsp;", " ").replace("  ", " ");
-  // TODO More cleaning required? More test cases needed.
-  // return dirtyText.replace(/[\?!;:]/g, ".").replace(/[\,()"'!;\n\r]/g, " ");
-}
+// // TODO Assess if this is needed at all?
+// function cleanText(dirtyText) {
+//   return dirtyText.replace("&nbsp;", " ").replace("  ", " ");
+//   // TODO More cleaning required? More test cases needed.
+// return dirtyText.replace(/[\?!;:]/g, ".").replace(/[\,()"'!;\n\r]/g, " ");
+// }
 
 function removeTags(html) {
   return html
@@ -125,18 +125,24 @@ function getSentencesFromText(p) {
   return sentences;
 }
 
-function lemmafy(inputString) {
-  let processedString, i;
+function removePunctuation(inputString) {
+  return inputString.replace(/[.,\/#!?"'$%\^&\*;:{}=\_`~()]/g, " ").replace("  ", " ");
+}
 
-  processedString = removeTags(inputString); // 1. Remove all tags
-  processedString = processedString.replace(/[.,\/#!?"'$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase(); // 2. Remove all punctuation & convert to lowercase
-  let processedWordsArray = processedString.split(/\s+/).filter((s) => s.length > 0); // 3. Split by words
-  const arrLength = processedWordsArray.length;
-  for (i = 0; i < arrLength; i++) {
-    // 4. Compare against lemma file
-    processedWordsArray[i] = lemmafyWord(processedWordsArray[i]);
-  }
-  return processedWordsArray;
+function splitStringToArray(inputString) {
+  return inputString.split(/\s+/).filter((s) => s.length > 0);
+}
+
+function lemmafy(inputArray) {
+  // Takes as an input an array of words
+  // let i;
+  return inputArray.map((word) => lemmafyWord(word));
+  // const arrLength = outputArray.length;
+  // for (i = 0; i < arrLength; i++) {
+  //   // Compare each word against lemma file
+  //   outputArray[i] = lemmafyWord(outputArray[i]);
+  // }
+  // return outputArray;
 }
 
 function lemmafyWord(inputWord) {
@@ -145,11 +151,26 @@ function lemmafyWord(inputWord) {
     return value[0] == inputWord;
   });
 
-  if (lookUp === [] || lookUp[0] === undefined) {
+  if (lookUp.length === 0) {
     return inputWord;
   } else {
     return lookUp[0][1];
   }
+}
+
+function removeAllStopord(textForAnalysis) {
+  // stopord file via global scope
+  const stopOrdLength = stopord.length;
+  for (let i = 0; i < stopOrdLength; i++) {
+    const regexString = new RegExp(`\\s${stopord[i]}\\s`, "ig");
+    textForAnalysis = textForAnalysis.replaceAll(regexString, " ");
+  }
+  textForAnalysis = textForAnalysis.replaceAll("  ", " ");
+  return textForAnalysis;
+}
+
+function titleCaseWord(inputWord) {
+  return inputWord[0].toUpperCase() + inputWord.slice(1);
 }
 
 // ! Statistical functions
@@ -194,17 +215,17 @@ function getUniqueWords(inputStringArray) {
       });
     }
   }
+}
 
-  function compareSecondColumn(a, b) {
-    if (a[1] === b[1]) {
-      return 0;
-    } else {
-      return a[1] > b[1] ? -1 : 1;
-    }
+function compareSecondColumn(a, b) {
+  if (a[1] === b[1]) {
+    return 0;
+  } else {
+    return a[1] > b[1] ? -1 : 1;
   }
 }
 
-function getRareWords(inputStringArray) {
+function getRareWords(inputStringArray, threshold = 5000) {
   // frequencyFile from global scope
   let rareWordsArray = [];
 
@@ -222,9 +243,9 @@ function getRareWords(inputStringArray) {
 
       // * If there is a match, rarity.length will be >0
       if (rarity !== [] && rarity.length > 0) {
-        // * Allow it to be considered rare if it's not in the top 5000
+        // * Allow it to be considered rare if it's not in the top X
         const rareScore = rarity[0][3];
-        if (parseInt(rareScore) > 5000) rareWordsArray.push(word);
+        if (parseInt(rareScore) > threshold) rareWordsArray.push(word);
       } else {
         // * If there is no match, consider it a rare word
         rareWordsArray.push(word);

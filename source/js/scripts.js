@@ -57,12 +57,12 @@ const readingtime = document.getElementById("readingtime");
 const speakingtime = document.getElementById("speakingtime");
 const happiness = document.getElementById("happiness");
 
-const modalReds = document.querySelector("span.rederrors");
-const modalYellows = document.querySelector("span.yellowerrors");
-const modalBlues = document.querySelector("span.blueerrors");
-const modalUniques = document.querySelector("span.uniquewords");
-const modalRares = document.querySelector("span.rarewords");
-const modalHappy = document.querySelector("span.happyWords");
+const modalReds = document.querySelector("span#rederrors");
+const modalYellows = document.querySelector("span#yellowerrors");
+const modalBlues = document.querySelector("span#blueerrors");
+const modalUniques = document.querySelector("span#uniquewords");
+const modalRares = document.querySelector("span#rarewords");
+const modalHappy = document.querySelector("ul#happyWords");
 
 // Window onload
 window.onload = function () {
@@ -185,11 +185,11 @@ async function analyzeText() {
     for (let i = 0; i < outputData.blocks.length; i++) {
       outputData.blocks[i].data.text = cleanText(prepareText(outputData.blocks[i].data.text));
     }
-
+    console.log(outputData);
     localStorage.setItem("editor", JSON.stringify(outputData));
 
     const endpoint = "http://localhost:3000";
-    const path = `${endpoint}/api`;
+    const path = `${endpoint}/api/hedonometer`;
 
     // POST request to server
     postRequest(path, outputData).then((data) => {
@@ -237,20 +237,33 @@ async function analyzeText() {
 
             let i;
 
-            for (i = 0; i < redErrors.length; i++) {
-              const txt = redErrors[i].innerText;
-              modalReds.innerHTML += `<span class="badge bg-danger me-1 ms-1">${txt}</span>`;
+            const redLength = redErrors.length;
+            let redArr = [];
+            for (i = 0; i < redLength; i++) {
+              redArr.push(standardizeText(redErrors[i].innerText));
             }
+            redArr = getUniqueWords(redArr);
+            modalReds.innerHTML = redArr.map((txt) => `<span class="badge bg-red me-1 ms-1">${txt}</span>`).join(" ");
 
-            for (i = 0; i < yellowErrors.length; i++) {
-              const txt = yellowErrors[i].innerText;
-              modalYellows.innerHTML += `<span class="badge bg-warning me-1 ms-1">${txt}</span>`;
+            const yellowLength = yellowErrors.length;
+            let yellowArr = [];
+            for (i = 0; i < yellowLength; i++) {
+              yellowArr.push(standardizeText(yellowErrors[i].innerText));
             }
+            yellowArr = getUniqueWords(yellowArr);
+            modalYellows.innerHTML = yellowArr
+              .map((txt) => `<span class="badge bg-yellow me-1 ms-1">${txt}</span>`)
+              .join(" ");
 
-            for (i = 0; i < blueErrors.length; i++) {
-              const txt = blueErrors[i].innerText;
-              modalBlues.innerHTML += `<span class="badge bg-primary me-1 ms-1">${txt}</span>`;
+            const blueLength = blueErrors.length;
+            let blueArr = [];
+            for (i = 0; i < blueLength; i++) {
+              blueArr.push(standardizeText(blueErrors[i].innerText));
             }
+            blueArr = getUniqueWords(blueArr);
+            modalBlues.innerHTML = blueArr
+              .map((txt) => `<span class="badge bg-blue me-1 ms-1">${txt}</span>`)
+              .join(" ");
 
             const uniqueWordsLength = data.uniqueWords.length;
             modalUniques.innerHTML = "";
@@ -268,15 +281,13 @@ async function analyzeText() {
 
             // Happy words
             const happyWordsLength = data.distinctHappyWords.length;
-            console.log("Look here")
-            console.log(happyWordsLength)
 
             for (i = 0; i < happyWordsLength; i++) {
-              const happyWord = data.happyWordsLength[i][0];
-              const happyValue = parseFloat(data.happyWordsLength[i][1]);
-              const happyStd = parseFloat(data.happyWordsLength[i][2]);
+              const happyWord = data.distinctHappyWords[i][0];
+              const happyValue = parseFloat(data.distinctHappyWords[i][1]);
+              const happyStd = parseFloat(data.distinctHappyWords[i][2]);
               const emoji = convertValToEmoji(parseFloat(happyValue));
-              modalHappy.innerHTML += `<li><span class="badge bg-light text-dark font-monospace">${emoji} ${happyWord} - ${happyValue}/7 (σ=${happyStd})</span></li>`;
+              modalHappy.innerHTML += `<li>${emoji} ${happyWord} <span class="badge bg-light text-dark font-monospace">[${happyValue} / 9]</span></li>`;
             }
           }, 2000);
         });
@@ -311,7 +322,7 @@ function prepareText(dirtyText) {
 
 function cleanText(dirtyText) {
   if (dirtyText !== undefined) {
-    return dirtyText.replace("&nbsp;", "");
+    return dirtyText.replace("\xc2\xa0", " ").replace("  ", " ");
   }
 }
 
@@ -396,5 +407,33 @@ function convertValToEmoji(inputScore) {
     console.log(err);
     emoji = "🤷‍♂️";
     return emoji;
+  }
+}
+
+function standardizeText(inputString) {
+  return inputString.replace(/[.,\/#!?"'$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase();
+}
+
+function getUniqueWords(inputStringArray) {
+  if (inputStringArray.length <= 1) {
+    return inputStringArray;
+  } else {
+    if (inputStringArray[0].length > 1) {
+      let set = new Set(inputStringArray.map(JSON.stringify));
+      let arr2 = Array.from(set).map(JSON.parse);
+      return arr2.sort(compareSecondColumn);
+    } else {
+      return inputStringArray.sort().filter(function (v, i, o) {
+        return v !== o[i - 1];
+      });
+    }
+  }
+
+  function compareSecondColumn(a, b) {
+    if (a[1] === b[1]) {
+      return 0;
+    } else {
+      return a[1] > b[1] ? -1 : 1;
+    }
   }
 }
