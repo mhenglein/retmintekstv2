@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Automatisk redskab til at forbedre dansk tekst",
   "main": "index.js",
+  "type": "module",
   "dependencies": {
     "@editorjs/editorjs": "^2.19.1",
     "@editorjs/header": "^2.6.1",
@@ -24,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/mhenglein/retmintekst-app/issues"
   },
-  "homepage": "https://github.com/mhenglein/retmintekst-app#readme"
+  "homepage": "https://github.com/mhenglein/retmintekst-app#readme",
+  "devDependencies": {
+    "@types/node": "^15.0.1"
+  }
 }

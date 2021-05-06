@@ -1,3 +1,8 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fafafa;
+}
+
 h1 {
   font-size: 1.8rem;
 }
@@ -6,13 +11,89 @@ h2 {
   font-size: 1.5rem;
 }
 
+h2 {
+  display: block;
+  margin-top: 17px;
+  margin-bottom: 13px;
+  margin-left: -1px;
+  padding-bottom: 11px;
+  float: left;
+  clear: both;
+  background-color: #fff;
+  font-family: Avenir, Tahoma, sans-serif;
+  color: #3d608d;
+  font-size: 35px;
+  line-height: 45px;
+  font-weight: 400;
+  letter-spacing: -0.55px;
+}
+
 h3 {
   font-size: 1.3rem;
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  background: #fafafa;
+h3 {
+  display: inline-block;
+  margin-top: 38px;
+  margin-bottom: 10px;
+  margin-left: 0;
+  padding-right: 12px;
+  padding-bottom: 10px;
+  clear: both;
+  border-bottom: 1px #1c68b9;
+  color: #3f5e8d;
+  font-size: 26.5px;
+  line-height: 31px;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+}
+
+h3.text {
+  display: inline-block;
+  margin-top: 39px;
+  margin-bottom: 9px;
+  clear: both;
+  color: #33598a;
+  font-size: 27px;
+  line-height: 33px;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+}
+
+.header-name {
+  display: inline-block;
+  width: 600px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 0;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-transition: color 150ms, text-shadow 150ms;
+  transition: color 150ms, text-shadow 150ms;
+  font-family: Lato, sans-serif;
+  color: #467eaf;
+  font-size: 57px;
+  line-height: 1.1em;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -2.75px;
+  text-shadow: 1px 0 0 rgb(27 91 177 / 87%), -4px -5px 0 rgb(0 133 255 / 3%);
+}
+
+.header-name:hover {
+  border-bottom-color: transparent;
+  -webkit-transition-property: none;
+  transition-property: none;
+  color: #6cc2b1;
+  text-decoration: none;
+  text-shadow: 1px 0 0 #20a000, -4px -5px 0 rgba(61, 255, 0, 0.08);
+}
+
+.header-background {
+  transform: scale(1);
+  text-align: center;
+  text-shadow: none;
 }
 
 p {
@@ -33,4 +114,8 @@ a:focus {
 
 .small {
   font-size: 0.5rem;
+}
+
+.list-group > li {
+  font-size: 0.8rem;
 }

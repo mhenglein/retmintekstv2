@@ -1,11 +1,14 @@
-#content {
-  width: calc(100% - 250px);
-  padding: 40px;
-  min-height: 100vh;
-  transition: all 0.3s;
-  position: absolute;
-  top: 0;
-  left: 0;
+.editor-api {
+  background-color: white;
+  border-radius: 5px;
+  min-height: 70vh;
+}
+
+.list-group {
+  overflow-y: scroll;
+  max-height: 70vh !important;
+  min-height: 70vh !important;
+  background-color: white;
 }
 
 #content.mobile {

@@ -1,11 +1,15 @@
 .bg-blue {
-    background-color: $blue !important;
+  background-color: $blue !important;
 }
 
 .bg-yellow {
-    background-color: $yellow !important;
+  background-color: $yellow !important;
 }
 
 .bg-red {
-    background-color: $red !important;
+  background-color: $red !important;
+}
+
+.badge.bg-primary.rounded-pill {
+  min-width: 3rem;
 }
