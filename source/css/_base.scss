@@ -1,3 +1,25 @@
+// CONTAINER
+body {
+  overscroll-behavior-y: none;
+}
+
+// * Wrapper
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+
+#content {
+  width: calc(100% - 250px);
+  padding: 40px;
+  min-height: 100vh;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+// TYPOGRAPHY
 body {
   font-family: "Poppins", sans-serif;
   background: #fafafa;

@@ -1,0 +1,63 @@
+// FONTS
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora&family=Oxygen:wght@400;700&family=Roboto:ital,wght@0,300;0,700;1,300&display=swap");
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+// font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, Arial;
+
+// MIXINS
+// Mixin for the span tags in the editor
+
+@mixin highlight($color, $z: 1) {
+  transition: background 0.5s;
+  background-color: $color;
+  // border-radius: $radius;
+  z-index: $z;
+  position: relative;
+  padding: 0 3px 0 3px;
+
+  :before {
+    content: "";
+    width: 100%;
+    height: 1em;
+    position: absolute;
+    z-index: -1;
+    filter: url(#marker-shape);
+    left: -0.25em;
+    top: 0.1em;
+    padding: 0 0.25em;
+  }
+}
+
+// Mixin for the list group items in the sidebar
+@mixin lg-item($color, $bg-color, $border-color: none) {
+  color: $color;
+  background-color: $bg-color;
+  border-color: $border-color;
+}
+
+// VARIABLES
+/* Color scheme */
+$color-text: #0e101a;
+$black: #0e101a;
+$bg: #f8f9fa;
+$radius: 20%;
+$grey0: rgb(100, 100, 100);
+
+// * Typography
+$font-sans: Lato, sans-serif;
+
+// TODO From Grammarly (Combine with 'realistic-highlight-marker?
+$red: rgb(234, 21, 55);
+$red-border-bottom-color: $red;
+$red-bg: rgb(255, 153, 171);
+
+$yellow: #ffae00;
+$yellow-border-bottom-color: $yellow;
+$yellow-bg: #ffebc0dc;
+
+$blue: rgb(74, 110, 224);
+$blue-border-bottom-color: $blue;
+$blue-bg: rgb(153, 194, 255);
+
+$hard: $yellow-bg;
+$vhard: $red-bg;
