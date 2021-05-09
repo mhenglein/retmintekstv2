@@ -1,6 +1,7 @@
 // TODO Dark mode
 // TODO Write/Edit switch
 // TODO Modals el. lign hvori den præcise nedbrydning af fx "rød fejl" ses ("Stavefejl, etc.")
+// TODO "Set goals": Audience (Brug længere/kortere ord...), Formality (Minus slang / plus formel)
 
 // Popover
 function initializePopovers() {

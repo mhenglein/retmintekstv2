@@ -7181,6 +7181,14 @@
       "pg" : 0,
       "sct" : 0
     },
+    "\/source\/data\/ddo-synonyms.csv" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 0,
+      "oAP" : "\/build\/data\/ddo-synonyms.csv",
+      "oF" : 0
+    },
     "\/source\/data\/frequency-ex.csv" : {
       "cB" : 0,
       "ft" : 8192,

@@ -24,20 +24,21 @@ class TextParser {
   lus: any;
   timeToRead: string;
   timeToSpeak: string;
-  difficulty: number;
+  level: number;
   rareWords: Array<string>;
   happy: Array<any>;
 
 
   constructor(s:string) {
     if (typeof s === "undefined" || !s.toString) {
-      throw new Error("textParser only works with strings and values that can be coerced into a string");
+      throw new Error("TextParser only works with strings and values that can be coerced into a string");
     }
     this.text = s.toString();
     this.original = s.toString();
     this.words = [];
     this.lix = -1;
     this.happy = []
+    this.rareWords = []
   }
 
   /**
@@ -45,6 +46,14 @@ class TextParser {
    */
   removeHTML() {
     this.text = this.text.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/gi, " ");
+    return this;
+  }
+
+  /**
+   * Removes HTML tags except (<b>, <i>, and <a>) and entities (such as non-breaking space, &nbsp;)
+   */
+  removeHTMLexceptFormatting() {
+    this.text = this.text.replace(/<[^>bia]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/gi, " ");
     return this;
   }
 
@@ -65,12 +74,12 @@ class TextParser {
  * Remove all punctuation
  */
 removePunctuation() {
-  this.text = TextParser.staticRemovePunctuation(this.text)
+  this.text = TextParser._RemovePunctuation(this.text)
   return this;
   // Inspiration via https://stackoverflow.com/questions/4328500/how-can-i-strip-all-punctuation-from-a-string-in-javascript-using-regex
 }
 
-static staticRemovePunctuation(string:string) {
+static _RemovePunctuation(string:string) {
   return string.replace(/[.,\/#!?"$%\^\*;:{}«»=\_`~()]/g, " ").replace("  ", " ");
 }
 
@@ -116,7 +125,7 @@ removeAllStopord(stopord:Array<string>) {
 /**
  * Title-case a word
  */
-titleCaseWord(word:string) {
+static _titleCaseWord(word:string) {
   return word[0].toUpperCase() + word.slice(1);
 }
 
@@ -144,7 +153,7 @@ titleCaseWord(word:string) {
  * @return {[Array]}            Array of words (all)
  */
 getWords(threshold = 6) {
-  // TODO Remove weird lettering (e.g. «)
+
   this.words = this.text
     .split(/\s+/) // Split by (multiple) whitespace(s)
     .filter((n) => n != "");
@@ -185,12 +194,40 @@ getUniqueWords() {
   }
 }
 
+// static getSingleUseWords(arrWords:Array<string>) {
+//   // Remove punctuation
+//   arrWords.forEach((item, index) => {
+//     arrWords[index] = TextParser._RemovePunctuation(arrWords[index]).trim().toLowerCase()
+//   })
+
+//   // Sort
+//   arrWords.sort();
+
+//   // Create freq. table
+//   let frequency:any = {};
+//   arrWords.forEach(item => {
+//       frequency[item] = (frequency[item] || 0) + 1;
+//   });
+// }
+
+static generateFrequencyMap(inputArray:Array<any>) {
+// Create freq. table
+  let frequency:any = {};
+  inputArray.forEach(item => {
+      frequency[item] = (frequency[item] || 0) + 1;
+  });
+
+  return frequency;
+}
+
 /**
  * Takes an input array of words and remove all duplicates
  * @param  {[Array]} stopord  Array of stopwords
  * @return {[Array]}          The most over-used words
  */
-getFrequentWords(stopord:Array<string>) {
+getFrequentWords(stopord:Array<string> =[], minOccurences:number=3, minCharLength:number = 3) {
+
+  // Remember to supply a stopord file or none will be applied
 
   // If the string hasn't been split into words, do so
   if (this.words.length === 0) this.getWords()
@@ -199,11 +236,11 @@ getFrequentWords(stopord:Array<string>) {
 
   // Remove punctuation
   frequentWords.forEach((item, index) => {
-    frequentWords[index] = TextParser.staticRemovePunctuation(frequentWords[index]).trim().toLowerCase();
+    frequentWords[index] = TextParser._RemovePunctuation(frequentWords[index]).trim().toLowerCase();
   })
 
   // Only look at words that are at least 3 letters long && sort();
-  const minCharLength = 3; 
+  const minimumCharLength = minCharLength; 
   frequentWords = frequentWords.filter((x) => x.length>=minCharLength).sort();
 
   // Remove stopwords (stopord)
@@ -217,8 +254,11 @@ getFrequentWords(stopord:Array<string>) {
       frequency[item] = (frequency[item] || 0) + 1;
   });
   
+  // Store the FULL frequency map in object
+  this.frequencyMap = frequency;
+
   // Table stakes
-  const minimumOccurences = 3;
+  const minimumOccurences = minOccurences;
   for (const key in frequency) {
     if (Object.prototype.hasOwnProperty.call(frequency, key)) {
       const element:number = Number(frequency[key])
@@ -227,9 +267,6 @@ getFrequentWords(stopord:Array<string>) {
       }
     }
   }
-
-  // Store frequency map in object
-  this.frequencyMap = frequency;
 
   // Sortable table
   let sortable = Array.from(Object.entries(frequency))
@@ -253,6 +290,14 @@ static compareSecondColumn(a:any, b:any) {
   } else {
     return a[1] > b[1] ? -1 : 1;
   }
+}
+
+sortWords() {
+   if (this.words.length === 0) this.getWords()
+
+    this.words = this.words.sort();
+
+   return this;
 }
 
 /**
@@ -434,17 +479,37 @@ calcTime(wpm:number=250,spm:number=120) {
 /**
  * Calculate the reading difficulty level on a sentence level --
  * used for assessing individual sentences (and highlighting with colour)
- * @param  {[Number]} letters Number of letters
- * @param  {[Number]} words Number of words
+ * @param  {[Number]} letters   Number of letters
+ * @param  {[Number]} words     Number of words
  * @param  {[Number]} sentences Number of sentences
+ * @return {[Number]}           Difficulty level
  */
-calculateLevel(letters=this.chars, words=this.wordCount, sentences=this.sentenceCount) {
+static calculateLevel(letters:number, words:number, sentences:number) {
   // If no words or sentences, bail
   if (words === 0 || sentences === 0) {
-    this.difficulty = 0;
+    return 0;
   } else {
-  let level = Math.round(4.71 * (letters / words) + (0.5 * words) / sentences - 21.43);
-  this.difficulty = level <= 0 ? 0 : level;
+  const level = Math.round(4.71 * (letters / words) + (0.5 * words) / sentences - 21.43);
+  return level <= 0 ? 0 : level;
+  }
+}
+
+/**
+ * Based on difficulty of sentence, this provides the HTML output
+ * Returns the new sentence and whether it was "hard" or "very hard"
+ * @param  {[Number]} letters Number of letters
+ * @param  {[Number]} words Number of words
+ * @return {[String]}      Difficulty 
+ */
+static determineDifficulty(words:number, level:number) {
+  if (words < 15) {
+    return "easy";
+  } else if (level >= 15 && level < 21) {
+    return "hard"
+  } else if (level >= 21) {
+    return "veryhard"
+  } else {
+    return "easy"
   }
 }
 
@@ -485,7 +550,6 @@ lemmafyText(lemmaDict:Array<any>) {
  * Map a value (number) to a corresponding emoji
  * @param  {[number]} score A scoring on a scale from 1-9
  */
-
 convertValToEmoji(score:number) {
   try {
     switch (true) {

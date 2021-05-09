@@ -1,5 +1,12 @@
 "use strict";
 
+// Single word (misspelling) vs. multiple words (phrases)
+// Generalized function for highlighting -- mostly the mechanism by which you find & replace
+// Advanced: Remove HTML, remember where it was taken from, and then reinsert it. But necessary anymore?
+// Typescript
+// Move away from red/yellow/blue
+// Grammarly has Correctness (red), Clarity (blue), Engagement? (green), Delivery (blue)
+
 function analyzeText(text, dict, findAndReplaceArray) {
   // Take a string of text (usually a sentence), a dictionary, and an array as input
   // Returns a string (unchanged if no match); otherwise the string will have IDs in it and the array will indicate how to bring in the changes
