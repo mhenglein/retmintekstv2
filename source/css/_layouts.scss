@@ -1,17 +1,130 @@
 /* NAVBAR */
 .navbar {
-  padding: 15px 10px;
   background: #fff;
   border: none;
   border-radius: 0;
-  margin-bottom: 40px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .navbar-btn {
   box-shadow: none;
   outline: none !important;
   border: none;
+}
+
+.navbar-brand {
+  font-size: 0.85rem !important;
+  font-family: "Nunito", sans-serif;
+}
+
+.nav-link {
+  font-size: 0.75rem !important;
+}
+
+// Bottom menu
+.full-view {
+  width: 100vw !important;
+  div {
+    @media (min-width: 900px) {
+      width: calc((100vw) / 6) !important;
+    }
+    width: calc((100vw) / 3) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .bottom-menu {
+    width: 100vw !important;
+    div {
+      width: calc((100vw) / 3) !important;
+    }
+  }
+}
+
+.bottom-menu {
+  transition: all 0.3s;
+  position: absolute;
+  top: auto;
+  bottom: 0em;
+  pointer-events: none;
+  width: calc(100vw - 200px);
+
+  z-index: 9001;
+  margin-bottom: -0.25em;
+  font-size: 1em;
+  display: block;
+  div {
+    @media (min-width: 900px) {
+      width: calc((100vw - 200px) / 6);
+    }
+    width: calc((100vw - 200px) / 3);
+    transition: all 0.3s;
+    overflow: hidden;
+    pointer-events: all;
+    float: left;
+    opacity: 1;
+    cursor: pointer;
+
+    span.tag {
+      display: block;
+      text-align: center;
+      width: 100%;
+      font-weight: 700;
+      height: 3em;
+      line-height: 3em;
+      font-size: 1em;
+      font-family: "Nunito", sans-serif;
+      span.label {
+        font-size: 1em;
+        text-shadow: 1px 1px 1px #565656;
+        vertical-align: middle;
+        color: #fff;
+      }
+    }
+  }
+  .blue-menu {
+    background-color: #42a5ff;
+    box-shadow: 0 -4px #75bdff;
+    &:hover {
+      background-color: #75bdff;
+    }
+  }
+  .green-menu {
+    background-color: #2bde73;
+    box-shadow: 0 -4px #73e797;
+    &:hover {
+      background-color: #73e797;
+    }
+  }
+  .yellow-menu {
+    background-color: #ffc924;
+    box-shadow: 0 -4px #ffd76a;
+    &:hover {
+      background-color: #ffd76a;
+    }
+  }
+  .red-menu {
+    background-color: #ff4742;
+    box-shadow: 0 -4px #ff7873;
+    &:hover {
+      background-color: #ff7873;
+    }
+  }
+  .darkblue-menu {
+    background-color: #1c5182;
+    box-shadow: 0 -4px #597da1;
+    &:hover {
+      background-color: #597da1;
+    }
+  }
+  .grey-menu {
+    background-color: #ccc;
+    box-shadow: 0 -4px #ddd;
+    &:hover {
+      background-color: #ddd;
+    }
+  }
 }
 
 /* Footer */

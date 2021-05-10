@@ -1,11 +1,48 @@
-<!-- <div
-  class="modal fade"
-  id="genereltModal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="genereltModalLabel"
-  aria-hidden="true"
-> -->
+<button id="showSidebar" hidden class="btn btn-sm px-2 btn-outline-success">Vis assistenten</button>
+
+<!-- Modal: Goals -->
+<div class="modal fade" id="goalsModal" tabindex="-1" aria-labelledby="goalsModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="goalsModalLabel">
+          <img src="./assets/bullseye.png" class="img-fluid img-modal" />
+          Definér dine målsætninger
+        </h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </Definér>
+      <div class="modal-body">
+        <div class="d-flex" id="audience">
+          <h6 class="goals-header">Publikum</h6>
+          <div class="goals-options">
+            <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-outline-primary active">Anders And</button>
+              <button type="button" class="btn btn-outline-primary">Helle Helle</button>
+              <button type="button" class="btn btn-outline-primary">Martin Krasnik</button>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-start" id="formality">
+          <h6 class="goals-header">Formalitet</h6>
+          <div class="goals-options">
+            <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-outline-primary active">Uformel</button>
+              <button type="button" class="btn btn-outline-primary">Neutral</button>
+              <button type="button" class="btn btn-outline-primary">Formel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ! OLD -->
 
 <!-- Modal: Red -->
 <div class="modal fade" id="redModal" tabindex="-1" aria-labelledby="redModal" aria-hidden="true">
@@ -126,8 +163,11 @@
       </div>
       <div class="modal-body">
         <p>Ved et 'sjældent' ord forstås ord, der ikke figurerer på de 5.000 mest anvendte ord i det danske sprog.</p>
-        <p><span id="rarewords"><button class="btn btn-sm btn-info">Analysér</button> din tekst for at se dine sjældne ord</span
-          ></span></p>
+        <p>
+          <span id="rarewords"
+            ><button class="btn btn-sm btn-info">Analysér</button> din tekst for at se dine sjældne ord</span
+          >
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
@@ -170,9 +210,11 @@
       </div>
       <div class="modal-body">
         <p>
-         Glædesbarometeret er lavet på baggrund af det amerikanske projekt, Hedonometer. Selve ordet 'Hedonometer' (løst oversat til glædesbarometer) stammer fra 1800-tallet, hvor økonomen Francis Edgeworth beskrev ideen som en psykologisk-fysisk maskine, der kontant målte glæden, en person oplevede ved hver aktivitet.
+          Glædesbarometeret er lavet på baggrund af det amerikanske projekt, Hedonometer. Selve ordet 'Hedonometer'
+          (løst oversat til glædesbarometer) stammer fra 1800-tallet, hvor økonomen Francis Edgeworth beskrev ideen som
+          en psykologisk-fysisk maskine, der kontant målte glæden, en person oplevede ved hver aktivitet.
         </p>
-        <p><ul class="list-unstyled ms-3" id="happyWords"></ul></p>
+        <ul class="list-unstyled ms-3" id="happyWords"></ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>

@@ -1,4 +1,6 @@
 //TODO TypeScript
+//TODO Fuzzy search Hedonometer
+
 "use strict";
 
 // * Server-related libraries

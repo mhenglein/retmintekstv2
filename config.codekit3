@@ -6632,6 +6632,19 @@
       "q" : 100,
       "rq" : 75
     },
+    "\/source\/assets\/bullseye.png" : {
+      "ft" : 32768,
+      "iS" : 25109,
+      "oA" : 0,
+      "oAP" : "\/build\/assets\/bullseye.png",
+      "oF" : 0,
+      "oIPL" : 0,
+      "opt" : 0,
+      "oT" : 1,
+      "ou" : "lpckwebp-none",
+      "q" : 100,
+      "rq" : 75
+    },
     "\/source\/assets\/cool-background.svg" : {
       "ft" : 2097152,
       "miP" : 0,
@@ -7023,6 +7036,20 @@
       "sC" : 0,
       "tS" : 0
     },
+    "\/source\/js\/analysis.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 0,
+      "oAP" : "\/build\/js\/analysis.js",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
     "\/source\/js\/api.js" : {
       "bF" : 4,
       "ft" : 64,
@@ -7137,6 +7164,17 @@
       "mi" : 0,
       "oA" : 0,
       "oAP" : "\/build\/js\/scripts.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/source\/js\/testOfAnalysis.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 0,
+      "oAP" : "\/build\/js\/testOfAnalysis.js",
       "oF" : 0,
       "sC" : 0,
       "tS" : 0

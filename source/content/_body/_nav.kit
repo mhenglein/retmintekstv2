@@ -1,16 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
+  <div class="container-fluid ms-3">
     <!-- * Brand (Emoji-as-a-Logo)-->
     <a href="/index.html" class="navbar-brand">🤖 RetMinTekst</a>
 
-    <button type="button" id="analyzeBtn" class="btn btn-info me-3 ms-3 text-nowrap">
-      Analysér
-      <!-- <span id="analyzeTxt">Analysér</span> -->
-    </button>
+    <button type="button" id="analyzeBtn" class="btn btn-sm btn-nav btn-analyze mx-1 text-nowrap">Analysér</button>
 
-    <button type="button" id="sidebarCollapse" class="btn btn-outline-info me-auto">
-      <span>Assistent</span>
-    </button>
+    <button class="btn btn-sm btn-nav btn-primary text-nowrap mx-1" id="removeMarkupBtn">Fjern rettelser</button>
+    <button class="btn btn-sm btn-nav btn-outline-danger text-nowrap mx-1" id="cleanBtn">Fjern alt</button>
 
     <button
       class="navbar-toggler ms-auto"
@@ -24,15 +20,42 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-2">
+    <div class="collapse navbar-collapse justify-content-between me-2" id="navbarSupportedContent">
+      <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="/kom-igang.html">Kom igang</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/om-os.html">Lær mere</a>
-        </li>
       </ul>
+      <div class="spinner-grow align-items-end" hidden id="spinner"></div>
     </div>
+  </div>
+</nav>
+
+<nav class="bottom-menu d-flex flex-wrap">
+  <div class="blue-menu">
+    <span class="tag"><span class="label">Forslag</span></span>
+  </div>
+  <div class="green-menu">
+    <span class="tag"
+      ><span class="label">Ord<span class="hide-on-mobile">forråd</span></span></span
+    >
+  </div>
+  <div class="yellow-menu">
+    <span class="tag"
+      ><span class="label">Læs<span class="hide-on-mobile">barhed</span></span></span
+    >
+  </div>
+  <div class="red-menu">
+    <span class="tag"
+      ><span class="label">Tekst<span class="hide-on-mobile">rytme</span></span></span
+    >
+  </div>
+  <div class="darkblue-menu">
+    <span class="tag"><span class="label">Sentiment</span></span>
+  </div>
+  <div class="grey-menu">
+    <span class="tag"
+      ><span class="label">Fjern<span class="hide-on-mobile"> rettelser</span></span></span
+    >
   </div>
 </nav>

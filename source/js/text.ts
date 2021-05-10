@@ -68,6 +68,7 @@ class TextParser {
   removeNonLetters() {
   this.text = this.text.replace(/&amp;/g,"og").replace(/[\.,()"'!;\n\r]/g, " ").replace(/&amp;|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/gi," ").replace("  ", " ")
   return this;
+  // \xc2\xa0
 }
 
 /**
