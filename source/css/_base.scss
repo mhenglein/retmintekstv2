@@ -10,8 +10,7 @@ body {
 }
 
 #content {
-  width: calc(100% - 250px);
-  padding: 40px;
+  width: calc(100% - 200px);
   min-height: 100vh;
   transition: all 0.3s;
   position: absolute;
@@ -19,10 +18,18 @@ body {
   left: 0;
 }
 
+.main-area {
+  width: calc(100% - 200px);
+  transition: all 0.3s;
+  margin-right: 4rem;
+  margin-left: 4rem;
+}
+
 // TYPOGRAPHY
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   background: #fafafa;
+  font-weight: 100;
 }
 
 h1 {
