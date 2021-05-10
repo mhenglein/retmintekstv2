@@ -1,3 +1,59 @@
+// SCRIPTS.JS
+const redErrors = document.querySelectorAll(".editor span.red");
+const yellowErrors = document.querySelectorAll(".editor span.yellow");
+const blueErrors = document.querySelectorAll(".editor span.blue");
+
+let i;
+
+const redLength = redErrors.length;
+let redArr = [];
+for (i = 0; i < redLength; i++) {
+  redArr.push(standardizeText(redErrors[i].innerText));
+}
+redArr = getUniqueWords(redArr);
+modalReds.innerHTML = redArr.map((txt) => `<span class="badge bg-red me-1 ms-1">${txt}</span>`).join(" ");
+
+const yellowLength = yellowErrors.length;
+let yellowArr = [];
+for (i = 0; i < yellowLength; i++) {
+  yellowArr.push(standardizeText(yellowErrors[i].innerText));
+}
+yellowArr = getUniqueWords(yellowArr);
+modalYellows.innerHTML = yellowArr.map((txt) => `<span class="badge bg-yellow me-1 ms-1">${txt}</span>`).join(" ");
+
+const blueLength = blueErrors.length;
+let blueArr = [];
+for (i = 0; i < blueLength; i++) {
+  blueArr.push(standardizeText(blueErrors[i].innerText));
+}
+blueArr = getUniqueWords(blueArr);
+modalBlues.innerHTML = blueArr.map((txt) => `<span class="badge bg-blue me-1 ms-1">${txt}</span>`).join(" ");
+
+const uniqueWordsLength = data.uniqueWords.length;
+modalUniques.innerHTML = "";
+for (i = 0; i < uniqueWordsLength; i++) {
+  const txt = data.uniqueWords[i];
+  modalUniques.innerHTML += `<span class="badge bg-light text-dark me-1 ms-1">${txt}</span>`;
+}
+
+const rareWordsLength = data.distinctRareWords.length;
+modalRares.innerHTML = "";
+for (i = 0; i < rareWordsLength; i++) {
+  const txt = data.distinctRareWords[i];
+  modalRares.innerHTML += `<span class="badge bg-light text-dark me-1 ms-1">${txt}</span>`;
+}
+
+// Happy words
+const happyWordsLength = data.distinctHappyWords.length;
+
+for (i = 0; i < happyWordsLength; i++) {
+  const happyWord = data.distinctHappyWords[i][0];
+  const happyValue = parseFloat(data.distinctHappyWords[i][1]);
+  const happyStd = parseFloat(data.distinctHappyWords[i][2]);
+  const emoji = convertValToEmoji(parseFloat(happyValue));
+  modalHappy.innerHTML += `<li>${emoji} ${happyWord} <span class="badge bg-light text-dark font-monospace">[${happyValue} / 9]</span></li>`;
+}
+
 // INDEX.JS
 app.get("/sentiment", function (req, res) {
   console.log("Received by the server!");
@@ -289,15 +345,6 @@ app.post("/api/sentence", function (req, res) {
   console.log("The operation took ...", endTime - currentTime);
 });
 
-
-
-
-
-
-
-
-
-
 // API.JS
 const editorHedonometer = new EditorJS({
   /**
@@ -393,45 +440,41 @@ function initializePopovers() {
 
 setInterval(initializePopovers(), 5000);
 
-
-
-
-
 //
 
- // if (inputType === "object") {
-  //   returnText = [];
+// if (inputType === "object") {
+//   returnText = [];
 
-  //   // Loop through object
-  //   for (let j = 0; j < input.length; j++) {
-  //     const block = input[j];
-  //     let blockText = block.data.text;
-  //     const counter = (blockText[j].match(/\.|\,|\?|!|:/g) || []).length;
-  //     const textLength = blockText.length - counter;
-  //     console.log("tl", textLength);
-  //     if (textLength > 6) {
-  //       blockText = `<span class='yellow'>${blockText}</span>`;
-  //       arrLongWords.push(blockText);
-  //     }
-  //     returnText[j] = blockText;
-  //   }
+//   // Loop through object
+//   for (let j = 0; j < input.length; j++) {
+//     const block = input[j];
+//     let blockText = block.data.text;
+//     const counter = (blockText[j].match(/\.|\,|\?|!|:/g) || []).length;
+//     const textLength = blockText.length - counter;
+//     console.log("tl", textLength);
+//     if (textLength > 6) {
+//       blockText = `<span class='yellow'>${blockText}</span>`;
+//       arrLongWords.push(blockText);
+//     }
+//     returnText[j] = blockText;
+//   }
 
-  //   // If input instead is string
-  // } else if (inputType === "string") {
-  //   returnText = textForAnalysis.split(" "); // Split into words;
+//   // If input instead is string
+// } else if (inputType === "string") {
+//   returnText = textForAnalysis.split(" "); // Split into words;
 
-  //   // Loop through all words
-  //   for (let i = 0; i < returnText.length; i++) {
-  //     // Count all punctuation
-  //     let counter = (returnText[i].match(/\.|\,|\?|!|:/g) || []).length;
+//   // Loop through all words
+//   for (let i = 0; i < returnText.length; i++) {
+//     // Count all punctuation
+//     let counter = (returnText[i].match(/\.|\,|\?|!|:/g) || []).length;
 
-  //     let textLength = returnText.length - counter;
-  //     if (textLength > 6) {
-  //       returnText[i] = `<span class='yellow'>${returnText[i]}</span>`;
-  //     } else {
-  //       returnText[i] = returnText[i];
-  //     }
-  //   }
+//     let textLength = returnText.length - counter;
+//     if (textLength > 6) {
+//       returnText[i] = `<span class='yellow'>${returnText[i]}</span>`;
+//     } else {
+//       returnText[i] = returnText[i];
+//     }
+//   }
 
-  //   returnText = returnText.join(" ");
-  // }
+//   returnText = returnText.join(" ");
+// }
