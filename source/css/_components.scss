@@ -92,12 +92,53 @@
   }
 }
 
+.purple {
+  border-bottom: 3px solid $purple-border-bottom-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $purple-bg;
+  }
+}
+
+span.two::after {
+  content: $two;
+}
+
+span.three::after {
+  content: $three;
+}
+
+span.four::after {
+  content: $four;
+}
+
+span.five::after {
+  content: $five;
+}
+
+span.six::after {
+  content: $six;
+}
+
+span.seven::after {
+  content: $seven;
+}
+
+span.eight::after {
+  content: $eight;
+}
+
+span.nine::after {
+  content: $nine;
+}
+
 .hard {
   @include highlight($hard);
 }
 
 .veryhard {
-  @include highlight($vhard);
+  @include highlight($veryhard);
 }
 
 // MODALS

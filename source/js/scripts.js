@@ -2,6 +2,7 @@
 // TODO Write/Edit switch
 // TODO Modals el. lign hvori den præcise nedbrydning af fx "rød fejl" ses ("Stavefejl, etc.")
 // TODO "Set goals": Audience (Brug længere/kortere ord...), Formality (Minus slang / plus formel)
+// TODO Standard deviation
 
 // *** EDITOR *** //
 import EditorJS from "@editorjs/editorjs";
@@ -208,7 +209,7 @@ window.onload = function () {
   });
 
   async function sendRequests() {
-    editor.save().then((data) => {
+    editor.save().then((saved) => {
       // Save EditorJS to Local Storage
       localStorage.setItem("editor", JSON.stringify(data));
 
@@ -218,155 +219,142 @@ window.onload = function () {
       const endpointHedonometer = `${path}/api/hedonometer`;
       const endpointSentence = `${path}/api/sentence`;
 
+      // PReference - which highlighting method?
+
       // Request 1 :: Metrics
+      postRequest(endpointMetrics, saved).then((data) => {
+        // Fill in
+        words.innerText = dataChecker(data.words);
+        longwords.innerText = dataChecker(data.longWords);
+        chars.innerText = dataChecker(data.chars);
+        charsplus.innerText = dataChecker(data.charsAndSpaces);
+        sentences.innerText = dataChecker(data.sentences);
+        sentenceLength.innerText = dataChecker(data.slength);
+        sentenceLength2.innerText = dataChecker(data.slength);
+        wordLength.innerText = dataChecker(data.wlength);
+        variance.innerText = dataChecker(data.variance);
+        lix.innerText = dataChecker(data.lix);
+        difficulty.innerText = dataChecker(data.difficulty);
+        // TODO audience;
+        readingtime.innerText = dataChecker(data.readingtime);
+        speakingtime.innerText = dataChecker(data.speakingtime);
+        paragraphs.innerText = dataChecker(data.paragraphs);
+        // TODO normalsider
 
-      // POST request to server
-      postRequest(path, data).then((data) => {
-        const newEditor = data.editorJSON; // Get editor data
-        editor.blocks.render(newEditor); // Render new editor
+        // Calc
+        const longWordPercentage = Math.floor((Number(data.longWords) / Number(data.words)) * 100);
 
-        const newAssistant = data.assistantData; // Get assistant data
-        localStorage.setItem("assistant", JSON.stringify(newAssistant)); // Upload assistant to Local Storage
-        localStorage.setItem("editor", JSON.stringify(data.editorJSON));
+        // Save formatted TEXT to Local Storage (w/ long words highlighted? Or nothing for this call)
+      });
 
-        // Update sidebar
-        polarity.innerText = newAssistant.polarity;
-        tone.innerText = newAssistant.tone;
-        totalErr.innerText = newAssistant.red + newAssistant.yellow + newAssistant.blue;
-        red.innerText = newAssistant.red;
-        yellow.innerText = newAssistant.yellow;
-        blue.innerText = newAssistant.blue;
-        hard.innerText = newAssistant.hard;
-        vhard.innerText = newAssistant.vhard;
-        lix.innerText = newAssistant.lix;
-        difficulty.innerText = newAssistant.difficulty;
-        unique.innerText = newAssistant.unique;
-        rare.innerText = newAssistant.rare;
-        wlength.innerText = newAssistant.wlength;
-        slength.innerText = newAssistant.slength;
-        svariance.innerText = newAssistant.svariance;
-        chars.innerText = newAssistant.chars;
-        charsplus.innerText = newAssistant.charsplus;
-        words.innerText = newAssistant.words;
-        sentences.innerText = newAssistant.sentences;
-        readingtime.innerText = newAssistant.readingtime;
-        speakingtime.innerText = newAssistant.speakingtime;
+      // Request 2 :: Vocab
+      postRequest(endpointVocab, saved).then((data) => {
+        // Fill in sidebar
+        unique.innerText = data.numUniqueWords;
+        rare.innerText = data.numRareWords;
+        frequent.innerText = data.numFrequentlyUsed;
 
-        // Initialize popovers
-        try {
-          editor.isReady.then(() => {
-            analyzeBtn.innerHTML = "Analysér";
+        // Calc
+        const uniquePercentage = Number(data.numUniqueWords) / Number(data.numAllWords);
+        const rarePercentage = Number(data.numRareWords) / Number(data.numAllWords);
 
-            setTimeout(() => {
-              initializePopovers();
+        // Update modals
+        // TODO
 
-              const redErrors = document.querySelectorAll(".editor span.red");
-              const yellowErrors = document.querySelectorAll(".editor span.yellow");
-              const blueErrors = document.querySelectorAll(".editor span.blue");
+        // Saved formatted TEXT to Local Storage (w/ frequent words highlighted)
+        // TODO
+      });
 
-              let i;
+      // Request 3 :: Sentence analysis
+      postRequest(endpointSentence, saved).then((data) => {
+        // Fill in sidebar
+        easy.innerText = dataChecker(data.easy);
+        hard.innerText = dataChecker(data.hard);
+        veryhard.innerText = dataChecker(data.veryhard);
 
-              const redLength = redErrors.length;
-              let redArr = [];
-              for (i = 0; i < redLength; i++) {
-                redArr.push(standardizeText(redErrors[i].innerText));
-              }
-              redArr = getUniqueWords(redArr);
-              modalReds.innerHTML = redArr.map((txt) => `<span class="badge bg-red me-1 ms-1">${txt}</span>`).join(" ");
+        s1to3.innerText = dataChecker(data.s1to3);
+        s4to6.innerText = dataChecker(data.s4to6);
+        s7to10.innerText = dataChecker(data.s7to10);
+        s11to18.innerText = dataChecker(data.s11to18);
+        s19to26.innerText = dataChecker(data.s19to26);
+        s26plus.innerText = dataChecker(data.s26plus);
 
-              const yellowLength = yellowErrors.length;
-              let yellowArr = [];
-              for (i = 0; i < yellowLength; i++) {
-                yellowArr.push(standardizeText(yellowErrors[i].innerText));
-              }
-              yellowArr = getUniqueWords(yellowArr);
-              modalYellows.innerHTML = yellowArr
-                .map((txt) => `<span class="badge bg-yellow me-1 ms-1">${txt}</span>`)
-                .join(" ");
+        // TODO Generate chart.js -> Modals
 
-              const blueLength = blueErrors.length;
-              let blueArr = [];
-              for (i = 0; i < blueLength; i++) {
-                blueArr.push(standardizeText(blueErrors[i].innerText));
-              }
-              blueArr = getUniqueWords(blueArr);
-              modalBlues.innerHTML = blueArr
-                .map((txt) => `<span class="badge bg-blue me-1 ms-1">${txt}</span>`)
-                .join(" ");
+        // Generate formatted TEXT for Local Storage (w/ diff sentence and rhythm - but hmmm depends on preference chosen earlier)
+      });
 
-              const uniqueWordsLength = data.uniqueWords.length;
-              modalUniques.innerHTML = "";
-              for (i = 0; i < uniqueWordsLength; i++) {
-                const txt = data.uniqueWords[i];
-                modalUniques.innerHTML += `<span class="badge bg-light text-dark me-1 ms-1">${txt}</span>`;
-              }
+      // Request 4 :: Hedonometer
+      postRequest(endpointHedonometer, saved).then((data) => {
+        // Fill in sidebar
+        hedonometer.innerText = dataChecker(data.happyScore);
 
-              const rareWordsLength = data.distinctRareWords.length;
-              modalRares.innerHTML = "";
-              for (i = 0; i < rareWordsLength; i++) {
-                const txt = data.distinctRareWords[i];
-                modalRares.innerHTML += `<span class="badge bg-light text-dark me-1 ms-1">${txt}</span>`;
-              }
+        // TODO Modals, scoring, emojis etc.
 
-              // Happy words
-              const happyWordsLength = data.distinctHappyWords.length;
+        // Formatted text somehow? With span.emoji::after { content: ":)";}
+      });
 
-              for (i = 0; i < happyWordsLength; i++) {
-                const happyWord = data.distinctHappyWords[i][0];
-                const happyValue = parseFloat(data.distinctHappyWords[i][1]);
-                const happyStd = parseFloat(data.distinctHappyWords[i][2]);
-                const emoji = convertValToEmoji(parseFloat(happyValue));
-                modalHappy.innerHTML += `<li>${emoji} ${happyWord} <span class="badge bg-light text-dark font-monospace">[${happyValue} / 9]</span></li>`;
-              }
-            }, 2000);
-          });
-        } catch (err) {
-          console.log("Something went wrong", err);
-        }
+      // Request 5 :: Corrections
+      // TODO -- Skip the <b> Stuff for now. Also remove headers and lists.
+
+      // Save ALL to Local Storage -- possible with separate function ...
+
+      // Render new EDITOR
+      // const newEditor = data.editorJSON; // Get editor data
+      //   editor.blocks.render(newEditor); // Render new editor
+
+      // Initialize popovers
+      // TODO wtf is this
+      editor.isReady.then(() => {
+        analyzeBtn.innerHTML = "Analysér";
+
+        setTimeout(() => {
+          initializePopovers();
+        }, 2000);
       });
     });
   }
-
-  /**
-   * Send a POST request to my server with the input text to get a response back
-   * (depending on the API)
-   * @param  {[String]} url End point
-   * @param  {[Object]} data Body
-   */
-  async function postRequest(url, data) {
-    function handleErrors(response) {
-      if (!response.ok) {
-        console.error("Response not OK");
-        throw Error(response.statusText);
-      }
-      return response;
-    }
-
-    try {
-      console.log("Sending request ...");
-
-      let response = await fetch(url, {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-        body: JSON.stringify(data),
-      });
-
-      console.log("Response status ...", response.statusText);
-      response = handleErrors(response);
-      return response.json();
-    } catch (err) {
-      console.error("Error in request", err);
-      return data;
-    }
-  }
 };
+
+/**
+ * Send a POST request to my server with the input text to get a response back
+ * (depending on the API)
+ * @param  {[String]} url End point
+ * @param  {[Object]} data Body
+ */
+async function postRequest(url, data) {
+  function handleErrors(response) {
+    if (!response.ok) {
+      console.error("Response not OK");
+      throw Error(response.statusText);
+    }
+    return response;
+  }
+
+  try {
+    console.log("Sending request ...");
+
+    let response = await fetch(url, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data),
+    });
+
+    console.log("Response status ...", response.statusText);
+    response = handleErrors(response);
+    return response.json();
+  } catch (err) {
+    console.error("Error in request", err);
+    return data;
+  }
+}
 
 // * Auxilliary functions
 // Placeholders
@@ -443,6 +431,21 @@ function removeEmptyBlocks() {
 
 function removeHTML(text) {
   return text.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/gi, " ");
+}
+
+function dataChecker(input) {
+  try {
+    input = input.toString();
+  } catch (err) {
+    console.error("Input must be able to be coerced by the toString() method", err);
+    return input;
+  }
+
+  if (input === undefined || typeof input === "undefined") {
+    return "🤷‍♂️";
+  } else {
+    return input;
+  }
 }
 
 // Popover
