@@ -54,24 +54,24 @@ window.onload = function () {
   const speakingtime = document.getElementById("speakingtime");
 
   // Sidebars
-  const toggleBtn = document.querySelector("#sidebarCollapse");
-  const showSidebar = document.querySelector("#showSidebar");
-  const sidebar = document.querySelector("#sidebar");
-  const content = document.querySelector("#content");
-  const bottomMenu = document.querySelector(".bottom-menu");
+  const btnCollapseSidebar = document.querySelector("#sidebarCollapse");
+  const btnShowSidebar = document.querySelector("#showSidebar");
+  const sectionSidebar = document.querySelector("#sidebar");
+  const sectionContent = document.querySelector("#content");
+  const bottomMenu = document.querySelector("#bottom-menu");
 
-  toggleBtn.addEventListener("click", function () {
-    sidebar.classList.toggle("mobile");
-    content.classList.toggle("mobile");
-    showSidebar.hidden = !showSidebar.hidden;
-    bottomMenu.classList.toggle("full-view");
+  btnCollapseSidebar.addEventListener("click", function () {
+    sectionSidebar.classList.toggle("mobile");
+    sectionContent.classList.toggle("mobile");
+    bottomMenu.classList.toggle("mobile");
+    btnShowSidebar.classList.toggle("mobile");
   });
 
-  showSidebar.addEventListener("click", function () {
-    sidebar.classList.toggle("mobile");
-    content.classList.toggle("mobile");
-    showSidebar.hidden = !showSidebar.hidden;
-    bottomMenu.classList.toggle("full-view");
+  btnShowSidebar.addEventListener("click", function () {
+    sectionSidebar.classList.toggle("mobile");
+    sectionContent.classList.toggle("mobile");
+    bottomMenu.classList.toggle("mobile");
+    btnShowSidebar.classList.toggle("mobile");
   });
 
   $(document).ready(function () {
@@ -133,8 +133,8 @@ window.onload = function () {
   difficulty.innerText = assistantData.difficulty;
   unique.innerText = assistantData.unique;
   rare.innerText = assistantData.rare;
-  wlength.innerText = assistantData.wlength;
-  slength.innerText = assistantData.slength;
+  wordLength.innerText = assistantData.wlength;
+  sentenceLength.innerText = assistantData.slength;
   chars.innerText = assistantData.chars;
   charsplus.innerText = assistantData.charsplus;
   words.innerText = assistantData.words;

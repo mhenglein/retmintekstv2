@@ -52,10 +52,6 @@
   min-height: 70vh !important;
 }
 
-#content.mobile {
-  width: 100%;
-}
-
 .ce-block__content,
 .ce-toolbar__content {
   max-width: unset;
@@ -188,8 +184,9 @@ span.nine::after {
   animation-delay: 5s;
 }
 
+// * Sidebar section
 #sidebar {
-  width: 200px;
+  width: var(--sidebar);
   position: fixed;
   top: 0;
   right: 0;
@@ -198,6 +195,29 @@ span.nine::after {
   padding: 10px;
   transition: all 0.3s;
   background-color: white;
+}
+
+// ! .mobile
+// Add .mobile to hide sidebar
+#sidebar.mobile {
+  margin-right: calc(-1 * var(--sidebar)) !important;
+}
+
+// And show the full area
+#content.mobile {
+  width: 100% !important;
+}
+
+// And show the full area
+#bottom-menu.mobile {
+  width: 100% !important;
+}
+
+#showSidebar.mobile {
+  display: none;
+  @media (max-width: 768px) {
+    display: all; // Show button on small screens
+  }
 }
 
 .hide-assistant {
@@ -255,19 +275,9 @@ small.report-details {
   }
 }
 
-#sidebar.mobile {
-  margin-right: -200px;
-}
-
 #sidebar .sidebar-header {
   padding: 40px 20px 5px 20px;
-  // background: #6d7fcc;
 }
-
-// #sidebar ul.components {
-//   // padding: 20px 0;
-//   // border-bottom: 1px solid #47748b;
-// }
 
 #sidebar.components {
   font-weight: 100;
@@ -286,19 +296,12 @@ small.report-details {
 }
 
 #sidebar ul li a:hover {
-  // color: #7386d5;
   background: #fff;
 }
 
 ul li ul li {
   padding-right: 20px;
 }
-
-// #sidebar ul li.mobile > a,
-// a[aria-expanded="true"] {
-//   // color: #fff;
-//   // background: #6d7fcc;
-// }
 
 a[data-bs-toggle="collapse"] {
   position: relative;
@@ -324,18 +327,13 @@ ul ul a {
 }
 
 /* Media queries */
+// TODO
 @media (max-width: 768px) {
   #sidebar {
-    margin-right: -275px;
+    margin-right: calc(-1 * var(--sidebar));
   }
   #sidebar.mobile {
     margin-right: 0;
-  }
-  #content {
-    width: 100%;
-  }
-  #content.mobile {
-    width: calc(100% - 275px);
   }
   #sidebarCollapse span {
     display: none;

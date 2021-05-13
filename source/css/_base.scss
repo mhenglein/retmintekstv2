@@ -3,26 +3,22 @@ body {
   overscroll-behavior-y: none;
 }
 
-// * Wrapper
 .wrapper {
   display: flex;
   width: 100%;
 }
 
+// * Content = Editor area w/o sidebar.
 #content {
-  width: calc(100% - 200px);
+  @media (max-width: 768px) {
+    width: 100%; // Hide sidebar on small screens
+  }
+  width: calc(100% - var(--sidebar)); // Default: Make room for sidebar
   min-height: 100vh;
   transition: all 0.3s;
   position: absolute;
   top: 0;
   left: 0;
-}
-
-.main-area {
-  width: calc(100% - 200px);
-  transition: all 0.3s;
-  margin-right: 4rem;
-  margin-left: 4rem;
 }
 
 // TYPOGRAPHY

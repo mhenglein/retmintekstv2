@@ -6744,22 +6744,6 @@
       "oAP" : "\/build\/content\/_body\/__body.html",
       "oF" : 0
     },
-    "\/source\/content\/_body\/_editor.kit" : {
-      "cB" : 0,
-      "ft" : 2048,
-      "hM" : 0,
-      "oA" : 1,
-      "oAP" : "\/build\/content\/_body\/_editor.html",
-      "oF" : 0
-    },
-    "\/source\/content\/_body\/_footer.kit" : {
-      "cB" : 0,
-      "ft" : 2048,
-      "hM" : 0,
-      "oA" : 1,
-      "oAP" : "\/build\/content\/_body\/_footer.html",
-      "oF" : 0
-    },
     "\/source\/content\/_body\/_modals.kit" : {
       "cB" : 0,
       "ft" : 2048,

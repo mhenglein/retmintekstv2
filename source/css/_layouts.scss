@@ -23,64 +23,38 @@
 }
 
 // Bottom menu
-.full-view {
-  width: 100vw !important;
-  div {
-    @media (min-width: 900px) {
-      width: calc((100vw) / 6) !important;
-    }
-    width: calc((100vw) / 3) !important;
+#bottom-menu {
+  width: calc(100% - var(--sidebar));
+  @media (max-width: 768px) {
+    width: 100% !important;
   }
-}
-
-@media (max-width: 768px) {
-  .bottom-menu {
-    width: 100vw !important;
-    div {
-      width: calc((100vw) / 3) !important;
-    }
-  }
-}
-
-.bottom-menu {
-  transition: all 0.3s;
-  position: absolute;
   top: auto;
-  bottom: 0em;
-  pointer-events: none;
-  width: calc(100vw - 200px);
-
-  z-index: 9001;
   margin-bottom: -0.25em;
   font-size: 1em;
-  display: block;
+  pointer-events: none;
+  transition: all 0.3s; // Effect?
   div {
-    @media (min-width: 900px) {
-      width: calc((100vw - 200px) / 6);
+    width: calc(100% / 6);
+    @media (max-width: 768px) {
+      width: calc(100% / 3);
     }
-    width: calc((100vw - 200px) / 3);
     transition: all 0.3s;
     overflow: hidden;
     pointer-events: all;
-    float: left;
-    opacity: 1;
+    // float: left;
+    // opacity: 1;
     cursor: pointer;
-
-    span.tag {
+    .tag {
       display: block;
       text-align: center;
       width: 100%;
       font-weight: 700;
-      height: 3em;
+      height: 3rem; // Responsive - i.e. reduces on smaller screens
       line-height: 3em;
       font-size: 1em;
       font-family: "Nunito", sans-serif;
-      span.label {
-        font-size: 1em;
-        text-shadow: 1px 1px 1px #565656;
-        vertical-align: middle;
-        color: #fff;
-      }
+      text-shadow: 1px 1px 1px #565656;
+      color: #fff;
     }
   }
   .blue-menu {
@@ -89,12 +63,20 @@
     &:hover {
       background-color: #75bdff;
     }
+    &:active {
+      background-color: #37638d;
+      box-shadow: 0 -4px #42a5ff;
+    }
   }
   .green-menu {
     background-color: #2bde73;
     box-shadow: 0 -4px #73e797;
     &:hover {
       background-color: #73e797;
+    }
+    &:active {
+      background-color: #166f39;
+      box-shadow: 0 -4px #2bde73;
     }
   }
   .yellow-menu {
@@ -103,12 +85,20 @@
     &:hover {
       background-color: #ffd76a;
     }
+    &:active {
+      background-color: #66500e;
+      box-shadow: 0 -4px #ffc924;
+    }
   }
   .red-menu {
     background-color: #ff4742;
     box-shadow: 0 -4px #ff7873;
     &:hover {
       background-color: #ff7873;
+    }
+    &:active {
+      background-color: #8d3a37;
+      box-shadow: 0 -4px #ff4742;
     }
   }
   .darkblue-menu {
@@ -117,6 +107,10 @@
     &:hover {
       background-color: #597da1;
     }
+    &:active {
+      background-color: #0b2034;
+      box-shadow: 0 -4px #1c5182;
+    }
   }
   .grey-menu {
     background-color: #ccc;
@@ -124,11 +118,9 @@
     &:hover {
       background-color: #ddd;
     }
+    &:active {
+      background-color: #aaa;
+      box-shadow: 0 -4px #ccc;
+    }
   }
-}
-
-/* Footer */
-#footer {
-  font-size: 0.8rem;
-  margin-top: 20px;
 }

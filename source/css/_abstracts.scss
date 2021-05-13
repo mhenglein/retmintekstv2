@@ -44,6 +44,11 @@ $bg: #f8f9fa;
 $radius: 20%;
 $grey0: rgb(100, 100, 100);
 
+$sidebarWidth: 200; //px
+:root {
+  --sidebar: 200px; //CSS variable
+}
+
 // Typography
 $font-sans: Lato, sans-serif;
 
