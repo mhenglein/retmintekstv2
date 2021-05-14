@@ -1,5 +1,3 @@
-<button id="showSidebar" hidden class="btn btn-sm px-2 btn-outline-success">Vis assistenten</button>
-
 <!-- Modal: Goals -->
 <div class="modal fade" id="goalsModal" tabindex="-1" aria-labelledby="goalsModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -11,7 +9,7 @@
         </h5>
 
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </Definér>
+      </div>
       <div class="modal-body">
         <div class="d-flex" id="audience">
           <h6 class="goals-header">Publikum</h6>
@@ -42,10 +40,37 @@
   </div>
 </div>
 
+<!-- ** Modal: Unique **  -->
+<div class="modal fade" id="uniqueModal" tabindex="-1" aria-labelledby="uniqueModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uniqueModalLabel">Unikke ord</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Ved 'unikt' ord forstås, at det kun er anvendt én gang i din tekst. Få unikke ord kan være et udtryk for, at
+          du anvender et monotont sprog. Dog vil en kortere tekst vil naturligvis have flere unikke ord. Se derfor også
+          på procenten, altså antallet af unikke ord i forhold til alle ord.
+        </p>
+        <small>
+          Vær opmærksom på at ordene i din tekst er forsøgt forvandlet til deres 'lemma', sådan så bøjninger mv. ikke
+          tæller for to forskellige ord
+        </small>
+        <p><span id="uniqueWordsList"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ! OLD -->
 
 <!-- Modal: Red -->
-<div class="modal fade" id="redModal" tabindex="-1" aria-labelledby="redModal" aria-hidden="true">
+<!-- <div class="modal fade" id="redModal" tabindex="-1" aria-labelledby="redModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -64,10 +89,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Modal: Yellow -->
-<div class="modal fade" id="yellowModal" tabindex="-1" aria-labelledby="yellowModal" aria-hidden="true">
+<!-- <div class="modal fade" id="yellowModal" tabindex="-1" aria-labelledby="yellowModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -92,10 +117,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Modal: Blue -->
-<div class="modal fade" id="blueModal" tabindex="-1" aria-labelledby="blueModal" aria-hidden="true">
+<!-- <div class="modal fade" id="blueModal" tabindex="-1" aria-labelledby="blueModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -120,38 +145,7 @@
       </div>
     </div>
   </div>
-</div>
-
-<!-- Modal: Unique -->
-<div class="modal fade" id="uniqueModal" tabindex="-1" aria-labelledby="uniqueModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uniqueModalLabel">Unikke ord</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>
-          Ved 'unikt' ord forstås, at det kun er anvendt én gang i din tekst. Få unikke ord kan være et udtryk for, at
-          du anvender et monotont sprog. Dog vil en kortere tekst vil naturligvis have flere unikke ord. Se derfor også
-          på procenten, altså antallet af unikke ord i forhold til alle ord.
-        </p>
-        <p>
-          Vær opmærksom på at ordene i din tekst er forsøgt forvandlet til deres 'lemma', sådan så bøjninger mv. ikke
-          tæller for to forskellige ord
-        </p>
-        <p>
-          <span id="uniquewords"
-            ><button class="btn btn-sm btn-info">Analysér</button> din tekst for at se dine unikke ord</span
-          >
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
-      </div>
-    </div>
-  </div>
-</div>
+</div> -->
 
 <!-- Modal: Rare -->
 <div class="modal fade" id="rareModal" tabindex="-1" aria-labelledby="rareModal" aria-hidden="true">

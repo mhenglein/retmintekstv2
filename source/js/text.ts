@@ -19,6 +19,7 @@ class TextParser {
   avgSentenceLength: number;
   lemmas: Array<string>;
   lix: number;
+  lixDifficulty: string;
   lixAudience: string;
   let: any;
   lus: any;
@@ -399,16 +400,27 @@ calcLix() {
     this.lix = lix <= 0 ? 0 : lix;
   }
 
-  // * Audience associated w/ LIX 
+  // * Difficulty associated w/ LIX 
   // If too little data, return 'unknown'
   if (this.wordCount < 10 || this.sentenceCount < 3) {
+    this.lixDifficulty = "Ukendt";
     this.lixAudience = "Ukendt";
-  } else if (this.lix >= 55) this.lixAudience = "Svær";
-  else if (this.lix >= 45 && this.lix < 55) this.lixAudience = "Mellemsvær";
-  else if (this.lix >= 35 && this.lix < 45) this.lixAudience  = "Middel";
-  else if (this.lix >= 25 && this.lix < 35) this.lixAudience = "Let";
-  else if (this.lix < 25 && this.lix >0) this.lixAudience = "Let for alle";
-  else this.lixAudience = "Ukendt";
+  } else if (this.lix >= 55) {
+    this.lixDifficulty = "Svær";
+this.lixAudience = "Universit";
+}
+  else if (this.lix >= 45 && this.lix < 55) {this.lixDifficulty = "Mellemsvær";
+this.lixAudience = "Gymnasium";}
+  else if (this.lix >= 35 && this.lix < 45) {this.lixDifficulty  = "Middel";
+this.lixAudience = "7-9. klasse";}
+  else if (this.lix >= 25 && this.lix < 35) {this.lixDifficulty = "Let"
+  this.lixAudience = "4-6. klasse";}
+
+  else if (this.lix < 25 && this.lix >0) {this.lixDifficulty = "Let for alle";
+this.lixAudience = "1-3. klasse";}
+  else {this.lixDifficulty = "Ukendt";
+  this.lixAudience = "Ukendt";
+}
 
   return this.lix;
 
@@ -551,7 +563,7 @@ lemmafyText(lemmaDict:Array<any>) {
  * Map a value (number) to a corresponding emoji
  * @param  {[number]} score A scoring on a scale from 1-9
  */
-convertValToEmoji(score:number) {
+static convertValToEmoji(score:number) {
   try {
     switch (true) {
       case score < 2:

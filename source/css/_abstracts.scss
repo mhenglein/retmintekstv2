@@ -45,8 +45,18 @@ $radius: 20%;
 $grey0: rgb(100, 100, 100);
 
 $sidebarWidth: 200; //px
+
 :root {
-  --sidebar: 200px; //CSS variable
+  --sidebar: 350px; //CSS variable
+  @media (max-width: 1200px) {
+    --sidebar: 300px; //CSS variable
+  }
+  @media (max-width: 992) {
+    --sidebar: 250px; //CSS variable
+  }
+  @media (max-width: 768) {
+    --sidebar: 200px; //CSS variable
+  }
 }
 
 // Typography
@@ -71,6 +81,10 @@ $purple-bg: #cdbeee;
 
 $hard: $yellow-bg;
 $veryhard: $red-bg;
+
+$grey: #ccc;
+$longword: $yellow-bg;
+$longword-border: $yellow-border-bottom-color;
 
 $two: "🤬";
 $three: "😡";

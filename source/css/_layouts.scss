@@ -19,7 +19,15 @@
 }
 
 .nav-link {
-  font-size: 0.75rem !important;
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+  @media (max-width: 768px) {
+    font-size: 0.65rem;
+  }
+}
+
+.grey {
+  background-color: $grey !important;
 }
 
 // Bottom menu
@@ -38,20 +46,30 @@
     @media (max-width: 768px) {
       width: calc(100% / 3);
     }
+    @media (max-width: 384px) {
+      width: calc(100% / 2);
+    }
     transition: all 0.3s;
     overflow: hidden;
     pointer-events: all;
-    // float: left;
-    // opacity: 1;
     cursor: pointer;
     .tag {
       display: block;
       text-align: center;
       width: 100%;
       font-weight: 700;
-      height: 3rem; // Responsive - i.e. reduces on smaller screens
+      height: 3rem;
+      @media (max-width: 768px) {
+        height: 2.5rem;
+      }
       line-height: 3em;
-      font-size: 1em;
+      font-size: 1rem;
+      @media (max-width: 768px) {
+        font-size: 0.85rem;
+      }
+      @media (max-width: 384px) {
+        font-size: 0.7rem;
+      }
       font-family: "Nunito", sans-serif;
       text-shadow: 1px 1px 1px #565656;
       color: #fff;

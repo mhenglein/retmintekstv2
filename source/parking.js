@@ -478,3 +478,22 @@ setInterval(initializePopovers(), 5000);
 
 //   returnText = returnText.join(" ");
 // }
+
+// TODO Modify text - hold on until I import my highlighter
+// Assume object
+// let output = input;
+// if (options.highlight != "nothing") {
+//   if (inputType === "object") {
+//     frequentlyUsedWords.forEach((item, index) => {
+//       const highlighted = `<span class='yellow'>${item}</span>`;
+//       const replacementArray = [item, highlighted];
+//       output = traverseEditorJS(input, updateText, replacementArray);
+//     });
+//   }
+
+//   function updateText(text, replacementArray) {
+//     const oldText = replacementArray[0];
+//     const newText = replacementArray[1];
+//     return text.replaceAll(oldText, newText);
+//   }
+// }

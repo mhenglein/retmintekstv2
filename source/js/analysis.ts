@@ -14,18 +14,15 @@ class TextHighlighter {
     formatting: Array<any>;
     replacements:Array<any>;
 
-    constructor(s:string, dict:Array<any>) {
+    constructor(s:string) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("TextHighlighter only works with strings and values that can be coerced into a string");
     }
 
-    if (dict.length === 0) {
-         throw new Error("TextHighlighter requires a dictionary to be applied");
-    }
     this.text = s.toString();
     this.original = s.toString();
-    this.dict = dict;
-    this.id = 0;
+    this.dict = [];
+    this.id = Number(Math.floor(100000000 + Math.random() * 900000000));
     this.formatting = [];
     this.replacements = [];
 
@@ -81,6 +78,51 @@ class TextHighlighter {
 }
 
   }
+
+ findAndReplaceLight(replacementArray:Array<any>, replacementType:string, popoverText:string, css:string) {
+
+     // Mimicking the regex boundary (which doesn't include ÆÆÅ)
+    const b1 = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|^)";
+    const b2 = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|$)";
+
+    replacementArray.forEach((item, index) => {
+
+      // Create searchs tring
+      const searchWord = item
+      const searchString = b1+ searchWord+b2
+      const regex = new RegExp(searchString, "gi")
+
+      let checkIfMatch = regex.test(this.text);
+       // Only proceed if there is a match
+    if (checkIfMatch) {
+      let textMatch = RegExp["$&"];
+      textMatch = textMatch.trim();
+
+      const textForPopoverTitle:string = textMatch.replace(/[.,\/#!?"'$%\^&\*;:{}=\_`~()]/g, "");
+      const popoverTitle:string = `${replacementType} <span class='badge bg-${css} ms-2'>${textForPopoverTitle}</span>`;
+      const replacementString = ` <span class="${css}" data-bs-toggle="popover" data-bs-original-title="${popoverTitle}" data-bs-html="true" data-bs-content="${popoverText}">${textMatch}</span> `
+
+        this.updateID();
+
+    this.replacements.push([this.id, replacementString, replacementType]);
+
+    }
+    this.text = this.text.replaceAll(regex, String(this.id));
+
+    })
+  
+ }
+
+ reconvertTextLight() {
+
+     this.replacements.forEach(arr => {
+        const replacement = new RegExp(arr[0], "g") // 0 is the ID
+         // Test if the text contains the ID
+        const regexTest = replacement.test(this.text);
+        if (regexTest) this.text = this.text.replace(replacement, arr[1]) // 1 is the <span>text</span>
+     })
+     
+ }
 
  findAndReplace() {
      // Mimicking the regex boundary (which doesn't include ÆÆÅ)
@@ -158,12 +200,7 @@ class TextHighlighter {
 
   
 updateID() {
-    if (this.id === 0) {this.generateInitialID}
     this.id++;
-}
-
-generateInitialID() {
-   this.id = Math.floor(100000000 + Math.random() * 900000000);
 }
 
 }

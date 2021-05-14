@@ -10,6 +10,7 @@ const cors = require("cors");
 
 // * Other Libraries
 const TextParser = require("./js/text.js").TextParser;
+const TextHighlighter = require("./js/analysis.js").TextHighlighter;
 const fs = require("fs");
 const papa = require("papaparse");
 
@@ -80,11 +81,12 @@ function textMetrics(req, res) {
 
   // Get request input & options
   const input = req.body.input;
+  const blocks = input.blocks;
   const inputType = typeof input;
   const options = req.body.options;
 
   // Extract full text from object
-  let textForAnalysis = extractFullText(inputType, input);
+  let textForAnalysis = extractFullText(inputType, blocks);
 
   // Preparation - Convert to TextParser object && clean HTML
   textForAnalysis = new TextParser(textForAnalysis);
@@ -92,25 +94,6 @@ function textMetrics(req, res) {
 
   // Optional Remove 'stopord' from the text
   if (options.removeStopwords === "remove") textForAnalysis.removeAllStopord(stopord);
-
-  // TODO Modify text - hold on until I import my highlighter
-  // Assume object
-  // let output = input;
-  // if (options.highlight != "nothing") {
-  //   if (inputType === "object") {
-  //     frequentlyUsedWords.forEach((item, index) => {
-  //       const highlighted = `<span class='yellow'>${item}</span>`;
-  //       const replacementArray = [item, highlighted];
-  //       output = traverseEditorJS(input, updateText, replacementArray);
-  //     });
-  //   }
-
-  //   function updateText(text, replacementArray) {
-  //     const oldText = replacementArray[0];
-  //     const newText = replacementArray[1];
-  //     return text.replaceAll(oldText, newText);
-  //   }
-  // }
 
   // Calculations
   textForAnalysis.getWords();
@@ -121,6 +104,30 @@ function textMetrics(req, res) {
   textForAnalysis.calcLix(); // Calculate LIX & the associated difficulty
   textForAnalysis.calcTime(); // Calculate reading & speaking time
   const paragraphs = countParagraphs(input);
+  const normalsider = Number(textForAnalysis.chars / 2400).toPrecision(1);
+
+  // Highlighted output - Loop through EditorJS object
+  let highlightedObject = input;
+  for (let i = 0; i < input.blocks.length; i++) {
+    const block = input.blocks[i];
+    const text = block.data.text;
+
+    const parsedText = new TextParser(text);
+    parsedText.removeHTML().removeNonLetters().removeNonLetters();
+
+    const highlightedText = new TextHighlighter(parsedText.text);
+    highlightedText.findAndReplaceLight(
+      textForAnalysis.longWords,
+      "Langt ord",
+      "Ord på over 6 bogstaver trækker dit LIX-tal op",
+      "longword"
+    );
+
+    highlightedText.reconvertTextLight();
+    console.log(highlightedText);
+
+    highlightedObject.blocks[i].data.text = highlightedText.text;
+  }
 
   // JSON
   const returnJSON = {
@@ -131,15 +138,17 @@ function textMetrics(req, res) {
     sentences: textForAnalysis.sentenceCount,
     slength: textForAnalysis.avgSentenceLength,
     wlength: textForAnalysis.avgWordLength,
-    svariance: textForAnalysis.sentenceVariance,
+    variance: textForAnalysis.sentenceVariance,
     sentenceStdDev: textForAnalysis.sentenceStdDev,
     lix: textForAnalysis.lix,
-    difficulty: textForAnalysis.lixAudience,
+    difficulty: textForAnalysis.lixDifficulty,
+    audience: textForAnalysis.lixAudience,
     readingtime: textForAnalysis.timeToRead,
     speakingtime: textForAnalysis.timeToSpeak,
-    outputText: output,
+    outputText: highlightedObject,
     arrLongWords: textForAnalysis.longWords,
     paragraphs: paragraphs,
+    normalsider: normalsider,
   };
 
   console.log(returnJSON);
@@ -158,11 +167,12 @@ function rateHappiness(req, res) {
 
   // Get request input & options
   const input = req.body.input;
+  const blocks = input.blocks;
   const inputType = typeof input;
-  const options = req.body.options;
+  const options = req.body.options; // uniqueOnly; lemmafyText;
 
   // Extract full text from object
-  let textForAnalysis = extractFullText(inputType, input);
+  let textForAnalysis = extractFullText(inputType, blocks);
 
   // Preparation - Convert to TextParser object && clean
   textForAnalysis = new TextParser(textForAnalysis);
@@ -200,14 +210,17 @@ function rateHappiness(req, res) {
   // TODO Better scoring, this will bias towards mean
   const happySum = happyValues.reduce((pv, cv) => parseFloat(pv) + parseFloat(cv), 0);
   const happyScore = (happySum / happyValues.length).toPrecision(2);
+  const emoji = TextParser.convertValToEmoji(happyScore);
 
   // ! Send back JSON w/ scoring and words
   const returnJSON = {
     happyWords: happyWords,
     happyScore: happyScore,
+    emoji: emoji,
+    outputText: "",
   };
 
-  console.log(returnJSON);
+  // console.log(returnJSON);
   res.json(returnJSON).end();
 
   // Time stamp
@@ -225,8 +238,9 @@ function wordVocab(req, res) {
 
   // Get request input & options
   const input = req.body.input;
+  const blocks = input.blocks;
   const inputType = typeof input;
-  const options = req.body.options;
+  const options = req.body.options; // Threshold, stopord,
 
   let threshold = options.threshold;
   try {
@@ -236,7 +250,7 @@ function wordVocab(req, res) {
   }
 
   // Extract full text from object
-  let textForAnalysis = extractFullText(inputType, input);
+  let textForAnalysis = extractFullText(inputType, blocks);
 
   // Preparation - Convert to TextParser object && clean away HTML
   textForAnalysis = new TextParser(textForAnalysis);
@@ -251,6 +265,7 @@ function wordVocab(req, res) {
   const allWords = textForAnalysis.words.length;
 
   // Get all REPEAT words
+  // TODO Ignore stopord?
   textForAnalysis.getFrequentWords(stopord);
   let repeatWords = textForAnalysis.frequentlyUsedWords;
 
@@ -287,6 +302,7 @@ function wordVocab(req, res) {
   const rareWords = textForAnalysis.rareWords;
 
   // Prepare returnJSON and close connection
+  // TODO Return highlighted text w/ repeatwords
   const returnJSON = {
     numAllWords: allWords,
     numRareWords: rareWords.length,
@@ -297,7 +313,7 @@ function wordVocab(req, res) {
     frequentlyUsed: repeatWords,
   };
 
-  console.log(returnJSON);
+  // console.log(returnJSON);
   res.json(returnJSON).end();
 
   // Time stamp
@@ -315,8 +331,9 @@ function sentenceEvaluation(req, res) {
 
   // Get request input & options
   const input = req.body.input;
+  const blocks = input.blocks;
   const inputType = typeof input;
-  const options = req.body.options;
+  const options = req.body.options; // Highlight
 
   let [all, easy, hard, veryhard] = [0, 0, 0, 0];
   let [s1to3, s4to6, s7to10, s11to18, s19to26, s26plus] = [0, 0, 0, 0, 0, 0];
@@ -324,10 +341,10 @@ function sentenceEvaluation(req, res) {
   if (inputType === "string") {
     // Extract full text from object
     // TODO
-    let textForAnalysis = extractFullText(inputType, input);
+    let textForAnalysis = extractFullText(inputType, blocks);
   } else {
     // Work with EditorJS object -- loop through blocks
-    input.forEach((block) => {
+    blocks.forEach((block) => {
       const textForAnalysis = new TextParser(block.data.text);
       textForAnalysis.removeHTMLexceptFormatting();
       textForAnalysis.getSentences();
@@ -383,7 +400,7 @@ function sentenceEvaluation(req, res) {
     // Sentence difficulty
     easy: easy,
     hard: hard,
-    vhard: vhard,
+    veryhard: veryhard,
     // Sentence lengths
     s1to3: s1to3,
     s4to6: s4to6,
@@ -393,7 +410,7 @@ function sentenceEvaluation(req, res) {
     s26plus: s26plus,
   };
 
-  console.log(returnJSON);
+  // console.log(returnJSON);
   res.json(returnJSON).end(); // Send JSON back and end the connection
 
   // Time stamp
@@ -487,7 +504,7 @@ app.post("/api/sentence", function (req, res) {
     s26plus: s26plus,
   };
 
-  console.log(returnObj);
+  // console.log(returnObj);
   res.json(returnObj).end(); // Send both JSONs back and the end the connection
 
   // Time stamp

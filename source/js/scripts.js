@@ -11,7 +11,7 @@ import List from "@editorjs/list";
 
 // Window onload
 window.onload = function () {
-  // Get elements
+  // Get DOM elements
   const totalErr = document.getElementById("totalErr");
 
   const korrekthed = document.getElementById("korrekthed");
@@ -22,6 +22,8 @@ window.onload = function () {
   const unique = document.getElementById("unique");
   const rare = document.getElementById("rare");
   const frequent = document.getElementById("frequent");
+
+  const uniqueWordsList = document.getElementById("uniqueWordsList");
 
   const lix = document.getElementById("lix");
   const difficulty = document.getElementById("difficulty");
@@ -80,67 +82,84 @@ window.onload = function () {
     });
   });
 
-  // Download from Local Storage
-  const assistantData = JSON.parse(localStorage.getItem("assistant"));
+  // Bottom menu
+  const btnSuggestions = document.getElementById("btnSuggestions");
+  const btnVocab = document.getElementById("btnVocab");
+  const btnReadability = document.getElementById("btnReadability");
+  const btnTextrhythm = document.getElementById("btnTextrhythm");
+  const btnSentiment = document.getElementById("btnSentiment");
+  const btnRemove = document.getElementById("btnRemove");
 
   // Update sidebar
+  const analyzeSpinner = document.getElementById("spinner");
+
+  // LOCAL STORAGE
+  function getFromStorage(identifier) {
+    try {
+      return String(localStorage.getItem(identifier));
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
+
+  function updateLocalStorage(identifier, value) {
+    if (identifier === "" || identifier == null) {
+      console.log("Failed to update local storage value", identifier);
+    }
+
+    try {
+      localStorage.setItem(identifier, value);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   totalErr.innerText =
-    assistantData.korrekthed + assistantData.originalitet + assistantData.klarhed + assistantData.udtryk;
-  korrekthed.innerText = assistantData.korrekthed;
-  originalitet.innerText = assistantData.originalitet;
-  klarhed.innerText = assistantData.klarhed;
-  udtryk.innerText = assistantData.udtryk;
+    Number(getFromStorage("korrekthed")) +
+    Number(getFromStorage("originalitet")) +
+    Number(getFromStorage("klarhed")) +
+    Number(getFromStorage("udtryk"));
 
-  unique.innerText = assistantData.unique;
-  rare.innerText = assistantData.rare;
-  frequent.innerText = assistantData.frequent;
+  korrekthed.innerText = Number(getFromStorage("korrekthed"));
+  originalitet.innerText = Number(getFromStorage("originalitet"));
+  klarhed.innerText = Number(getFromStorage("klarhed"));
+  udtryk.innerText = Number(getFromStorage("udtryk"));
 
-  easy.innerText = assistantData.easy;
-  hard.innerText = assistantData.hard;
-  veryhard.innerText = assistantData.veryhard;
+  unique.innerText = Number(getFromStorage("unique"));
+  rare.innerText = Number(getFromStorage("rare"));
+  frequent.innerText = Number(getFromStorage("frequent"));
 
-  lix.innerText = assistantData.lix;
-  difficulty.innerText = assistantData.difficulty;
-  audience.innerText = assistantData.audience;
-  longwords.innerText = assistantData.longwords;
-  easy.innerText = assistantData.easy;
-  hard.innerText = assistantData.hard;
-  veryhard.innerText = assistantData.veryhard;
-  wordLength.innerText = assistantData.wordLength;
-  sentenceLength.innerText = assistantData.sentenceLength;
+  easy.innerText = Number(getFromStorage("easy"));
+  hard.innerText = Number(getFromStorage("hard"));
+  veryhard.innerText = Number(getFromStorage("veryhard"));
 
-  sentenceLength2.innerText = assistantData.sentenceLength;
-  variance.innerText = assistantData.variance;
-  s1to3.innerText = assistantData.s1to3;
-  s4to6.innerText = assistantData.s4to6;
-  s7to10.innerText = assistantData.s7to10;
-  s11to18.innerText = assistantData.s11to18;
-  s19to26.innerText = assistantData.s19to26;
-  s26plus.innerText = assistantData.s26plus;
+  lix.innerText = Number(getFromStorage("lix"));
+  difficulty.innerText = String(getFromStorage("difficulty"));
+  audience.innerText = String(getFromStorage("audience"));
+  longwords.innerText = Number(getFromStorage("longwords"));
+  wordLength.innerText = Number(getFromStorage("wordLength"));
+  sentenceLength.innerText = Number(getFromStorage("sentenceLength"));
 
-  hedonometer.innerText = assistantData.hedonometer;
+  sentenceLength2.innerText = Number(getFromStorage("sentenceLength"));
+  variance.innerText = Number(getFromStorage("variance"));
+  s1to3.innerText = Number(getFromStorage("s1to3"));
+  s4to6.innerText = Number(getFromStorage("s4to6"));
+  s7to10.innerText = Number(getFromStorage("s7to10"));
+  s11to18.innerText = Number(getFromStorage("s11to18"));
+  s19to26.innerText = Number(getFromStorage("s19to26"));
+  s26plus.innerText = Number(getFromStorage("s26plus"));
 
-  paragraphs.innerText = assistantData.paragraphs;
-  normalsider.innerText = assistantData.normalsider;
-  sentences.innerText = assistantData.sentences;
-  words.innerText = assistantData.words;
-  chars.innerText = assistantData.chars;
-  charsplus.innerText = assistantData.charsplus;
-  readingtime.innerText = assistantData.readingtime;
-  speakingtime.innerText = assistantData.speakingtime;
+  hedonometer.innerText = String(getFromStorage("hedonometer"));
 
-  lix.innerText = assistantData.lix;
-  difficulty.innerText = assistantData.difficulty;
-  unique.innerText = assistantData.unique;
-  rare.innerText = assistantData.rare;
-  wordLength.innerText = assistantData.wlength;
-  sentenceLength.innerText = assistantData.slength;
-  chars.innerText = assistantData.chars;
-  charsplus.innerText = assistantData.charsplus;
-  words.innerText = assistantData.words;
-  sentences.innerText = assistantData.sentences;
-  readingtime.innerText = assistantData.readingtime;
-  speakingtime.innerText = assistantData.speakingtime;
+  paragraphs.innerText = Number(getFromStorage("paragraphs"));
+  normalsider.innerText = Number(getFromStorage("normalsider"));
+  sentences.innerText = Number(getFromStorage("sentences"));
+  words.innerText = Number(getFromStorage("words"));
+  chars.innerText = Number(getFromStorage("chars"));
+  charsplus.innerText = Number(getFromStorage("charsplus"));
+  readingtime.innerText = String(getFromStorage("readingtime"));
+  speakingtime.innerText = String(getFromStorage("speakingtime"));
 
   // Retrieve data from storage
   const editorData = JSON.parse(localStorage.getItem("editor"));
@@ -163,23 +182,33 @@ window.onload = function () {
 
       // * Allow buttons
 
+      // * Bottom menu
+      btnReadability.addEventListener("click", () => {
+        // Long word or difficults sentences? Option to be made
+
+        const getEditorText = JSON.parse(getFromStorage("highlightedText_longwords"));
+        console.log("readability", getEditorText);
+        editor.render(getEditorText);
+      });
+
+      btnRemove.addEventListener("click", () => {
+        editor.save().then((saved) => {
+          for (let i = 0; i < saved.blocks.length; i++) {
+            saved.blocks[i].data.text = removeHTML(saved.blocks[i].data.text);
+          }
+          localStorage.setItem("editor", saved);
+          editor.render(saved);
+        });
+        resetSidebar();
+      });
+
+      // * Top menu
       // Analyze Text btn
       const analyzeBtn = document.getElementById("analyzeBtn");
       analyzeBtn.addEventListener("click", function () {
         // API Calls
+        analyzeSpinner.hidden = false;
         sendRequests();
-      });
-
-      // Clean all button
-      const cleanBtn = document.getElementById("cleanBtn");
-      cleanBtn.addEventListener("click", function () {
-        if (confirm("Er du sikker?")) {
-          editor.save().then((saved) => {
-            localStorage.setItem("editor-backup", JSON.stringify(saved)); // Allows a backup in case the user clicked by mistake
-            editor.clear();
-            resetSidebar();
-          });
-        }
       });
 
       // Remove markup button
@@ -210,104 +239,190 @@ window.onload = function () {
 
   async function sendRequests() {
     editor.save().then((saved) => {
-      // Save EditorJS to Local Storage
-      localStorage.setItem("editor", JSON.stringify(data));
+      if (saved.blocks.length > 0 && saved.blocks[0] !== "") {
+        // Save EditorJS to Local Storage
+        localStorage.setItem("editor", JSON.stringify(saved));
 
-      const path = "http://localhost:3000";
-      const endpointMetrics = `${path}/api/metrics`;
-      const endpointVocab = `${path}/api/vocab`;
-      const endpointHedonometer = `${path}/api/hedonometer`;
-      const endpointSentence = `${path}/api/sentence`;
+        const path = "http://localhost:3000";
+        const endpointMetrics = `${path}/api/metrics`;
+        const endpointVocab = `${path}/api/vocab`;
+        const endpointHedonometer = `${path}/api/hedonometer`;
+        const endpointSentence = `${path}/api/sentence`;
 
-      // PReference - which highlighting method?
+        // PReference - which highlighting method?
 
-      // Request 1 :: Metrics
-      postRequest(endpointMetrics, saved).then((data) => {
-        // Fill in
-        words.innerText = dataChecker(data.words);
-        longwords.innerText = dataChecker(data.longWords);
-        chars.innerText = dataChecker(data.chars);
-        charsplus.innerText = dataChecker(data.charsAndSpaces);
-        sentences.innerText = dataChecker(data.sentences);
-        sentenceLength.innerText = dataChecker(data.slength);
-        sentenceLength2.innerText = dataChecker(data.slength);
-        wordLength.innerText = dataChecker(data.wlength);
-        variance.innerText = dataChecker(data.variance);
-        lix.innerText = dataChecker(data.lix);
-        difficulty.innerText = dataChecker(data.difficulty);
-        // TODO audience;
-        readingtime.innerText = dataChecker(data.readingtime);
-        speakingtime.innerText = dataChecker(data.speakingtime);
-        paragraphs.innerText = dataChecker(data.paragraphs);
-        // TODO normalsider
+        // Request 1 :: Metrics
+        const requestMetrics = {
+          input: saved,
+          options: {
+            highlight: false,
+            removeStopwords: false,
+          },
+        };
+        postRequest(endpointMetrics, requestMetrics).then((data) => {
+          // Fill in DOM
+          words.innerText = dataChecker(data.words);
+          longwords.innerText = dataChecker(data.longWords);
+          chars.innerText = dataChecker(data.charNoSpaces);
+          charsplus.innerText = dataChecker(data.charSpaces);
+          sentences.innerText = dataChecker(data.sentences);
+          sentenceLength.innerText = dataChecker(data.slength);
+          sentenceLength2.innerText = dataChecker(data.slength);
+          wordLength.innerText = dataChecker(data.wlength);
+          variance.innerText = dataChecker(data.variance);
+          lix.innerText = dataChecker(data.lix);
+          difficulty.innerText = dataChecker(data.difficulty);
+          audience.innerText = dataChecker(data.audience);
+          readingtime.innerText = dataChecker(data.readingtime);
+          speakingtime.innerText = dataChecker(data.speakingtime);
+          paragraphs.innerText = dataChecker(data.paragraphs);
+          normalsider.innerText = dataChecker(data.normalsider);
 
-        // Calc
-        const longWordPercentage = Math.floor((Number(data.longWords) / Number(data.words)) * 100);
+          // Update Local Storage
+          updateLocalStorage("words", data.words);
+          updateLocalStorage("longWords", data.longWords);
+          updateLocalStorage("chars", data.charNoSpaces);
+          updateLocalStorage("charsplus", data.charSpaces);
+          updateLocalStorage("sentences", data.sentences);
+          updateLocalStorage("sentenceLength", data.slength);
+          updateLocalStorage("wordLength", data.wlength);
+          updateLocalStorage("variance", data.variance);
+          updateLocalStorage("lix", data.lix);
+          updateLocalStorage("difficulty", data.difficulty);
+          updateLocalStorage("audience", data.audience);
+          updateLocalStorage("readingtime", data.readingtime);
+          updateLocalStorage("speakingtime", data.speakingtime);
+          updateLocalStorage("paragraphs", data.paragraphs);
+          updateLocalStorage("normalsider", data.normalsider);
 
-        // Save formatted TEXT to Local Storage (w/ long words highlighted? Or nothing for this call)
-      });
+          // Calc
+          const longWordPercentage = Math.floor((Number(data.longWords) / Number(data.words)) * 100);
 
-      // Request 2 :: Vocab
-      postRequest(endpointVocab, saved).then((data) => {
-        // Fill in sidebar
-        unique.innerText = data.numUniqueWords;
-        rare.innerText = data.numRareWords;
-        frequent.innerText = data.numFrequentlyUsed;
+          // Save formatted TEXT to Local Storage (w/ long words highlighted? Or nothing for this call)
 
-        // Calc
-        const uniquePercentage = Number(data.numUniqueWords) / Number(data.numAllWords);
-        const rarePercentage = Number(data.numRareWords) / Number(data.numAllWords);
+          updateLocalStorage("highlightedText_longwords", JSON.stringify(data.outputText));
 
-        // Update modals
-        // TODO
+          // Need more than 1 type of long word.
+        });
 
-        // Saved formatted TEXT to Local Storage (w/ frequent words highlighted)
-        // TODO
-      });
+        // Request 2 :: Vocab
+        const requestVocab = {
+          input: saved,
+          options: {
+            threshold: 5000,
+            lemmafyAll: false,
+            removeStopwords: false,
+          },
+        };
+        postRequest(endpointVocab, requestVocab).then((data) => {
+          // Fill in DOM
+          unique.innerText = dataChecker(data.numUniqueWords);
+          rare.innerText = dataChecker(data.numRareWords);
+          frequent.innerText = dataChecker(data.numFrequentlyUsed);
 
-      // Request 3 :: Sentence analysis
-      postRequest(endpointSentence, saved).then((data) => {
-        // Fill in sidebar
-        easy.innerText = dataChecker(data.easy);
-        hard.innerText = dataChecker(data.hard);
-        veryhard.innerText = dataChecker(data.veryhard);
+          // Update modals
+          const frequentlyUsedWords = data.frequentlyUsed;
 
-        s1to3.innerText = dataChecker(data.s1to3);
-        s4to6.innerText = dataChecker(data.s4to6);
-        s7to10.innerText = dataChecker(data.s7to10);
-        s11to18.innerText = dataChecker(data.s11to18);
-        s19to26.innerText = dataChecker(data.s19to26);
-        s26plus.innerText = dataChecker(data.s26plus);
+          unique.innerHTML = "";
+          data.uniqueWords.forEach((word) => {
+            uniqueWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
+          });
 
-        // TODO Generate chart.js -> Modals
+          const rareWords = data.rareWords;
 
-        // Generate formatted TEXT for Local Storage (w/ diff sentence and rhythm - but hmmm depends on preference chosen earlier)
-      });
+          // frequentlyUsedWords.forEach();
 
-      // Request 4 :: Hedonometer
-      postRequest(endpointHedonometer, saved).then((data) => {
-        // Fill in sidebar
-        hedonometer.innerText = dataChecker(data.happyScore);
+          // Update storage
+          updateLocalStorage("unique", data.numUniqueWords);
+          updateLocalStorage("rare", data.numRareWords);
+          updateLocalStorage("frequent", data.numFrequentlyUsed);
 
-        // TODO Modals, scoring, emojis etc.
+          updateLocalStorage("uniqueWords", data.uniqueWords);
+          updateLocalStorage("rareWords", data.rareWords);
+          updateLocalStorage("frequentWords", data.frequentlyUsed);
 
-        // Formatted text somehow? With span.emoji::after { content: ":)";}
-      });
+          // Calc
+          const uniquePercentage = Number(data.numUniqueWords) / Number(data.numAllWords);
+          const rarePercentage = Number(data.numRareWords) / Number(data.numAllWords);
 
-      // Request 5 :: Corrections
-      // TODO -- Skip the <b> Stuff for now. Also remove headers and lists.
+          // Saved formatted TEXT to Local Storage (w/ frequent words highlighted)
+          // TODO
+        });
 
-      // Save ALL to Local Storage -- possible with separate function ...
+        // Request 3 :: Sentence analysis
+        const requestSentence = {
+          input: saved,
+          options: {
+            highlight: "difficulty",
+          },
+        };
+        postRequest(endpointSentence, requestSentence).then((data) => {
+          // Fill in DOM
+          easy.innerText = dataChecker(data.easy);
+          hard.innerText = dataChecker(data.hard);
+          veryhard.innerText = dataChecker(data.veryhard);
 
-      // Render new EDITOR
-      // const newEditor = data.editorJSON; // Get editor data
-      //   editor.blocks.render(newEditor); // Render new editor
+          s1to3.innerText = dataChecker(data.s1to3);
+          s4to6.innerText = dataChecker(data.s4to6);
+          s7to10.innerText = dataChecker(data.s7to10);
+          s11to18.innerText = dataChecker(data.s11to18);
+          s19to26.innerText = dataChecker(data.s19to26);
+          s26plus.innerText = dataChecker(data.s26plus);
 
+          // Update storage
+          updateLocalStorage("easy", data.easy);
+          updateLocalStorage("hard", data.hard);
+          updateLocalStorage("veryhard", data.veryhard);
+
+          updateLocalStorage("s1to3", data.s1to3);
+          updateLocalStorage("s4to6", data.s4to6);
+          updateLocalStorage("s7to10", data.s7to10);
+          updateLocalStorage("s11to18", data.s11to18);
+          updateLocalStorage("s19to26", data.s19to26);
+          updateLocalStorage("s26plus", data.s26plus);
+
+          // TODO Generate chart.js -> Modals
+
+          // Generate formatted TEXT for Local Storage (w/ diff sentence and rhythm - but hmmm depends on preference chosen earlier)
+
+          analyzeSpinner.hidden = true;
+        });
+
+        // Request 4 :: Hedonometer
+        const requestSentiment = {
+          input: saved,
+          options: {
+            lemmafyAll: false,
+            uniqueOnly: false,
+          },
+        };
+
+        postRequest(endpointHedonometer, requestSentiment).then((data) => {
+          const happinessScore = String(`${dataChecker(data.emoji)} - ${dataChecker(data.happyScore)}/9`);
+
+          // Fill in DOM
+          hedonometer.innerText = happinessScore;
+
+          // Store in Local Storage
+          updateLocalStorage("hedonometer", happinessScore);
+
+          // TODO Modals, scoring, emojis etc.
+
+          // Formatted text somehow? With span.emoji::after { content: ":)";}
+        });
+
+        // Request 5 :: Corrections
+        // TODO -- Skip the <b> Stuff for now. Also remove headers and lists.
+
+        // Save ALL to Local Storage -- possible with separate function ...
+
+        // Render new EDITOR
+        // const newEditor = data.editorJSON; // Get editor data
+        //   editor.blocks.render(newEditor); // Render new editor
+      }
       // Initialize popovers
       // TODO wtf is this
       editor.isReady.then(() => {
-        analyzeBtn.innerHTML = "Analysér";
-
         setTimeout(() => {
           initializePopovers();
         }, 2000);
@@ -332,7 +447,7 @@ async function postRequest(url, data) {
   }
 
   try {
-    console.log("Sending request ...");
+    console.log("Sending request ...", url);
 
     let response = await fetch(url, {
       method: "POST",
@@ -347,7 +462,7 @@ async function postRequest(url, data) {
       body: JSON.stringify(data),
     });
 
-    console.log("Response status ...", response.statusText);
+    console.log("Response status ...", response.statusText, url);
     response = handleErrors(response);
     return response.json();
   } catch (err) {
@@ -370,10 +485,6 @@ function generatePlaceholder() {
     "Den Luft, der laa under Lindetræernes Kroner, havde vugget sig frem over den brune Hede og de tørstige Marker, den var blevet baget af Solen og støvet af Vejene, men nu var den renset af det tætte Løvhang, svalet de kjølige Lindeblade, og Duften af Lindens gule Blomster havde gjort den fugtig og givet den Fylde", // JP Jacobsen - Fru Marie Grubbe
   ];
   return placerholderArray[Math.floor(Math.random() * placerholderArray.length)];
-}
-
-function resetLocalStorage() {
-  localStorage.setItem("assistant", "");
 }
 
 function resetSidebar() {
@@ -441,7 +552,7 @@ function dataChecker(input) {
     return input;
   }
 
-  if (input === undefined || typeof input === "undefined") {
+  if (input === undefined || typeof input === "undefined" || input === "undefined") {
     return "🤷‍♂️";
   } else {
     return input;

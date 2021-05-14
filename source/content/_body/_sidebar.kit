@@ -11,50 +11,85 @@
   <div class="goals-section" data-bs-toggle="modal" data-bs-target="#goalsModal">Juster målsætning</div>
 </div>
 
-<ul class="list-unstyled components">
+<ul id="parent-list" class="list-unstyled components">
   <!-- * FORSLAG -->
   <li class="border-top">
-    <a href="#forslagSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
-      >Forslag <span class="badge bg-secondary ms-2" id="totalErr">0</span></a
+    <a
+      href="#forslagSubmenu"
+      data-bs-toggle="collapse"
+      data-bs-parent="#parent-list"
+      aria-expanded="false"
+      class="dropdown-toggle"
+      >Forslag <span class="badge text-dark stat ms-2" id="totalErr">0</span></a
     >
     <ul class="collapse list-unstyled" id="forslagSubmenu">
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#korrekthedModal"><span class="red">Korrekthed</span></a
-        ><span id="korrekthed" class="stat badge bg-secondary rounded-pill">10</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#korrekthedModal"
+      >
+        <a href="#"><span class="red">Korrekthed</span></a
+        ><span id="korrekthed" class="stat badge text-dark rounded-pill">10</span>
       </li>
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#originalitetModal"
-          ><span class="yellow">Originalitet</span></a
-        ><span id="originalitet" class="stat badge bg-secondary rounded-pill">10</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#originalitetModal"
+      >
+        <a href="#"><span class="yellow">Originalitet</span></a
+        ><span id="originalitet" class="stat badge text-dark rounded-pill">10</span>
       </li>
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#klarhedModal"><span class="blue">Klarhed</span></a
-        ><span id="klarhed" class="stat badge bg-secondary rounded-pill">10</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#klarhedModal"
+      >
+        <a href="#"><span class="blue">Klarhed</span></a
+        ><span id="klarhed" class="stat badge text-dark rounded-pill">10</span>
       </li>
-      <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#udtrykModal"><span class="purple">Udtryk</span></a
-        ><span id="udtryk" class="stat badge bg-secondary rounded-pill">10</span>
+      <li
+        class="d-flex justify-content-between align-items-center border-bottom"
+        data-bs-toggle="modal"
+        data-bs-target="#udtrykModal"
+      >
+        <a href="#"><span class="purple">Udtryk</span></a
+        ><span id="udtryk" class="stat badge text-dark rounded-pill">10</span>
       </li>
     </ul>
   </li>
 
   <!-- * ORDFORRÅD -->
   <li>
-    <a href="#vocabSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Ordforråd</a>
+    <a
+      href="#vocabSubmenu"
+      data-bs-toggle="collapse"
+      data-bs-parent="#parent-list"
+      aria-expanded="false"
+      class="dropdown-toggle"
+      >Ordforråd</a
+    >
     <ul class="collapse list-unstyled" id="vocabSubmenu">
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#uniqueModal">Unikke ord</a>
-        <span id="unique" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#uniqueModal"
+      >
+        <a href="#">Unikke ord</a>
+        <span id="unique" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rareModal">Sjældent forekommende ord</a>
-        <span id="rare" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#rareModal">
+        <a href="#">Sjældent forekommende ord</a>
+        <span id="rare" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#frequentModal">Gengangerord</a>
-        <span id="frequent" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center border-bottom"
+        data-bs-toggle="modal"
+        data-bs-target="#frequentModal"
+      >
+        <a href="#">Gengangerord</a>
+        <span id="frequent" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
     </ul>
   </li>
@@ -63,49 +98,69 @@
   <li>
     <a href="#readabilitySubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Læsbarhed</a>
     <ul class="collapse list-unstyled" id="readabilitySubmenu">
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#lixModal">LIX</a>
-        <span id="lix" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
+        <a href="#">LIX</a>
+        <span id="lix" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#lixModal">Sværhedsgrad</a>
-        <span id="difficulty" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
+        <a href="#">Sværhedsgrad</a>
+        <span id="difficulty" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#lixModal">Publikum</a>
-        <span id="audience" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
+        <a href="#">Publikum</a>
+        <span id="audience" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#lixModal">Lange ord</a>
-        <span id="longwords" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
+        <a href="#"><span class="longword">Lange ord</span></a>
+        <span id="longwords" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#sentenceModal">Lette sætninger</a>
-        <span id="easy" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#sentenceModal"
+      >
+        <a href="#">Lette sætninger</a>
+        <span id="easy" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#sentenceModal">Svære sætninger</a>
-        <span id="hard" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#sentenceModal"
+      >
+        <a href="#"><span class="hard">Svære sætninger</span></a>
+        <span id="hard" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#sentenceModal">Meget svære sætninger</a>
-        <span id="veryhard" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#sentenceModal"
+      >
+        <a href="#"><span class="veryhard">Meget svære sætninger</span></a>
+        <span id="veryhard" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#sentenceModal">Gnst. ordlængde</a>
-        <span id="wordLength" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#lenghtsModal"
+      >
+        <a href="#">Gnst. ordlængde</a>
+        <span id="wordLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#sentenceModal">Gnst. sætningslængde</a>
-        <span id="sentenceLength" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center"
+        data-bs-toggle="modal"
+        data-bs-target="#lenghtsModal"
+      >
+        <a href="#">Gnst. sætningslængde</a>
+        <span id="sentenceLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
     </ul>
   </li>
@@ -113,43 +168,43 @@
   <!-- * TEKSTRYTME -->
   <li>
     <a href="#rhythmSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tekstrytme</a>
-    <ul class="collapse list-unstyled" id="rhythmSubmenu">
+    <ul class="collapse list-unstyled" id="rhythmSubmenu" data-bs-toggle="modal" data-bs-target="#rhythmModal">
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">Gnst. sætningslængde</a>
-        <span id="sentenceLength2" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">Gnst. sætningslængde</a>
+        <span id="sentenceLength2" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">Sætningsvarians</a>
-        <span id="variance" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">Sætningsvarians</a>
+        <span id="variance" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">1-3 ord</a>
-        <span id="s1to3" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">4-6 ord</a>
-        <span id="s4to6" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">1-3 ord</a>
+        <span id="s1to3" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">7-10 ord</a>
-        <span id="s7to10" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">4-6 ord</a>
+        <span id="s4to6" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">11-18 ord</a>
-        <span id="s11to18" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">7-10 ord</a>
+        <span id="s7to10" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">19-26 ord</a>
-        <span id="s19to26" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">11-18 ord</a>
+        <span id="s11to18" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+      </li>
+
+      <li class="d-flex justify-content-between align-items-center">
+        <a href="#">19-26 ord</a>
+        <span id="s19to26" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">26+ ord</a>
-        <span id="s26plus" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">26+ ord</a>
+        <span id="s26plus" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
     </ul>
   </li>
@@ -158,9 +213,13 @@
   <li>
     <a href="#sentimentSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Sentiment</a>
     <ul class="collapse list-unstyled" id="sentimentSubmenu">
-      <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#rhythmModal">Glædesbarometer</a>
-        <span id="hedonometer" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+      <li
+        class="d-flex justify-content-between align-items-center border-bottom"
+        data-bs-toggle="modal"
+        data-bs-target="#hedonometerModal"
+      >
+        <a href="#">Glædesbarometer</a>
+        <span id="hedonometer" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
     </ul>
   </li>
@@ -170,36 +229,36 @@
     <a href="#genereltSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Generelt</a>
     <ul class="collapse list-unstyled" id="genereltSubmenu">
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Afsnit</a><span id="paragraphs" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">Afsnit</a><span id="paragraphs" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Normalsider</a><span id="normalsider" class="stat badge bg-secondary rounded-pill">🤷‍♀️</span>
+        <a href="#">Normalsider</a><span id="normalsider" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a>Sætninger</a><span id="sentences" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a>Sætninger</a><span id="sentences" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Ord</a><span id="words" class="stat badge bg-secondary rounded-pill">🤷‍♀️</span>
+        <a href="#">Ord</a><span id="words" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
         <a href="#">Tegn <br /><small>(u. mellemrum)</small> </a
-        ><span id="chars" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        ><span id="chars" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
         <a href="#">Tegn <br /><small>(m. mellemrum)</small></a
-        ><span id="charsplus" class="stat badge bg-secondary rounded-pill">🤷‍♀️</span>
+        ><span id="charsplus" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Læsetid</a><span id="readingtime" class="stat badge bg-secondary rounded-pill">🤷‍♂️</span>
+        <a href="#">Læsetid</a><span id="readingtime" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
       <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#">Oplæsningstid</a><span id="speakingtime" class="stat badge bg-secondary rounded-pill">🤷‍♀️</span>
+        <a href="#">Oplæsningstid</a><span id="speakingtime" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
       </li>
     </ul>
   </li>

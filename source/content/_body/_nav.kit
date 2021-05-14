@@ -1,62 +1,52 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid ms-3">
-    <!-- * Brand (Emoji-as-a-Logo)-->
-    <a href="/index.html" class="navbar-brand">🤖 RetMinTekst</a>
+<!-- ! Top menu -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light ms-3">
+  <div class="container-fluid justify-content-start">
+    <!-- Brand -->
+    <a href="/index.html" class="navbar-brand">🤖 <span class="hide-on-mobile">RetMinTekst</span> </a>
 
-    <button type="button" id="analyzeBtn" class="btn btn-sm btn-nav btn-analyze mx-1 text-nowrap">Analysér</button>
-
-    <button class="btn btn-sm btn-nav btn-primary text-nowrap mx-1" id="removeMarkupBtn">Fjern rettelser</button>
-    <button class="btn btn-sm btn-nav btn-outline-danger text-nowrap mx-1" id="cleanBtn">Fjern alt</button>
-
-    <button
-      class="navbar-toggler ms-auto"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
+    <!-- Action -->
+    <button type="button" id="analyzeBtn" class="btn btn-sm btn-nav btn-analyze text-nowrap">
+      Analysér
+      <div class="spinner-border spinner-border-sm mx-1" hidden id="spinner"></div>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-between me-2" id="navbarSupportedContent">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="/kom-igang.html">Kom igang</a>
-        </li>
-      </ul>
-      <div class="spinner-grow align-items-end" hidden id="spinner"></div>
-    </div>
+    <!-- Clear -->
+    <button class="btn btn-sm btn-nav btn-remove text-nowrap" id="removeMarkupBtn">
+      Fjern <span class="hide-on-mobile">rettelser</span>
+    </button>
+
+    <!-- Intro -->
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/kom-igang.html">Intro</a>
+      </li>
+    </ul>
+
+    <!-- Show assistant -->
+    <button type="button" id="showSidebar" class="btn btn-sm px-2 btn-outline-success">
+      Vis <span class="hide-on-mobile">assistenten</span>
+    </button>
   </div>
 </nav>
 
 <!-- ! Bottom menu -->
 <nav id="bottom-menu" class="fixed-bottom partial-width d-flex flex-wrap">
   <div class="blue-menu">
-    <span class="tag"><span class="label">Forslag</span></span>
+    <span class="tag" id="btnSuggestions">Forslag</span>
   </div>
   <div class="green-menu">
-    <span class="tag"
-      ><span class="label">Ord<span class="hide-on-mobile">forråd</span></span></span
-    >
+    <span class="tag" id="btnVocab">Ordforråd</span>
   </div>
   <div class="yellow-menu">
-    <span class="tag"
-      ><span class="label">Læs<span class="hide-on-mobile">barhed</span></span></span
-    >
+    <span class="tag" id="btnReadability">Læsbarhed</span>
   </div>
   <div class="red-menu">
-    <span class="tag"
-      ><span class="label">Tekst<span class="hide-on-mobile">rytme</span></span></span
-    >
+    <span class="tag" id="btnTextrhythm">Tekstrytme</span>
   </div>
   <div class="darkblue-menu">
-    <span class="tag"><span class="label">Sentiment</span></span>
+    <span class="tag" id="btnSentiment">Sentiment</span>
   </div>
   <div class="grey-menu">
-    <span class="tag"
-      ><span class="label">Fjern<span class="hide-on-mobile"> rettelser</span></span></span
-    >
+    <span class="tag" id="btnRemove">Fjern <span class="hide-on-mobile">rettelser</span></span>
   </div>
 </nav>

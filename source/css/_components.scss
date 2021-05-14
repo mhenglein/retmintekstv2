@@ -15,6 +15,10 @@
   min-width: 3rem;
 }
 
+.bg-longword {
+  background-color: $longword;
+}
+
 // DIVIDERS
 .slanted-divider {
   position: relative;
@@ -33,6 +37,10 @@
 
 // EDITOR
 .editor {
+  @media (max-width: 768px) {
+    width: 80vw;
+    margin-left: 2rem;
+  }
   width: 60vw;
   margin-left: 4rem;
 }
@@ -97,6 +105,15 @@
   }
 }
 
+.longword {
+  border-bottom: 3px solid $longword-border;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $longword;
+  }
+}
+
 span.two::after {
   content: $two;
 }
@@ -152,6 +169,10 @@ span.nine::after {
   width: 70%;
 }
 
+[data-bs-toggle="modal"] {
+  cursor: pointer;
+}
+
 // BUTTONS
 .btn-analyze {
   background-color: #1c5182;
@@ -162,22 +183,50 @@ span.nine::after {
   }
 }
 
+.btn-remove {
+  background-color: $grey;
+  border-color: $grey;
+  color: white;
+  &:hover {
+    color: #6cc2b1;
+  }
+  &:active {
+    background-color: darkgrey;
+    color: black;
+  }
+}
+
 .btn-nav {
   font-family: "Nunito", sans-serif;
   font-size: 0.8rem;
+  @media (max-width: 768px) {
+    font-size: 0.66rem;
+    min-width: 15%;
+  }
+  @media (max-width: 384px) {
+    font-size: 0.52rem;
+    min-width: 17%;
+  }
+
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
   padding: 0.2rem 0.5rem;
-  width: 13%;
+  min-width: 12%;
+  text-shadow: 1px 1px 1px #565656;
 }
 
 // SIDEBAR
 
 #showSidebar {
-  position: fixed;
-  top: 5%;
-  right: 2%;
+  // position: fixed;
+  // top: 4%;
+  // right: 2%;
   border-radius: 25px;
   transition: all 0.3s;
   font-size: 0.6875rem;
+  @media (max-width: 768px) {
+    font-size: 0.52rem;
+  }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05rem;
@@ -211,13 +260,6 @@ span.nine::after {
 // And show the full area
 #bottom-menu.mobile {
   width: 100% !important;
-}
-
-#showSidebar.mobile {
-  display: none;
-  @media (max-width: 768px) {
-    display: all; // Show button on small screens
-  }
 }
 
 .hide-assistant {
@@ -321,9 +363,10 @@ ul ul a {
 }
 
 .stat {
-  font-family: monospace;
+  font-family: "Inter";
   font-size: 0.6rem;
   min-width: 2rem;
+  border: 1px solid #6c757d !important;
 }
 
 /* Media queries */
