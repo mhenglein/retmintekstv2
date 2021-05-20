@@ -14,14 +14,14 @@ class TextHighlighter {
     formatting: Array<any>;
     replacements:Array<any>;
 
-    constructor(s:string) {
+    constructor(s:string, dict:Array<any> = []) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("TextHighlighter only works with strings and values that can be coerced into a string");
     }
 
     this.text = s.toString();
     this.original = s.toString();
-    this.dict = [];
+    this.dict = dict;
     this.id = Number(Math.floor(100000000 + Math.random() * 900000000));
     this.formatting = [];
     this.replacements = [];
@@ -85,10 +85,14 @@ class TextHighlighter {
     const b1 = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|^)";
     const b2 = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|$)";
 
+    function escapeRegExp(string:string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
     replacementArray.forEach((item, index) => {
 
       // Create searchs tring
-      const searchWord = item
+      const searchWord = escapeRegExp(item)
       const searchString = b1+ searchWord+b2
       const regex = new RegExp(searchString, "gi")
 
@@ -129,15 +133,28 @@ class TextHighlighter {
     const b1 = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|^)";
     const b2 = "(\\s|\\.|\\,|\\!|\\?|\\(|\\)|\\'|\\\"|$)";
 
+    const outputObject = {
+      Generelt: 0, // korrekthed
+      Stavefejl: 0, // korrekthed
+      Fyldeord: 0, // klarhed
+      Anglicisme: 0, // originalitet
+      Kliche: 0, // originalitet
+      Dobbeltkonfekt: 0, // klarhed
+      Buzzword: 0, // udtryk
+      Formelt: 0, // udtryk
+      'Typisk anvendt forkert': 0, // klarhed
+      Grammatik: 0, // korrekthed
+    }
+
     // Loop through the dictionary & see if there are any matches in the text.
   for (let j = 0; j < this.dict.length; j++) {
     let [regex, type, popover, i, left, right] = [
-      this.dict[j][1],
-      this.dict[j][2],
-      this.dict[j][3],
-      this.dict[j][4],
-      this.dict[j][5],
-      this.dict[j][6],
+      this.dict[j][1], // Regex
+      this.dict[j][2], // Type
+      this.dict[j][3], // Popover
+      this.dict[j][4], // Case (i)
+      this.dict[j][5], // Left border
+      this.dict[j][6], // Right border
     ];
 
     // Create search string based on the dictionary specifications (e.g. include 'borders')
@@ -159,13 +176,18 @@ class TextHighlighter {
       let textMatch = RegExp["$&"];
       textMatch = textMatch.trim();
 
+      // Update output object
+      outputObject[type]++;
+
+      const css = type.toLowerCase().replace(" ", "");
+
       const textForPopoverTitle:string = textMatch.replace(/[.,\/#!?"'$%\^&\*;:{}=\_`~()]/g, "");
-      const popoverTitle:string = `${type} <span class='badge bg-${type} ms-2'>${textForPopoverTitle}</span>`;
-      const firstPartOfString:string = ` <span class="${type}" 
+      const popoverTitle:string = `${type}`;
+      const firstPartOfString:string = ` <span class="${css}" 
         data-bs-toggle="popover" 
         data-bs-original-title="${popoverTitle}"
         data-bs-html="true" 
-        data-bs-content="${popover}">`
+        data-bs-content="${popover}"> `
 
       const stringContent:string = textMatch;
       const endOfString:string = "</span>"
@@ -183,6 +205,10 @@ class TextHighlighter {
 
     }
   }
+
+  // Return number of errors etc.
+  return outputObject
+
  }
 
  // TODO Move to client?
@@ -197,7 +223,6 @@ class TextHighlighter {
      })
      
  }
-
   
 updateID() {
     this.id++;

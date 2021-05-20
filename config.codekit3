@@ -2,6 +2,15 @@
   "AAInfo" : "This is a CodeKit 3 project config file. EDITING THIS FILE IS A POOR LIFE DECISION. Doing so may cause CodeKit to crash and\/or corrupt your project. Several critical values in this file are 64-bit integers, which JavaScript JSON parsers do not support because JavaScript cannot handle 64-bit integers. These values will be corrupted if the file is parsed with JavaScript. This file is not backwards-compatible with CodeKit 1 or 2. For details, see https:\/\/codekitapp.com\/",
   "buildSteps" : [
     {
+      "itemsToProcess" : [
+        "\/source\/js\/analysis.ts",
+        "\/source\/js\/text.ts"
+      ],
+      "name" : "New \"Process Certain Files\" Step",
+      "stepType" : 0,
+      "uuidString" : "CA5E6121-292E-4CC2-8A7B-5498108ABADD"
+    },
+    {
       "name" : "Process All Remaining Files and Folders",
       "stepType" : 1,
       "uuidString" : "7EC80A22-AF65-421D-B61E-D65FDFBDABE8"
@@ -9,6 +18,14 @@
   ],
   "creatorBuild" : "34127",
   "files" : {
+    "\/.gitignore" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 0,
+      "oAP" : "\/build\/.gitignore",
+      "oF" : 0
+    },
     "\/.vscode\/settings.json" : {
       "ft" : 524288,
       "oA" : 1,
@@ -31,30 +48,6 @@
       "oO" : 0,
       "oS" : 1
     },
-    "\/node_modules\/@editorjs\/editorjs\/.eslintignore" : {
-      "cB" : 0,
-      "ft" : 8192,
-      "hM" : 0,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/.eslintignore",
-      "oF" : 1
-    },
-    "\/node_modules\/@editorjs\/editorjs\/.postcssrc.yml" : {
-      "cB" : 0,
-      "ft" : 8192,
-      "hM" : 0,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/.postcssrc.yml",
-      "oF" : 1
-    },
-    "\/node_modules\/@editorjs\/editorjs\/cypress.json" : {
-      "ft" : 524288,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/cypress.json",
-      "oF" : 1,
-      "oO" : 0,
-      "oS" : 1
-    },
     "\/node_modules\/@editorjs\/editorjs\/dist\/editor.js" : {
       "bF" : 0,
       "ft" : 64,
@@ -70,24 +63,24 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/dist\/editor.js.LICENSE.txt",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/editorjs\/dist\/editor.licenses.txt" : {
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/dist\/editor.licenses.txt",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/editorjs\/dist\/sprite.svg" : {
       "ft" : 2097152,
       "miP" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/dist\/sprite.svg",
-      "oF" : 1,
+      "oF" : 0,
       "opt" : 0,
       "plM" : 52780316221407,
       "prP" : 0
@@ -96,23 +89,23 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/example\/tools\/image\/dev\/.tmp\/.npmignore",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/editorjs\/LICENSE" : {
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/LICENSE",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/editorjs\/package.json" : {
       "ft" : 524288,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/package.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
@@ -125,101 +118,15 @@
       "eSQ" : 1,
       "ft" : 4096,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/README.md",
-      "oF" : 1,
+      "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
       "pHT" : 0,
       "pME" : 1,
       "rFN" : 0,
       "uCM" : 0
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/fixtures\/test.html" : {
-      "cB" : 0,
-      "ft" : 8192,
-      "hM" : 0,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/fixtures\/test.html",
-      "oF" : 1
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/plugins\/index.ts" : {
-      "cDF" : 0,
-      "ft" : 128,
-      "jxM" : 0,
-      "ma" : 0,
-      "mi" : 0,
-      "moR" : 0,
-      "moT" : 2,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/plugins\/index.ts",
-      "oF" : 1,
-      "rC" : 0,
-      "tEC" : 5
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/support\/commands.ts" : {
-      "cDF" : 0,
-      "ft" : 128,
-      "jxM" : 0,
-      "ma" : 0,
-      "mi" : 0,
-      "moR" : 0,
-      "moT" : 2,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/support\/commands.ts",
-      "oF" : 1,
-      "rC" : 0,
-      "tEC" : 5
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/support\/index.d.ts" : {
-      "cDF" : 0,
-      "ft" : 128,
-      "jxM" : 0,
-      "ma" : 0,
-      "mi" : 0,
-      "moR" : 0,
-      "moT" : 2,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/support\/index.d.ts",
-      "oF" : 1,
-      "rC" : 0,
-      "tEC" : 5
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/support\/index.ts" : {
-      "cDF" : 0,
-      "ft" : 128,
-      "jxM" : 0,
-      "ma" : 0,
-      "mi" : 0,
-      "moR" : 0,
-      "moT" : 2,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/support\/index.ts",
-      "oF" : 1,
-      "rC" : 0,
-      "tEC" : 5
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/tests\/initialization.spec.ts" : {
-      "cDF" : 0,
-      "ft" : 128,
-      "jxM" : 0,
-      "ma" : 0,
-      "mi" : 0,
-      "moR" : 0,
-      "moT" : 2,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/tests\/initialization.spec.ts",
-      "oF" : 1,
-      "rC" : 0,
-      "tEC" : 5
-    },
-    "\/node_modules\/@editorjs\/editorjs\/test\/cypress\/videos\/initialization.spec.ts.mp4" : {
-      "cB" : 0,
-      "ft" : 8192,
-      "hM" : 0,
-      "oA" : 1,
-      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/test\/cypress\/videos\/initialization.spec.ts.mp4",
-      "oF" : 1
     },
     "\/node_modules\/@editorjs\/editorjs\/types\/api\/block.d.ts" : {
       "cDF" : 0,
@@ -231,7 +138,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/block.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -243,9 +150,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/blocks.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -257,9 +164,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/caret.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -271,9 +178,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/events.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -285,9 +192,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/i18n.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -299,9 +206,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -313,9 +220,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/inline-toolbar.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -327,9 +234,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/listeners.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -341,9 +248,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/notifier.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -355,9 +262,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/readonly.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -369,9 +276,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/sanitizer.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -383,9 +290,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/saver.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -397,9 +304,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/selection.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -411,9 +318,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/styles.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -425,9 +332,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/toolbar.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -439,9 +346,23 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/api\/tooltip.d.ts",
-      "oF" : 1,
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/node_modules\/@editorjs\/editorjs\/types\/block-tunes\/block-tune-data.d.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/block-tunes\/block-tune-data.d.ts",
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -453,9 +374,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/block-tunes\/block-tune.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -469,7 +390,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/block-tunes\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -481,9 +402,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/conversion-config.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -495,9 +416,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/editor-config.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -511,7 +432,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/i18n-config.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -525,7 +446,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/i18n-dictionary.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -539,7 +460,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -551,9 +472,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/log-levels.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -565,9 +486,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/paste-config.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -581,7 +502,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/configs\/sanitizer-config.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -593,9 +514,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/data-formats\/block-data.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -609,7 +530,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/data-formats\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -623,7 +544,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/data-formats\/output-data.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -637,7 +558,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -651,7 +572,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/block-tool-data.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -665,7 +586,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/block-tool.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -679,7 +600,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/hook-events.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -693,7 +614,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -707,7 +628,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/inline-tool.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -721,7 +642,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/paste-events.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -735,7 +656,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/tool-config.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -747,9 +668,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/tool-settings.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -763,7 +684,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/editorjs\/types\/tools\/tool.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -782,16 +703,16 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/header\/.github\/workflows\/npm-publish.yml",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/header\/assets\/icon.svg" : {
       "ft" : 2097152,
       "miP" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/header\/assets\/icon.svg",
-      "oF" : 1,
+      "oF" : 0,
       "opt" : 0,
       "plM" : 52780316221407,
       "prP" : 0
@@ -801,9 +722,9 @@
       "ft" : 64,
       "ma" : 0,
       "mi" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/header\/dist\/bundle.js",
-      "oF" : 1,
+      "oF" : 0,
       "sC" : 0,
       "tS" : 0
     },
@@ -811,15 +732,15 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/header\/LICENSE",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/header\/package.json" : {
       "ft" : 524288,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/header\/package.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
@@ -832,9 +753,9 @@
       "eSQ" : 1,
       "ft" : 4096,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/header\/README.md",
-      "oF" : 1,
+      "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
       "pHT" : 0,
@@ -857,18 +778,18 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/list\/.github\/workflows\/npm-publish.yml",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/list\/dist\/bundle.js" : {
       "bF" : 0,
       "ft" : 64,
       "ma" : 0,
       "mi" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/list\/dist\/bundle.js",
-      "oF" : 1,
+      "oF" : 0,
       "sC" : 0,
       "tS" : 0
     },
@@ -876,15 +797,15 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/list\/LICENSE",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/@editorjs\/list\/package.json" : {
       "ft" : 524288,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@editorjs\/list\/package.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
@@ -897,9 +818,9 @@
       "eSQ" : 1,
       "ft" : 4096,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/@editorjs\/list\/README.md",
-      "oF" : 1,
+      "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
       "pHT" : 0,
@@ -1057,6 +978,20 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/@types\/node\/dgram.d.ts",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/node_modules\/@types\/node\/diagnostic_channel.d.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/@types\/node\/diagnostic_channel.d.ts",
       "oF" : 0,
       "rC" : 0,
       "tEC" : 5
@@ -1600,6 +1535,20 @@
       "rC" : 0,
       "tEC" : 5
     },
+    "\/node_modules\/@types\/node\/util\/types.d.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/@types\/node\/util\/types.d.ts",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
     "\/node_modules\/@types\/node\/v8.d.ts" : {
       "cDF" : 0,
       "ft" : 128,
@@ -2036,9 +1985,9 @@
       "ft" : 64,
       "ma" : 0,
       "mi" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-notifier\/dist\/bundle.js",
-      "oF" : 1,
+      "oF" : 0,
       "sC" : 0,
       "tS" : 0
     },
@@ -2052,7 +2001,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/codex-notifier\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -2060,15 +2009,15 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-notifier\/LICENSE",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/codex-notifier\/package.json" : {
       "ft" : 524288,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/codex-notifier\/package.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
@@ -2081,9 +2030,9 @@
       "eSQ" : 1,
       "ft" : 4096,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-notifier\/README.md",
-      "oF" : 1,
+      "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
       "pHT" : 0,
@@ -2097,24 +2046,24 @@
       "hM" : 0,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/.babelrc",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/codex-tooltip\/.postcssrc.yml" : {
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/.postcssrc.yml",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/codex-tooltip\/dist\/tooltip.js" : {
       "bF" : 0,
       "ft" : 64,
       "ma" : 0,
       "mi" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/dist\/tooltip.js",
-      "oF" : 1,
+      "oF" : 0,
       "sC" : 0,
       "tS" : 0
     },
@@ -2122,17 +2071,17 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/dist\/tooltip.js.map",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/codex-tooltip\/example\/index.html" : {
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/example\/index.html",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/codex-tooltip\/index.d.ts" : {
       "cDF" : 0,
@@ -2144,7 +2093,7 @@
       "moT" : 2,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/index.d.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -2152,15 +2101,15 @@
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/LICENSE",
-      "oF" : 1
+      "oF" : 0
     },
     "\/node_modules\/codex-tooltip\/package.json" : {
       "ft" : 524288,
       "oA" : 1,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/package.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
@@ -2173,9 +2122,9 @@
       "eSQ" : 1,
       "ft" : 4096,
       "hM" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/README.md",
-      "oF" : 1,
+      "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
       "pHT" : 0,
@@ -2191,9 +2140,9 @@
       "mi" : 0,
       "moR" : 0,
       "moT" : 2,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/src\/index.ts",
-      "oF" : 1,
+      "oF" : 0,
       "rC" : 0,
       "tEC" : 5
     },
@@ -2204,17 +2153,17 @@
       "co" : 0,
       "ft" : 16,
       "ma" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/styles\/main.css",
-      "oF" : 1,
+      "oF" : 0,
       "pg" : 0
     },
     "\/node_modules\/codex-tooltip\/tooltips.png" : {
       "ft" : 32768,
       "iS" : 78354,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/tooltips.png",
-      "oF" : 1,
+      "oF" : 0,
       "oIPL" : 0,
       "opt" : 0,
       "oT" : 1,
@@ -2224,17 +2173,17 @@
     },
     "\/node_modules\/codex-tooltip\/tsconfig.json" : {
       "ft" : 524288,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/tsconfig.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
     "\/node_modules\/codex-tooltip\/tslint.json" : {
       "ft" : 524288,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/tslint.json",
-      "oF" : 1,
+      "oF" : 0,
       "oO" : 0,
       "oS" : 1
     },
@@ -2243,9 +2192,9 @@
       "ft" : 64,
       "ma" : 0,
       "mi" : 0,
-      "oA" : 1,
+      "oA" : 2,
       "oAP" : "\/build\/node_modules\/codex-tooltip\/webpack.config.js",
-      "oF" : 1,
+      "oF" : 0,
       "sC" : 0,
       "tS" : 0
     },
@@ -2631,6 +2580,90 @@
       "hM" : 0,
       "oA" : 2,
       "oAP" : "\/build\/node_modules\/cookie\/README.md",
+      "oF" : 0,
+      "oFM" : 0,
+      "oS" : 0,
+      "pHT" : 0,
+      "pME" : 1,
+      "rFN" : 0,
+      "uCM" : 0
+    },
+    "\/node_modules\/cors\/CONTRIBUTING.md" : {
+      "cB" : 0,
+      "cS" : 0,
+      "eF" : 1,
+      "eL" : 1,
+      "ema" : 1,
+      "eSQ" : 1,
+      "ft" : 4096,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/cors\/CONTRIBUTING.md",
+      "oF" : 0,
+      "oFM" : 0,
+      "oS" : 0,
+      "pHT" : 0,
+      "pME" : 1,
+      "rFN" : 0,
+      "uCM" : 0
+    },
+    "\/node_modules\/cors\/HISTORY.md" : {
+      "cB" : 0,
+      "cS" : 0,
+      "eF" : 1,
+      "eL" : 1,
+      "ema" : 1,
+      "eSQ" : 1,
+      "ft" : 4096,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/cors\/HISTORY.md",
+      "oF" : 0,
+      "oFM" : 0,
+      "oS" : 0,
+      "pHT" : 0,
+      "pME" : 1,
+      "rFN" : 0,
+      "uCM" : 0
+    },
+    "\/node_modules\/cors\/lib\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/cors\/lib\/index.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/cors\/LICENSE" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/cors\/LICENSE",
+      "oF" : 0
+    },
+    "\/node_modules\/cors\/package.json" : {
+      "ft" : 524288,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/cors\/package.json",
+      "oF" : 0,
+      "oO" : 0,
+      "oS" : 1
+    },
+    "\/node_modules\/cors\/README.md" : {
+      "cB" : 0,
+      "cS" : 0,
+      "eF" : 1,
+      "eL" : 1,
+      "ema" : 1,
+      "eSQ" : 1,
+      "ft" : 4096,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/cors\/README.md",
       "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
@@ -4726,6 +4759,257 @@
       "rFN" : 0,
       "uCM" : 0
     },
+    "\/node_modules\/nanoid\/async\/index.browser.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/async\/index.browser.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/async\/index.cjs" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/async\/index.cjs",
+      "oF" : 0
+    },
+    "\/node_modules\/nanoid\/async\/index.d.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/async\/index.d.ts",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/node_modules\/nanoid\/async\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/async\/index.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/async\/index.native.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/async\/index.native.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/async\/package.json" : {
+      "ft" : 524288,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/nanoid\/async\/package.json",
+      "oF" : 0,
+      "oO" : 0,
+      "oS" : 1
+    },
+    "\/node_modules\/nanoid\/bin\/nanoid.cjs" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/bin\/nanoid.cjs",
+      "oF" : 0
+    },
+    "\/node_modules\/nanoid\/index.browser.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/index.browser.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/index.cjs" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/index.cjs",
+      "oF" : 0
+    },
+    "\/node_modules\/nanoid\/index.d.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/index.d.ts",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/node_modules\/nanoid\/index.dev.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/index.dev.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/index.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/index.prod.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/index.prod.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/LICENSE" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/LICENSE",
+      "oF" : 0
+    },
+    "\/node_modules\/nanoid\/nanoid.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/nanoid.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/non-secure\/index.cjs" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/non-secure\/index.cjs",
+      "oF" : 0
+    },
+    "\/node_modules\/nanoid\/non-secure\/index.d.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/non-secure\/index.d.ts",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/node_modules\/nanoid\/non-secure\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/non-secure\/index.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/non-secure\/package.json" : {
+      "ft" : 524288,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/nanoid\/non-secure\/package.json",
+      "oF" : 0,
+      "oO" : 0,
+      "oS" : 1
+    },
+    "\/node_modules\/nanoid\/package.json" : {
+      "ft" : 524288,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/nanoid\/package.json",
+      "oF" : 0,
+      "oO" : 0,
+      "oS" : 1
+    },
+    "\/node_modules\/nanoid\/README.md" : {
+      "cB" : 0,
+      "cS" : 0,
+      "eF" : 1,
+      "eL" : 1,
+      "ema" : 1,
+      "eSQ" : 1,
+      "ft" : 4096,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/README.md",
+      "oF" : 0,
+      "oFM" : 0,
+      "oS" : 0,
+      "pHT" : 0,
+      "pME" : 1,
+      "rFN" : 0,
+      "uCM" : 0
+    },
+    "\/node_modules\/nanoid\/url-alphabet\/index.cjs" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/nanoid\/url-alphabet\/index.cjs",
+      "oF" : 0
+    },
+    "\/node_modules\/nanoid\/url-alphabet\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/nanoid\/url-alphabet\/index.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/nanoid\/url-alphabet\/package.json" : {
+      "ft" : 524288,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/nanoid\/url-alphabet\/package.json",
+      "oF" : 0,
+      "oO" : 0,
+      "oS" : 1
+    },
     "\/node_modules\/negotiator\/HISTORY.md" : {
       "cB" : 0,
       "cS" : 0,
@@ -4827,6 +5111,52 @@
       "hM" : 0,
       "oA" : 2,
       "oAP" : "\/build\/node_modules\/negotiator\/README.md",
+      "oF" : 0,
+      "oFM" : 0,
+      "oS" : 0,
+      "pHT" : 0,
+      "pME" : 1,
+      "rFN" : 0,
+      "uCM" : 0
+    },
+    "\/node_modules\/object-assign\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/object-assign\/index.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
+    },
+    "\/node_modules\/object-assign\/license" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/object-assign\/license",
+      "oF" : 0
+    },
+    "\/node_modules\/object-assign\/package.json" : {
+      "ft" : 524288,
+      "oA" : 1,
+      "oAP" : "\/build\/node_modules\/object-assign\/package.json",
+      "oF" : 0,
+      "oO" : 0,
+      "oS" : 1
+    },
+    "\/node_modules\/object-assign\/readme.md" : {
+      "cB" : 0,
+      "cS" : 0,
+      "eF" : 1,
+      "eL" : 1,
+      "ema" : 1,
+      "eSQ" : 1,
+      "ft" : 4096,
+      "hM" : 0,
+      "oA" : 2,
+      "oAP" : "\/build\/node_modules\/object-assign\/readme.md",
       "oF" : 0,
       "oFM" : 0,
       "oS" : 0,
@@ -6639,7 +6969,7 @@
       "oAP" : "\/build\/assets\/bullseye.png",
       "oF" : 0,
       "oIPL" : 0,
-      "opt" : 0,
+      "opt" : 1,
       "oT" : 1,
       "ou" : "lpckwebp-none",
       "q" : 100,
@@ -6722,6 +7052,14 @@
       "oF" : 3,
       "oO" : 0,
       "oS" : 1
+    },
+    "\/source\/assets\/site.webmanifest" : {
+      "cB" : 0,
+      "ft" : 8192,
+      "hM" : 0,
+      "oA" : 0,
+      "oAP" : "\/build\/assets\/site.webmanifest",
+      "oF" : 0
     },
     "\/source\/assets\/Tutto Ricco - Red Standing.png" : {
       "ft" : 32768,
@@ -6912,6 +7250,34 @@
       "pg" : 0,
       "sct" : 0
     },
+    "\/source\/css\/_mixins.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "dP" : 10,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 1,
+      "oAP" : "\/build\/css\/_mixins.css",
+      "oF" : 0,
+      "oS" : 0,
+      "pg" : 0,
+      "sct" : 0
+    },
+    "\/source\/css\/_typography.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "dP" : 10,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 1,
+      "oAP" : "\/build\/css\/_typography.css",
+      "oF" : 0,
+      "oS" : 0,
+      "pg" : 0,
+      "sct" : 0
+    },
     "\/source\/css\/styles.scss" : {
       "aP" : 0,
       "bl" : 0,
@@ -6998,17 +7364,6 @@
       "oAP" : "\/build\/data\/stopord.txt",
       "oF" : 0
     },
-    "\/source\/holup.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/holup.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
     "\/source\/index.js" : {
       "bF" : 0,
       "ft" : 64,
@@ -7016,7 +7371,7 @@
       "mi" : 0,
       "oA" : 0,
       "oAP" : "\/build\/index.js",
-      "oF" : 2,
+      "oF" : 3,
       "sC" : 0,
       "tS" : 0
     },
@@ -7030,7 +7385,7 @@
       "moT" : 2,
       "oA" : 0,
       "oAP" : "\/build\/js\/analysis.js",
-      "oF" : 0,
+      "oF" : 2,
       "rC" : 0,
       "tEC" : 5
     },
@@ -7045,98 +7400,13 @@
       "sC" : 0,
       "tS" : 0
     },
-    "\/source\/js\/depr\/analysis.js" : {
+    "\/source\/js\/array.js" : {
       "bF" : 0,
       "ft" : 64,
       "ma" : 0,
       "mi" : 0,
       "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/analysis.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/array.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/array.js",
-      "oF" : 2,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/arrayToObject.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/arrayToObject.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/Chart.bundle.min.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/Chart.bundle.min.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/dictAPI.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/dictAPI.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/hedonometer.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/hedonometer.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/hedonometer.json" : {
-      "ft" : 524288,
-      "oA" : 1,
-      "oAP" : "\/build\/js\/depr\/hedonometer-min.json",
-      "oF" : 0,
-      "oO" : 0,
-      "oS" : 1
-    },
-    "\/source\/js\/depr\/landing.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/landing.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/depr\/samples.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/depr\/samples.js",
+      "oAP" : "\/build\/js\/array.js",
       "oF" : 2,
       "sC" : 0,
       "tS" : 0
@@ -7148,17 +7418,6 @@
       "mi" : 0,
       "oA" : 0,
       "oAP" : "\/build\/js\/scripts.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/js\/testOfAnalysis.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/testOfAnalysis.js",
       "oF" : 0,
       "sC" : 0,
       "tS" : 0
@@ -7176,28 +7435,6 @@
       "oF" : 2,
       "rC" : 0,
       "tEC" : 5
-    },
-    "\/source\/js\/util.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/js\/util.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/parking.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/parking.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
     },
     "\/source\/py\/__pycache__\/danlp.cpython-39.pyc" : {
       "cB" : 0,
@@ -51414,17 +51651,6 @@
       "oAP" : "\/build\/py\/nlp.py",
       "oF" : 1
     },
-    "\/source\/test.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/test.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
     "\/tsconfig.json" : {
       "ft" : 524288,
       "oA" : 1,
@@ -51454,7 +51680,7 @@
     "displayValueWasSetByUser" : 0,
     "iconImageName" : "\/source\/assets\/apple-touch-icon.png",
     "iconImageWasSetByUser" : 0,
-    "lastBuiltDate" : 635015272.86440599
+    "lastBuiltDate" : 643146194.78983402
   },
   "projectSettings" : {
     "abortBuildOnError" : 1,

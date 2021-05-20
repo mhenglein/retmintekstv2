@@ -72,6 +72,10 @@ class TextParser {
   // \xc2\xa0
 }
 
+static _removeNonLetters(string:string) {
+  return string.replace(/&amp;/g,"og").replace(/[\.,()"'!;\n\r]/g, " ").replace(/&amp;|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/gi," ").replace("  ", " ")
+}
+
 /**
  * Remove all punctuation
  */
@@ -137,7 +141,7 @@ static _titleCaseWord(word:string) {
  getSentences() {
   // this.removeHTML().removeDoubleSpacing()
   this.sentences = this.text
-  .replace(/\w[.?!:;](\s|$)/g, "$1|x") //  Add |x to all sentence stoppers (hyphen not included)
+  .replace(/([.?!:])\s*(?=[A-Z|Æ|Ø|Å])/g, "$1|x") //  Add |x to all sentence stoppers (hyphen not included)
   .split("|x") // Split by |x
   .filter((x) => x.length > 0);
 
@@ -147,6 +151,7 @@ static _titleCaseWord(word:string) {
 
 }
 // alt regex ([.?!:])\s*(?=[A-Z|Æ|Ø|Å])
+// option 1: \w[.?!:;](\s|$)
 
 /**
  * Returns array with all words; also separates out long words (default >6 letters or more)
@@ -156,7 +161,7 @@ static _titleCaseWord(word:string) {
  */
 getWords(threshold = 6) {
 
-  this.words = this.text
+  this.words = TextParser._removeNonLetters(this.text)
     .split(/\s+/) // Split by (multiple) whitespace(s)
     .filter((n) => n != "");
 
@@ -242,10 +247,9 @@ getFrequentWords(stopord:Array<string> =[], minOccurences:number=3, minCharLengt
   })
 
   // Only look at words that are at least 3 letters long && sort();
-  const minimumCharLength = minCharLength; 
   frequentWords = frequentWords.filter((x) => x.length>=minCharLength).sort();
 
-  // Remove stopwords (stopord)
+  // Remove stopwords (stopord) if a file has been supplied
   for (let i = 0; i < stopord.length; i++) {
     frequentWords = frequentWords.filter(e => e !== stopord[i])
   }
@@ -275,14 +279,17 @@ getFrequentWords(stopord:Array<string> =[], minOccurences:number=3, minCharLengt
   sortable.sort(TextParser.compareSecondColumn);
   let newSortable = sortable.map(s => s[0])
 
+  
+
   // Take top X%
-  const percentageThreshold:number =  0.35;
+  const percentageThreshold:number =  1;
   const lengthOfArray = percentageThreshold*newSortable.length;
 
   const uniqueFrequentWords = newSortable.slice(0,lengthOfArray)
+
   this.frequentlyUsedWords = uniqueFrequentWords;
 
-  return uniqueFrequentWords;
+  return this;
 
 }
 
@@ -332,7 +339,7 @@ getRareWords(frequencyList:Array<string>, threshold:number = 5000) {
       }
     }
   }
-  return this.rareWords;
+  return this;
 }
 
 /**
@@ -375,8 +382,8 @@ rateHappyWords(happinessList:Array<string>) {
  * @return {[Number]} Number of characters
  */
 countCharacters() {
-  this.chars = this.text.length;
-  this.charsAndSpaces = this.text.split(" ").join("").length;
+  this.charsAndSpaces = this.text.length;
+  this.chars = this.text.split(" ").join("").length;
 }
 
 /**
@@ -407,7 +414,7 @@ calcLix() {
     this.lixAudience = "Ukendt";
   } else if (this.lix >= 55) {
     this.lixDifficulty = "Svær";
-this.lixAudience = "Universit";
+this.lixAudience = "Universitet";
 }
   else if (this.lix >= 45 && this.lix < 55) {this.lixDifficulty = "Mellemsvær";
 this.lixAudience = "Gymnasium";}

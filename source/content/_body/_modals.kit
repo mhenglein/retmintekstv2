@@ -32,6 +32,31 @@
             </div>
           </div>
         </div>
+        <hr />
+        <div class="d-flex justify-content-start" id="chooseFont">
+          <h6 class="goals-header">Skrifttype</h6>
+          <div class="goals-options d-flex justify-content-start">
+            <div class="dropdown me-3">
+              <button
+                class="btn btn-primary btn-sm ms-2 flex-grow-1"
+                type="button"
+                id="dropdownFont"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Vælg font <i class="fas fa-caret-down"></i>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item inter" id="fontInter" href="#">Inter</a></li>
+                <li><a class="dropdown-item lora" id="fontLora" href="#">Lora</a></li>
+                <li><a class="dropdown-item oxygen" id="fontOxygen" href="#">Oxygen</a></li>
+                <li><a class="dropdown-item libre" id="fontLibre" href="#">Libre Baskeville</a></li>
+                <li><a class="dropdown-item lato" id="fontLato" href="#">Lato</a></li>
+              </ul>
+            </div>
+            <small class="w-50 align-self-center" id="chosenFont">Vælg ny font</small>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
@@ -59,6 +84,46 @@
           tæller for to forskellige ord
         </small>
         <p><span id="uniqueWordsList"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ** Modal: Rare **  -->
+<div class="modal fade" id="rareModal" tabindex="-1" aria-labelledby="rareModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rareModalLabel">Unikke ord</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Ord, der ikke er i top 5000</p>
+
+        <p><span id="rareWordsList"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ** Modal: Frequent words **  -->
+<div class="modal fade" id="frequentModal" tabindex="-1" aria-labelledby="frequentModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="frequentModalLabel">Unikke ord</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Gengangerord!</p>
+
+        <p><span id="frequentWordsList"></span></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
@@ -216,3 +281,104 @@
     </div>
   </div>
 </div>
+
+<!-- OPTIONS -->
+<!-- ** Modal: Frequent words **  -->
+<div class="modal fade" id="frequentModal" tabindex="-1" aria-labelledby="frequentModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="frequentModalLabel">Unikke ord</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Gengangerord!</p>
+
+        <p><span id="frequentWordsList"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ! OLD -->
+
+<!-- Modal: Red -->
+<!-- <div class="modal fade" id="redModal" tabindex="-1" aria-labelledby="redModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="redModalLabel"><span class="red">🤯 Røde fejl</span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Røde markeringer skal du tage alvorligt 🤯 Det kan være faste vendinger, der er anvendt forkert, typiske
+          stavefejl eller brug af dobbeltkonfekt (en ordforbindelse, hvor et eller flere ord er logisk unødvendige).
+        </p>
+        <p><span id="rederrors"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Modal: Yellow -->
+<!-- <div class="modal fade" id="yellowModal" tabindex="-1" aria-labelledby="yellowModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="yellowModalLabel"><span class="yellow">🤔 Gule fejl</span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Gule fejl er de gange, hvor du bør tænke dig om 🤔 Er det nu forbudt at bruge en kliche, spørger du måske?
+          Nej, men det er ikke superoriginalt, så vi vil gerne give dig muligheden for at tænkte dig til et friskt
+          billedsprog.
+        </p>
+        <p>
+          Det samme gælder for anglicismer (AKA 'engelskgøring, som er vores lån af ord, vendinger eller udtryksformer
+          fra engelsk'). Flere sprogforskere er bekymret for at denne engelske syge betyder, at dansk om nogle få ord
+          ikke længere vil være et komplet og samfundsbærende sprog.
+        </p>
+        <p><span id="yellowerrors"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Modal: Blue -->
+<!-- <div class="modal fade" id="blueModal" tabindex="-1" aria-labelledby="blueModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="blueModalLabel"><span class="blue">😇 Blå fejl</span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Det er ikke alt, der kan sættes på en formel, men vi har prøvet alligevel 😇 Mange forfattere og
+          korrekturlæsere har en liste af djævleord/fyldeord, de løber igennem, og det er den samme slags liste, der
+          anvendes her.
+        </p>
+
+        <p>
+          Det betyder, at der vil være en række falske positiver - rettelser, der egentligt ikke er fejl - og der må man
+          selv have hovedet med sig
+        </p>
+        <p><span id="blueerrors"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk vinduet</button>
+      </div>
+    </div>
+  </div>
+</div> -->

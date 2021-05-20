@@ -11,7 +11,7 @@ export interface EditorConfig {
   holderId?: string | HTMLElement;
 
   /**
-   * Element where Editor will be append
+   * Element where Editor will be appended
    */
   holder?: string | HTMLElement;
 
@@ -95,4 +95,9 @@ export interface EditorConfig {
    * Defines default toolbar for all tools.
    */
   inlineToolbar?: string[]|boolean;
+
+  /**
+   * Common Block Tunes list. Will be added to all the blocks which do not specify their own 'tunes' set
+   */
+  tunes?: string[];
 }

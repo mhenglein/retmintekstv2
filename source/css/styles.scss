@@ -3,11 +3,17 @@
 //Abstracts
 @import "_abstracts";
 
+//Mixins
+@import "_mixins";
+
 //Base Styles
 @import "_base";
 
 //Components
 @import "_components";
+
+//Typography
+@import "_typography";
 
 //Layout
 @import "_layouts";

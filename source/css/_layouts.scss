@@ -13,11 +13,6 @@
   border: none;
 }
 
-.navbar-brand {
-  font-size: 0.85rem !important;
-  font-family: "Nunito", sans-serif;
-}
-
 .nav-link {
   font-size: 0.75rem;
   margin-left: 0.25rem;
@@ -26,13 +21,18 @@
   }
 }
 
+.navbar-brand {
+  font-size: 0.85rem !important;
+  font-family: "Nunito", sans-serif;
+}
+
 .grey {
   background-color: $grey !important;
 }
 
 // Bottom menu
 #bottom-menu {
-  width: calc(100% - var(--sidebar));
+  width: calc(100% - var(--sidebarWidth));
   @media (max-width: 768px) {
     width: 100% !important;
   }

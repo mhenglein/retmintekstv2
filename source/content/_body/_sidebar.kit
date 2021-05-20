@@ -11,17 +11,12 @@
   <div class="goals-section" data-bs-toggle="modal" data-bs-target="#goalsModal">Juster målsætning</div>
 </div>
 
-<ul id="parent-list" class="list-unstyled components">
+<ul class="list-unstyled components">
   <!-- * FORSLAG -->
   <li class="border-top">
-    <a
-      href="#forslagSubmenu"
-      data-bs-toggle="collapse"
-      data-bs-parent="#parent-list"
-      aria-expanded="false"
-      class="dropdown-toggle"
-      >Forslag <span class="badge text-dark stat ms-2" id="totalErr">0</span></a
-    >
+    <a href="#forslagSubmenu" id="forslagHeader" data-bs-toggle="collapse" aria-expanded="false" role="button">
+      Forslag <span class="badge text-dark stat ms-2" id="totalErr">0</span>
+    </a>
     <ul class="collapse list-unstyled" id="forslagSubmenu">
       <li
         class="d-flex justify-content-between align-items-center"
@@ -60,14 +55,7 @@
 
   <!-- * ORDFORRÅD -->
   <li>
-    <a
-      href="#vocabSubmenu"
-      data-bs-toggle="collapse"
-      data-bs-parent="#parent-list"
-      aria-expanded="false"
-      class="dropdown-toggle"
-      >Ordforråd</a
-    >
+    <a href="#vocabSubmenu" id="vocabHeader" data-bs-toggle="collapse" aria-expanded="false" role="button">Ordforråd</a>
     <ul class="collapse list-unstyled" id="vocabSubmenu">
       <li
         class="d-flex justify-content-between align-items-center"
@@ -96,7 +84,7 @@
 
   <!-- * LÆSBARHED -->
   <li>
-    <a href="#readabilitySubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Læsbarhed</a>
+    <a href="#readabilitySubmenu" id="readabilityHeader" data-bs-toggle="collapse" aria-expanded="false">Læsbarhed</a>
     <ul class="collapse list-unstyled" id="readabilitySubmenu">
       <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
         <a href="#">LIX</a>
@@ -155,7 +143,7 @@
       </li>
 
       <li
-        class="d-flex justify-content-between align-items-center"
+        class="d-flex justify-content-between align-items-center border-bottom"
         data-bs-toggle="modal"
         data-bs-target="#lenghtsModal"
       >
@@ -166,9 +154,15 @@
   </li>
 
   <!-- * TEKSTRYTME -->
-  <li>
-    <a href="#rhythmSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tekstrytme</a>
-    <ul class="collapse list-unstyled" id="rhythmSubmenu" data-bs-toggle="modal" data-bs-target="#rhythmModal">
+  <li id="rhythmList">
+    <a href="#rhythmSubmenu" id="rhythmHeader" data-bs-toggle="collapse" aria-expanded="false">Tekstrytme</a>
+    <ul
+      class="collapse list-unstyled"
+      id="rhythmSubmenu"
+      data-bs-toggle="modal"
+      data-bs-target="#rhythmModal"
+      aria-expanded="false"
+    >
       <li class="d-flex justify-content-between align-items-center">
         <a href="#">Gnst. sætningslængde</a>
         <span id="sentenceLength2" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
@@ -178,32 +172,32 @@
         <span id="variance" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">1-3 ord</a>
+        <a href="#"><span class="s1to3">1-3 ord</span></a>
         <span id="s1to3" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">4-6 ord</a>
+        <a href="#"><span class="s4to6">4-6 ord</span> </a>
         <span id="s4to6" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">7-10 ord</a>
+        <a href="#"><span class="s7to10">7-10 ord</span> </a>
         <span id="s7to10" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">11-18 ord</a>
+        <a href="#"><span class="s11to18">11-18 ord</span></a>
         <span id="s11to18" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center">
-        <a href="#">19-26 ord</a>
+        <a href="#"><span class="s19to26">19-26 ord</span></a>
         <span id="s19to26" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
 
       <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#">26+ ord</a>
+        <a href="#"><span class="s26plus">26+ ord</span></a>
         <span id="s26plus" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
       </li>
     </ul>
@@ -211,7 +205,7 @@
 
   <!-- * SENTIMENT -->
   <li>
-    <a href="#sentimentSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Sentiment</a>
+    <a href="#sentimentSubmenu" id="sentimentHeader" data-bs-toggle="collapse" aria-expanded="false">Sentiment</a>
     <ul class="collapse list-unstyled" id="sentimentSubmenu">
       <li
         class="d-flex justify-content-between align-items-center border-bottom"
@@ -226,7 +220,7 @@
 
   <!-- * GENERELT -->
   <li>
-    <a href="#genereltSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Generelt</a>
+    <a href="#genereltSubmenu" id="genereltHeader" data-bs-toggle="collapse" aria-expanded="false">Generelt</a>
     <ul class="collapse list-unstyled" id="genereltSubmenu">
       <li class="d-flex justify-content-between align-items-center">
         <a href="#">Afsnit</a><span id="paragraphs" class="stat badge text-dark rounded-pill">🤷‍♂️</span>

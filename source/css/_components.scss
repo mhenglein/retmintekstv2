@@ -11,6 +11,97 @@
   background-color: $red !important;
 }
 
+// Forslag
+.dobbeltkonfekt {
+  border-bottom: 3px solid $blue;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $blue-bg;
+  }
+}
+
+.grammatik {
+  border-bottom: 3px solid $red;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $red-bg;
+  }
+}
+
+.generelt {
+  border-bottom: 3px solid $red;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $red-bg;
+  }
+}
+
+.stavefejl {
+  border-bottom: 3px solid $red;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $red-bg;
+  }
+}
+
+.fyldeord {
+  border-bottom: 3px solid $blue;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $blue-bg;
+  }
+}
+
+.anglicisme {
+  border-bottom: 3px solid $yellow;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $yellow-bg;
+  }
+}
+
+.kliche {
+  border-bottom: 3px solid $yellow;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $yellow-bg;
+  }
+}
+
+.buzzword {
+  border-bottom: 3px solid $purple;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $purple-bg;
+  }
+}
+
+.formelt {
+  border-bottom: 3px solid $purple;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $purple-bg;
+  }
+}
+
+.typiskanvendtforkert {
+  border-bottom: 3px solid $yellow;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $yellow-bg;
+  }
+}
+
 .badge.bg-primary.rounded-pill {
   min-width: 3rem;
 }
@@ -35,39 +126,9 @@
   background-color: rgba(220, 227, 231, 0.39);
 }
 
-// EDITOR
-.editor {
-  @media (max-width: 768px) {
-    width: 80vw;
-    margin-left: 2rem;
-  }
-  width: 60vw;
-  margin-left: 4rem;
-}
-.editor-api {
-  background-color: white;
-  border-radius: 5px;
-  min-height: 70vh;
-}
 
-.list-group {
-  overflow-y: scroll;
-  max-height: 100vh !important;
-  background-color: white;
-}
 
-.list-group-min {
-  min-height: 70vh !important;
-}
 
-.ce-block__content,
-.ce-toolbar__content {
-  max-width: unset;
-}
-
-.ce-paragraph {
-  line-height: 1.8em !important;
-}
 
 .red {
   border-bottom: 3px solid $red-border-bottom-color;
@@ -114,6 +175,40 @@
   }
 }
 
+.frequentword {
+  border-bottom: 3px solid $yellow;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $yellow-bg;
+  }
+}
+
+.s1to3 {
+  @include highlight($s1to3, 1);
+}
+
+.s4to6 {
+  @include highlight($s4to6, 1);
+}
+
+.s7to10 {
+  @include highlight($s7to10, 1);
+}
+
+.s11to18 {
+  @include highlight($s11to18, 1);
+}
+
+.s19to26 {
+  @include highlight($s19to26, 1);
+}
+
+.s26plus {
+  @include highlight($s26plus, 1);
+}
+
+// Hedonometer
 span.two::after {
   content: $two;
 }
@@ -215,6 +310,10 @@ span.nine::after {
   text-shadow: 1px 1px 1px #565656;
 }
 
+.btn-outline-success {
+  background-color: white;
+}
+
 // SIDEBAR
 
 #showSidebar {
@@ -235,7 +334,7 @@ span.nine::after {
 
 // * Sidebar section
 #sidebar {
-  width: var(--sidebar);
+  width: var(--sidebarWidth);
   position: fixed;
   top: 0;
   right: 0;
@@ -249,7 +348,7 @@ span.nine::after {
 // ! .mobile
 // Add .mobile to hide sidebar
 #sidebar.mobile {
-  margin-right: calc(-1 * var(--sidebar)) !important;
+  margin-right: calc(-1 * var(--sidebarWidth)) !important;
 }
 
 // And show the full area
@@ -373,7 +472,7 @@ ul ul a {
 // TODO
 @media (max-width: 768px) {
   #sidebar {
-    margin-right: calc(-1 * var(--sidebar));
+    margin-right: calc(-1 * var(--sidebarWidth));
   }
   #sidebar.mobile {
     margin-right: 0;
