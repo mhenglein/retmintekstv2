@@ -1,8 +1,6 @@
 //TODO TypeScript
 //TODO Fuzzy search Hedonometer
 
-"use strict";
-
 // * Server-related libraries
 const express = require("express");
 const compression = require("compression");
@@ -11,6 +9,8 @@ const cors = require("cors");
 // * Other Libraries
 const TextParser = require("./js/text.js").TextParser;
 const TextHighlighter = require("./js/analysis.js").TextHighlighter;
+const dict = require(__dirname + "/js/array.js");
+
 const fs = require("fs");
 const papa = require("papaparse");
 
@@ -70,10 +70,79 @@ app.post("/api/hedonometer", rateHappiness);
 app.get("/api/vocab", wordVocab);
 app.post("/api/vocab", wordVocab);
 
-app.get("/api/sentence", sentenceEvaluation);
-app.post("/api/sentence", sentenceEvaluation);
+app.get("/api/sentence", sentenceEvaluateDifficulty);
+app.post("/api/sentence", sentenceEvaluateDifficulty);
+
+app.get("/api/rhythm", sentenceEvaluateRhythm);
+app.post("/api/rhythm", sentenceEvaluateRhythm);
+
+app.get("/api/retmintekst", retMinTekst);
+app.post("/api/retmintekst", retMinTekst);
 
 // * Main functions
+function retMinTekst(req, res) {
+  // Time stamp
+  const currentTime = new Date();
+  console.log("Corrections API :: Received by the server at ...", currentTime.toLocaleTimeString());
+
+  // Get request input & options
+  const input = req.body.input;
+  const blocks = input.blocks;
+  const inputType = typeof input;
+  const options = req.body.options;
+
+  const outputObject = {
+    korrekthed: 0,
+    originalitet: 0,
+    klarhed: 0,
+    udtryk: 0,
+  };
+
+  // Loop through block (ALso count types of mistakes)
+  input.blocks.forEach((block, index) => {
+    // Prepare text block
+    const parsedText = new TextParser(block.data.text);
+    parsedText.removeHTML();
+
+    // 1A: findAndReplaceLight w/ mispellings file
+    // TODO
+
+    // 1B: findAndReplace w/ regular file
+    const highlightedText = new TextHighlighter(parsedText.text, dict.dict);
+    const errObject = highlightedText.findAndReplace();
+    highlightedText.reconvertText();
+
+    // Reupload highlighted text
+    block.data.text = highlightedText.text;
+
+    // Count errors
+    outputObject.korrekthed = outputObject.korrekthed + errObject.Generelt + errObject.Stavefejl + errObject.Grammatik;
+    outputObject.klarhed =
+      outputObject.klarhed + errObject.Fyldeord + errObject.Dobbeltkonfekt + errObject["Typisk anvendt forkert"];
+    outputObject.originalitet = outputObject.originalitet + errObject.Anglicisme + errObject.Kliche;
+    outputObject.udtryk = outputObject.udtryk + errObject.Buzzword + errObject.Formelt;
+  });
+
+  // Prepare return obj
+  let output = input;
+  output.blocks = blocks;
+
+  const returnJSON = {
+    korrekthed: outputObject.korrekthed,
+    klarhed: outputObject.klarhed,
+    originalitet: outputObject.originalitet,
+    udtryk: outputObject.udtryk,
+    formattedText: output,
+  };
+
+  res.json(returnJSON).end();
+
+  // Time stamp
+  const endTime = new Date();
+  console.log("Corrections API :: Completed by the server at ...", endTime.toLocaleTimeString());
+  console.log(`The operation took ... ${endTime - currentTime}ms`);
+}
+
 function textMetrics(req, res) {
   // Time stamp
   const currentTime = new Date();
@@ -104,7 +173,7 @@ function textMetrics(req, res) {
   textForAnalysis.calcLix(); // Calculate LIX & the associated difficulty
   textForAnalysis.calcTime(); // Calculate reading & speaking time
   const paragraphs = countParagraphs(input);
-  const normalsider = Number(textForAnalysis.chars / 2400).toPrecision(1);
+  const normalsider = Number(textForAnalysis.chars / 2400).toPrecision(2);
 
   // Highlighted output - Loop through EditorJS object
   let highlightedObject = input;
@@ -112,19 +181,15 @@ function textMetrics(req, res) {
     const block = input.blocks[i];
     const text = block.data.text;
 
-    const parsedText = new TextParser(text);
-    parsedText.removeHTML().removeNonLetters().removeNonLetters();
-
-    const highlightedText = new TextHighlighter(parsedText.text);
+    const highlightedText = new TextHighlighter(text);
     highlightedText.findAndReplaceLight(
-      textForAnalysis.longWords,
+      textForAnalysis.longWords, // replacementArray
       "Langt ord",
       "Ord på over 6 bogstaver trækker dit LIX-tal op",
       "longword"
     );
 
     highlightedText.reconvertTextLight();
-    console.log(highlightedText);
 
     highlightedObject.blocks[i].data.text = highlightedText.text;
   }
@@ -175,8 +240,13 @@ function rateHappiness(req, res) {
   let textForAnalysis = extractFullText(inputType, blocks);
 
   // Preparation - Convert to TextParser object && clean
-  textForAnalysis = new TextParser(textForAnalysis);
-  textForAnalysis.removeHTML().removeNonLetters().removePunctuation().removeDoubleSpacing().convLowerCase().trimText();
+  textForAnalysis = new TextParser(textForAnalysis)
+    .removeHTML()
+    .removeNonLetters()
+    .removePunctuation()
+    .removeDoubleSpacing()
+    .convLowerCase()
+    .trimText();
 
   // * Optional Remove 'stopord' from the text
   if (options.removeStopwords) textForAnalysis.removeAllStopord(stopord);
@@ -264,10 +334,8 @@ function wordVocab(req, res) {
   textForAnalysis.sortWords();
   const allWords = textForAnalysis.words.length;
 
-  // Get all REPEAT words
-  // TODO Ignore stopord?
-  textForAnalysis.getFrequentWords(stopord);
-  let repeatWords = textForAnalysis.frequentlyUsedWords;
+  // Get all REPEAT words (Do not include stopord file)
+  let repeatWords = textForAnalysis.getFrequentWords().frequentlyUsedWords;
 
   // Get all unique words (Words that are only used once!)
   const frequencyMap = TextParser.generateFrequencyMap(textForAnalysis.words);
@@ -276,9 +344,7 @@ function wordVocab(req, res) {
   for (const key in frequencyMap) {
     if (Object.prototype.hasOwnProperty.call(frequencyMap, key)) {
       const element = Number(frequencyMap[key]);
-      if (element > 1) {
-        delete frequencyMap[key];
-      }
+      if (element > 1) delete frequencyMap[key];
     }
   }
 
@@ -286,23 +352,39 @@ function wordVocab(req, res) {
   const uniqueWords = Array.from(Object.entries(frequencyMap)).map((s) => s[0]);
 
   // Get & count all rare words
-  // * Remove duplicates  - just to speed things up
-  textForAnalysis.getUniqueWords();
+  textForAnalysis.getUniqueWords(); // Remove duplicates  - just to speed things up
 
   //  * (Optional) -- Lemmafy array
   if (options.lemmafyAll) {
     textForAnalysis.lemmafyText(lemmaDict);
-
-    // Remove any duplicates & store the uniques that may have arisen from the lemmafication
-    textForAnalysis.getUniqueWords();
+    textForAnalysis.getUniqueWords(); // Remove any duplicates & store the uniques that may have arisen from the lemmafication
   }
 
   // Get & count all rare words (word that are not in the top [threshold])
-  textForAnalysis.getRareWords(frequencyFile, options.threshold);
-  const rareWords = textForAnalysis.rareWords;
+  const rareWords = textForAnalysis.getRareWords(frequencyFile, options.threshold).rareWords;
+
+  // Highlighted output for FREQUENTLY USED WORDS - Loop through EditorJS object
+  let highlightedObject = input;
+  if (textForAnalysis.frequentlyUsedWords.length > 0) {
+    for (let i = 0; i < input.blocks.length; i++) {
+      const block = input.blocks[i];
+      const text = block.data.text;
+
+      const highlightedText = new TextHighlighter(text);
+      highlightedText.findAndReplaceLight(
+        textForAnalysis.frequentlyUsedWords, // replacementArray
+        "Ofte anvendt ord",
+        "Du bruger dette ord ofte i din tekst. Overvej, om du kan begrænse omfanget eller finde passende synonymer.",
+        "frequentword"
+      );
+
+      highlightedText.reconvertTextLight();
+
+      highlightedObject.blocks[i].data.text = highlightedText.text;
+    }
+  }
 
   // Prepare returnJSON and close connection
-  // TODO Return highlighted text w/ repeatwords
   const returnJSON = {
     numAllWords: allWords,
     numRareWords: rareWords.length,
@@ -311,9 +393,10 @@ function wordVocab(req, res) {
     uniqueWords: uniqueWords,
     numFrequentlyUsed: repeatWords.length,
     frequentlyUsed: repeatWords,
+    outputObject: highlightedObject,
   };
 
-  // console.log(returnJSON);
+  console.log(returnJSON);
   res.json(returnJSON).end();
 
   // Time stamp
@@ -322,196 +405,134 @@ function wordVocab(req, res) {
   console.log("The operation took ...", endTime - currentTime);
 }
 
-// * API that takes a string or object as input and returns highlighted sentences
-// Send back both rhytm and difficulty
-function sentenceEvaluation(req, res) {
+// * API that takes a string or object as input and returns highlighted sentences plus other stuff
+function sentenceEvaluateDifficulty(req, res) {
   // Time stamp
   const currentTime = new Date();
-  console.log("Sentence API :: Received by the server at ...", currentTime.toLocaleTimeString());
+  console.log("Sentence API (Difficulty) :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
   const input = req.body.input;
-  const blocks = input.blocks;
-  const inputType = typeof input;
-  const options = req.body.options; // Highlight
+  const options = req.body.options;
 
   let [all, easy, hard, veryhard] = [0, 0, 0, 0];
-  let [s1to3, s4to6, s7to10, s11to18, s19to26, s26plus] = [0, 0, 0, 0, 0, 0];
 
-  if (inputType === "string") {
-    // Extract full text from object
-    // TODO
-    let textForAnalysis = extractFullText(inputType, blocks);
-  } else {
-    // Work with EditorJS object -- loop through blocks
-    blocks.forEach((block) => {
-      const textForAnalysis = new TextParser(block.data.text);
-      textForAnalysis.removeHTMLexceptFormatting();
-      textForAnalysis.getSentences();
+  input.blocks.forEach((block, b) => {
+    const textForAnalysis = new TextParser(block.data.text);
+    textForAnalysis.removeHTMLexceptFormatting();
+    textForAnalysis.getSentences();
 
-      all = textForAnalysis.sentenceCount;
+    all += textForAnalysis.sentenceCount;
 
-      // TODO Bundle up into new blocks; might as well jsut return both difficulty and rhythm sections
+    // Loop through sentences in block b
+    for (let index = 0; index < textForAnalysis.sentenceCount; index++) {
+      const sentence = textForAnalysis.sentences[index];
+      const parsedSentence = new TextParser(sentence);
+      parsedSentence.removeHTML().removeNonLetters().removePunctuation().trimText();
+      parsedSentence.getWords();
+      parsedSentence.countCharacters();
 
-      textForAnalysis.sentences.forEach((sentence, index) => {
-        const sentenceForAnalysis = new TextParser(sentence);
-        sentenceForAnalysis.removeHTML().removeNonLetters().removePunctuation().trimText();
-        sentenceForAnalysis.getWords();
-        sentenceForAnalysis.countCharacters();
+      const sentenceLevel = TextParser.calculateLevel(parsedSentence.chars, parsedSentence.wordCount, 1);
+      const sentenceDifficulty = TextParser.determineDifficulty(parsedSentence.wordCount, sentenceLevel);
 
-        const sentenceLength = sentenceForAnalysis.wordCount;
-        const sentenceLevel = TextParser.calculateLevel(sentenceForAnalysis.chars, sentenceForAnalysis.wordCount, 1);
-        const sentenceDifficulty = TextParser.determineDifficulty(sentenceForAnalysis.wordCount, sentenceLevel);
+      // ** Assign difficulty **
+      if (sentenceDifficulty === "hard") {
+        hard++;
+        textForAnalysis.sentences[index] = `<span class='hard'>${sentence}</span>`;
+      } else if (sentenceDifficulty === "veryhard") {
+        veryhard++;
+        textForAnalysis.sentences[index] = `<span class='veryhard'>${sentence}</span>`;
+      }
+    }
 
-        if ((options.highlight = "difficulty")) {
-          // Difficulty
-          let newSentence = textForAnalysis.sentences[index];
-          if (sentenceDifficulty === "hard") {
-            hard++;
-            newSentence = `<span class='hard'>${newSentence}</span>`;
-          } else if (sentenceDifficulty === "veryhard") {
-            veryhard++;
-            newSentence = `<span class='veryhard'>${newSentence}</span>`;
-          }
-
-          textForAnalysis.sentences[index] = newSentence;
-        } else {
-          // Rhythm
-          let newSentence = textForAnalysis.sentences[index];
-          let sentenceEval = assignSentenceByLength(newSentence, sentenceLength);
-
-          newSentence = sentenceEval.newSentence;
-          s1to3 += sentenceEval.s1to3;
-          s4to6 += sentenceEval.s4to6;
-          s7to10 += sentenceEval.s7to10;
-          s11to18 += sentenceEval.s11to18;
-          s19to26 += sentenceEval.s19to26;
-          s26plus += sentenceEval.s26plus;
-        }
-      });
-    });
-  }
+    input.blocks[b].data.text = textForAnalysis.sentences.join("");
+  });
 
   easy = all - hard - veryhard;
 
   // Prepare return objects
   const returnJSON = {
     sentenceCount: all,
-    // Sentence difficulty
+    // * Sentence difficulty
     easy: easy,
     hard: hard,
     veryhard: veryhard,
-    // Sentence lengths
-    s1to3: s1to3,
-    s4to6: s4to6,
-    s7to10: s7to10,
-    s11to18: s11to18,
-    s19to26: s19to26,
-    s26plus: s26plus,
+    // * Formatted objects
+    difficulty: input,
   };
 
-  // console.log(returnJSON);
+  console.log(returnJSON);
   res.json(returnJSON).end(); // Send JSON back and end the connection
 
   // Time stamp
   const endTime = new Date();
-  console.log("Sentence API :: Completed by the server at ...", endTime.toLocaleTimeString());
+  console.log("Sentence API (Difficulty) :: Completed by the server at ...", endTime.toLocaleTimeString());
   console.log("The operation took ...", endTime - currentTime);
 }
 
-app.post("/api/sentence", function (req, res) {
-  // ! Step 2 - Prepare text
-  // * The only risk at this point is that the text contains HTML etc. but strip this in the client?
-  // Would at some point also like to leave this in
+function sentenceEvaluateRhythm(req, res) {
+  // Time stamp
+  const currentTime = new Date();
+  console.log("Sentence API (Rhythm) :: Received by the server at ...", currentTime.toLocaleTimeString());
 
-  const sentencesFromText = getSentencesFromText(textForAnalysis);
-  const noOfSentences = sentencesFromText.length;
+  // Get request input & options
+  const input = req.body.input;
+  const options = req.body.options;
 
-  // ! Step 3 - Optional :: Evaluate sentence difficulty & length
-  let [red, yellow, blue, hard, vhard] = [0, 0, 0, 0, 0];
   let [s1to3, s4to6, s7to10, s11to18, s19to26, s26plus] = [0, 0, 0, 0, 0, 0];
-  let [finalText, finalTextLength] = ["", ""];
+  let all = 0;
 
-  for (i = 0; i < noOfSentences; i++) {
-    let specificSentence = removeHTML(sentencesFromText[i]); // Remove all tags like <b> so they don't affect letter counts etc.
-    let [sentenceByDiff, sentenceByLength] = ["", ""];
-    // * Evaluate the difficulty of the sentence
-    let level = 0,
-      words = 0;
-    if (sentenceDifficulty) {
-      words = getWords(specificSentence).words;
-      const chars = countCharacters(specificSentence).chars;
-      level = calculateLevel(chars, words, 1); // Sentence difficulty
+  input.blocks.forEach((block, b) => {
+    const textForAnalysis = new TextParser(block.data.text);
+    textForAnalysis.removeHTMLexceptFormatting();
+    textForAnalysis.getSentences();
+
+    all += textForAnalysis.sentenceCount;
+
+    // Loop through sentences in block b
+    for (let index = 0; index < textForAnalysis.sentenceCount; index++) {
+      const sentence = textForAnalysis.sentences[index];
+      const parsedSentence = new TextParser(sentence);
+      parsedSentence.removeHTML().removeNonLetters().removePunctuation().trimText();
+      parsedSentence.getWords();
+      const sentenceLength = parsedSentence.wordCount;
+
+      // ** Asign rhythm **
+      const sentenceEval = assignSentenceByLength(sentence, sentenceLength);
+      textForAnalysis.sentences[index] = String(sentenceEval.newSentence);
+
+      s1to3 += Number(sentenceEval.s1to3);
+      s4to6 += Number(sentenceEval.s4to6);
+      s7to10 += Number(sentenceEval.s7to10);
+      s11to18 += Number(sentenceEval.s11to18);
+      s19to26 += Number(sentenceEval.s19to26);
+      s26plus += Number(sentenceEval.s26plus);
     }
+    input.blocks[b].data.text = textForAnalysis.sentences.join("");
+  });
 
-    // * Evaluate the length of the sentence
-    let length = 0;
-    if (sentenceRhythm) length = specificSentence.length;
-
-    // ! Step 4 - Optional :: Review sentence against my dictionary
-    // let findAndReplaceArray = [];
-
-    // if (textAnalysis) {
-    //   findAndReplaceArray.splice(0, findAndReplaceArray.length);
-    //   const analysisOutcome = analyzeText(specificSentence, dict, findAndReplaceArray); // dict via global scope
-    //   specificSentence = analysisOutcome.text;
-    //   red += analysisOutcome.red;
-    //   yellow += analysisOutcome.yellow;
-    //   blue += analysisOutcome.blue;
-    // }
-    // ! Step 5 - Optional :: Wrap in <span>s & update stats, depending on step 3
-
-    if (sentenceDifficulty) {
-      const sentenceEval = assignSentenceByDifficulty(words, level, specificSentence);
-      sentenceByDiff = sentenceEval.newSentence;
-      hard += sentenceEval.hard;
-      vhard += sentenceEval.vhard;
-    }
-
-    if (sentenceRhythm) {
-      const sentenceEval = assignSentenceByLength(specificSentence, length);
-      sentenceByLength = sentenceEval.newSentence;
-      s1to3 += sentenceEval.s1to3;
-      s4to6 += sentenceEval.s4to6;
-      s7to10 += sentenceEval.s7to10;
-      s11to18 += sentenceEval.s11to18;
-      s19to26 += sentenceEval.s19to26;
-      s26plus += sentenceEval.s26plus;
-    }
-
-    // ! Assign sentence back into original string
-    if (sentenceRhythm) finalTextLength += sentenceByLength;
-    if (sentenceDifficulty) {
-      finalText += sentenceDifficulty;
-    } else {
-      finalText += specificSentence;
-    }
-  }
-
-  // ! Step 6 - Prepare return objects
-  const returnObj = {
-    finalText: finalText,
-    finalTextLength: finalTextLength,
-    // Sentence difficulty
-    hard: hard,
-    vhard: vhard,
-    // Sentence lengths
+  // Prepare return objects
+  const returnJSON = {
+    sentenceCount: all,
+    // * Sentence lengths
     s1to3: s1to3,
     s4to6: s4to6,
     s7to10: s7to10,
     s11to18: s11to18,
     s19to26: s19to26,
     s26plus: s26plus,
+    // * Formatted objects
+    rhythm: input,
   };
 
-  // console.log(returnObj);
-  res.json(returnObj).end(); // Send both JSONs back and the end the connection
+  console.log(returnJSON);
+  res.json(returnJSON).end(); // Send JSON back and end the connection
 
   // Time stamp
   const endTime = new Date();
-  console.log("Sentence API :: Completed by the server at ...", endTime.toLocaleTimeString());
+  console.log("Sentence API (Rhythm) :: Completed by the server at ...", endTime.toLocaleTimeString());
   console.log("The operation took ...", endTime - currentTime);
-});
+}
 
 // * Auxillary functions
 
@@ -635,20 +656,67 @@ function extractFullText(type = "undefined", input) {
  * @param  {[Number]} length    The length of the sentence (in number of words)
  */
 function assignSentenceByLength(s, length) {
-  switch (length) {
-    case value <= 3:
-      return { newSentence: `<span class="s1to3">${s}</span>`, s1to3: 1 };
-    case value <= 6:
-      return { newSentence: `<span class="s4to6">${s}</span>`, s4to6: 1 };
-    case value <= 10:
-      return { newSentence: `<span class="s7to10">${s}</span>`, s7to10: 1 };
-    case value <= 18:
-      return { newSentence: `<span class="s11to18">${s}</span>`, s11to18: 1 };
-    case value <= 26:
-      return { newSentence: `<span class="s19to26">${s}</span>`, s19to26: 1 };
-    case value > 26:
-      return { newSentence: `<span class="s26plus">${s}</span>`, s26plus: 1 };
-    default:
-      break;
+  if (length <= 3) {
+    return {
+      newSentence: `<span class="s1to3">${s}</span>`,
+      s1to3: 1,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  } else if (length <= 6) {
+    return {
+      newSentence: `<span class="s4to6">${s}</span>`,
+      s1to3: 0,
+      s4to6: 1,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  } else if (length <= 10) {
+    return {
+      newSentence: `<span class="s7to10">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 1,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  } else if (length <= 18) {
+    return {
+      newSentence: `<span class="s11to18">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 1,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  } else if (length <= 26) {
+    return {
+      newSentence: `<span class="s19to26">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 1,
+      s26plus: 0,
+    };
+  } else if (length > 26) {
+    return {
+      newSentence: `<span class="s26plus">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 1,
+    };
+  } else {
+    return { newSentence: `${s}`, s1to3: 0, s4to6: 0, s7to10: 0, s11to18: 0, s19to26: 0, s26plus: 0 };
   }
 }
