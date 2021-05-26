@@ -126,10 +126,6 @@
   background-color: rgba(220, 227, 231, 0.39);
 }
 
-
-
-
-
 .red {
   border-bottom: 3px solid $red-border-bottom-color;
   cursor: pointer;
@@ -209,6 +205,18 @@
 }
 
 // Hedonometer
+.two,
+.three,
+.four,
+.five,
+.six,
+.seven,
+.eight,
+.nine {
+  &::after {
+    font-size: 0.5rem;
+  }
+}
 span.two::after {
   content: $two;
 }
@@ -312,6 +320,36 @@ span.nine::after {
 
 .btn-outline-success {
   background-color: white;
+}
+
+.btn-outline-primary.goals {
+  font-family: "Inter", sans-serif;
+  background-color: rgb(240, 242, 252) !important;
+  color: rgb(74, 110, 224) !important;
+  font-weight: 100;
+  &:active {
+    background-color: rgb(74, 110, 224);
+    transition-duration: 0.2s;
+    color: rgb(255, 255, 255);
+  }
+}
+
+.btn-goals {
+  color: rgb(74, 110, 224);
+  background-color: rgb(240, 242, 252);
+  border-color: rgb(74, 110, 224);
+  font-weight: 100;
+  letter-spacing: 0;
+}
+
+.btn-goals:hover,
+.btn-goals:active,
+.btn-goals:focus,
+.btn-goals.active {
+  background: rgb(74, 110, 224);
+  color: rgb(255, 255, 255);
+  border-color: rgb(74, 110, 224);
+  transition-duration: 0.2s;
 }
 
 // SIDEBAR
@@ -493,4 +531,10 @@ ul ul a {
   width: 15%;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+}
+
+.img-aud {
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
 }

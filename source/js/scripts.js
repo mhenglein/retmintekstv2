@@ -1,7 +1,8 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-console */
+
 // *** EDITOR *** //
 import EditorJS from "@editorjs/editorjs";
-// import Header from "@editorjs/header";
-// import List from "@editorjs/list";
 
 const path = "http://localhost:3000";
 const endpointMetrics = `${path}/api/metrics`;
@@ -10,9 +11,10 @@ const endpointHedonometer = `${path}/api/hedonometer`;
 const endpointSentence = `${path}/api/sentence`;
 const endpointRhythm = `${path}/api/rhythm`;
 const endpointCorrections = `${path}/api/retmintekst`;
+const endpointLongWords = `${path}/api/longwords`;
 
 // Window onload
-window.onload = function () {
+window.onload = () => {
   // Aux functions
   function updateLocalStorage(identifier, value) {
     if (identifier === "" || identifier == null) {
@@ -50,7 +52,6 @@ window.onload = function () {
   const editordiv = document.getElementById("editorjs");
 
   // * Options
-  const dropdownFont = document.getElementById("dropdownFont");
   const fontInter = document.getElementById("fontInter");
   const fontLora = document.getElementById("fontLora");
   const fontOxygen = document.getElementById("fontOxygen");
@@ -59,7 +60,7 @@ window.onload = function () {
   const chosenFont = document.getElementById("chosenFont");
 
   const preferredFont = getFromStorage("RetMinTekst:PreferredFont");
-  if (preferredFont != "null") {
+  if (preferredFont !== "null") {
     setFont(preferredFont);
   }
 
@@ -68,7 +69,7 @@ window.onload = function () {
     removeClasses(chosenFont, ["w-50", "align-self-center"]);
     removeClasses(editordiv);
     editordiv.classList.add(fontName.toLowerCase(), ["editor"]);
-    chosenFont.classList.add(fontName.toLowerCase());
+    chosenFont.classList.add(fontName.toLowerCase().replace(" ", ""));
     chosenFont.innerText = fontName;
     updateLocalStorage("RetMinTekst:PreferredFont", fontName);
   }
@@ -89,6 +90,43 @@ window.onload = function () {
     setFont(fontLato.innerText);
   };
 
+  const aud1 = document.getElementById("aud1");
+  const aud2 = document.getElementById("aud2");
+  const aud3 = document.getElementById("aud3");
+  const audienceCheck = localStorage.getItem("audience");
+  if (audienceCheck === "1") {
+    aud1.classList.add("active");
+    aud2.classList.remove("active");
+    aud3.classList.remove("active");
+  } else if (audienceCheck === "2") {
+    aud2.classList.add("active");
+    aud1.classList.remove("active");
+    aud3.classList.remove("active");
+  } else {
+    aud2.classList.add("active");
+    aud1.classList.remove("active");
+    aud3.classList.remove("active");
+  }
+
+  aud1.addEventListener("click", () => {
+    aud1.classList.add("active");
+    aud2.classList.remove("active");
+    aud3.classList.remove("active");
+    localStorage.setItem("audience", 1);
+  });
+  aud2.addEventListener("click", () => {
+    aud2.classList.add("active");
+    aud1.classList.remove("active");
+    aud3.classList.remove("active");
+    localStorage.setItem("audience", 2);
+  });
+  aud3.addEventListener("click", () => {
+    aud3.classList.add("active");
+    aud2.classList.remove("active");
+    aud1.classList.remove("active");
+    localStorage.setItem("audience", 3);
+  });
+
   // * Sidebar
   const totalErr = document.getElementById("totalErr");
 
@@ -102,6 +140,8 @@ window.onload = function () {
   const frequent = document.getElementById("frequent");
 
   const uniqueWordsList = document.getElementById("uniqueWordsList");
+  const rareWordsList = document.getElementById("rareWordsList");
+  const frequentWordsList = document.getElementById("frequentWordsList");
 
   const lix = document.getElementById("lix");
   const difficulty = document.getElementById("difficulty");
@@ -140,21 +180,21 @@ window.onload = function () {
   const sectionContent = document.querySelector("#content");
   const bottomMenu = document.querySelector("#bottom-menu");
 
-  btnCollapseSidebar.addEventListener("click", function () {
+  btnCollapseSidebar.addEventListener("click", () => {
     sectionSidebar.classList.toggle("mobile");
     sectionContent.classList.toggle("mobile");
     bottomMenu.classList.toggle("mobile");
     btnShowSidebar.classList.toggle("mobile");
   });
 
-  btnShowSidebar.addEventListener("click", function () {
+  btnShowSidebar.addEventListener("click", () => {
     sectionSidebar.classList.toggle("mobile");
     sectionContent.classList.toggle("mobile");
     bottomMenu.classList.toggle("mobile");
     btnShowSidebar.classList.toggle("mobile");
   });
 
-  $(document).ready(function () {
+  $(document).ready(() => {
     $("#sidebar").mCustomScrollbar({
       theme: "minimal",
     });
@@ -166,7 +206,6 @@ window.onload = function () {
   const readabilityHeader = document.getElementById("readabilityHeader");
   const rhythmHeader = document.getElementById("rhythmHeader");
   const sentimentHeader = document.getElementById("sentimentHeader");
-  const genereltHeader = document.getElementById("genereltHeader");
 
   // Sidebar sections SUBMENUS
   // const collapseElementList = [].slice.call(document.querySelectorAll(".collapse"));
@@ -199,9 +238,9 @@ window.onload = function () {
   //   genereltSubmenu.classList.remove("show");
   // });
 
-  arrSubMenus.forEach((menu, index) => {
-    menu.addEventListener("show.bs.collapse", function () {
-      for (let i = 0; i < arrSubMenus.length; i++) {
+  arrSubMenus.forEach((menu) => {
+    menu.addEventListener("show.bs.collapse", () => {
+      for (let i = 0; i < arrSubMenus.length; i += 1) {
         if (arrSubMenus[i] !== menu) {
           if (arrSubMenus[i].classList.contains("show")) {
             arrSubMenus[i].classList.remove("show");
@@ -278,9 +317,6 @@ window.onload = function () {
     onReady: () => {
       console.log("Editor.js is ready to work!");
 
-      // * Allow buttons
-      //?
-
       // * Bottom menu
       btnCorrections.addEventListener("click", () => {
         forslagHeader.click();
@@ -320,6 +356,8 @@ window.onload = function () {
 
       btnSentiment.addEventListener("click", () => {
         sentimentHeader.click();
+        const getEditorText = JSON.parse(getFromStorage("highlightedText_sentiment"));
+        if (getEditorText !== undefined) editor.render(getEditorText);
       });
 
       btnSentences.addEventListener("click", () => {
@@ -331,7 +369,7 @@ window.onload = function () {
       // * Top menu
       // Analyze Text btn
       const analyzeBtn = document.getElementById("analyzeBtn");
-      analyzeBtn.addEventListener("click", function () {
+      analyzeBtn.addEventListener("click", () => {
         // API Calls
         analyzeSpinner.hidden = false;
         sendRequests();
@@ -340,13 +378,14 @@ window.onload = function () {
 
       // Remove markup button
       const removeMarkupBtn = document.getElementById("removeMarkupBtn");
-      removeMarkupBtn.addEventListener("click", function () {
+      removeMarkupBtn.addEventListener("click", () => {
         editor.save().then((saved) => {
-          for (let i = 0; i < saved.blocks.length; i++) {
-            saved.blocks[i].data.text = removeHTML(saved.blocks[i].data.text);
+          const savedBlocks = saved;
+          for (let i = 0; i < saved.blocks.length; i += 1) {
+            savedBlocks.blocks[i].data.text = removeHTML(savedBlocks.blocks[i].data.text);
           }
-          localStorage.setItem("editor", saved);
-          editor.render(saved);
+          localStorage.setItem("editor", savedBlocks);
+          editor.render(savedBlocks);
         });
         resetSidebar();
         sendRequests();
@@ -375,21 +414,23 @@ window.onload = function () {
         const preference = getFromStorage("highlightingPreference");
         const options = getFromStorage("options");
 
+        sendRequestLongWords(saved, options);
+
         // Request 1 :: Metrics + Long words highlighting
-        sendRequestMetrics(saved, preference, options);
+        // sendRequestMetrics(saved, preference, options);
 
         // Request 2 :: Vocab
-        sendRequestVocab(saved, preference, options);
+        // sendRequestVocab(saved, preference, options);
 
         // Request 3A + 3B :: Sentence analysis + rhythm
-        sendRequestSentence(saved, preference, options);
-        sendRequestRhythm(saved, preference, options);
+        // sendRequestSentence(saved, preference, options);
+        // sendRequestRhythm(saved, preference, options);
 
         // Request 4 :: Hedonometer
-        sendRequestsSentiment(saved, preference, options);
+        // sendRequestsSentiment(saved, preference, options);
 
         // Request 5 :: Corrections
-        sendRequestsCorrections(saved, preference, options);
+        // sendRequestsCorrections(saved, preference, options);
       }
       // TODO Initialize popovers
       editor.isReady.then(() => {
@@ -400,10 +441,10 @@ window.onload = function () {
     });
   }
 
-  function sendRequestMetrics(editor, preference = "", option = "") {
+  function sendRequestMetrics(savedEditor, preference = "", option = "") {
     // Request 1 :: Metrics
     const request = {
-      input: editor,
+      input: savedEditor,
       options: {
         highlight: false,
         removeStopwords: false,
@@ -446,16 +487,27 @@ window.onload = function () {
       updateLocalStorage("normalsider", data.normalsider);
 
       // Calc
-      const longWordPercentage = String(Math.floor((Number(data.longWords) / Number(data.words)) * 100) + "%");
+      const longWordPercentage = `${Math.floor((Number(data.longWords) / Number(data.words)) * 100)}%`;
 
       // Save formatted TEXT to Local Storage (w/ long words highlighted? Or nothing for this call)
-      updateLocalStorage("highlightedText_longwords", JSON.stringify(data.outputText));
+      updateLocalStorage("highlightedText_longwords", JSON.stringify(data.output));
     });
   }
 
-  function sendRequestVocab(editor, preference = "", option = "") {
+  function sendRequestLongWords(savedEditor, option = "") {
     const request = {
-      input: editor,
+      input: savedEditor,
+      options: {},
+    };
+
+    postRequest(endpointLongWords, request).then((data) => {
+      console.log(data);
+    });
+  }
+
+  function sendRequestVocab(savedEditor, preference = "", option = "") {
+    const request = {
+      input: savedEditor,
       options: {
         threshold: 5000,
         lemmafyAll: false,
@@ -498,14 +550,14 @@ window.onload = function () {
       updateLocalStorage("frequentWords", data.frequentlyUsed);
 
       // Saved formatted TEXT to Local Storage (w/ frequent words highlighted)
-      updateLocalStorage("highlightedText_frequent", JSON.stringify(data.outputObject));
+      updateLocalStorage("highlightedText_frequent", JSON.stringify(data.output));
     });
   }
 
-  function sendRequestRhythm(editor, preference = "", options = {}) {
+  function sendRequestRhythm(savedEditor, preference = "", options = {}) {
     const request = {
-      input: editor,
-      options: options,
+      input: savedEditor,
+      options,
     };
 
     postRequest(endpointRhythm, request).then((data) => {
@@ -530,7 +582,7 @@ window.onload = function () {
   function sendRequestSentence(editor, preference = "", options = {}) {
     const request = {
       input: editor,
-      options: options,
+      options,
     };
     postRequest(endpointSentence, request).then((data) => {
       // Fill in DOM
@@ -538,39 +590,22 @@ window.onload = function () {
       hard.innerText = dataChecker(data.hard);
       veryhard.innerText = dataChecker(data.veryhard);
 
-      // s1to3.innerText = dataChecker(data.s1to3);
-      // s4to6.innerText = dataChecker(data.s4to6);
-      // s7to10.innerText = dataChecker(data.s7to10);
-      // s11to18.innerText = dataChecker(data.s11to18);
-      // s19to26.innerText = dataChecker(data.s19to26);
-      // s26plus.innerText = dataChecker(data.s26plus);
-
       // Update storage
       updateLocalStorage("easy", data.easy);
       updateLocalStorage("hard", data.hard);
       updateLocalStorage("veryhard", data.veryhard);
 
-      // updateLocalStorage("s1to3", data.s1to3);
-      // updateLocalStorage("s4to6", data.s4to6);
-      // updateLocalStorage("s7to10", data.s7to10);
-      // updateLocalStorage("s11to18", data.s11to18);
-      // updateLocalStorage("s19to26", data.s19to26);
-      // updateLocalStorage("s26plus", data.s26plus);
-
       // TODO Generate chart.js -> Modals
 
       // Generate formatted TEXT for Local Storage (w/ diff sentence and rhythm)
       updateLocalStorage("highlightedText_difficulty", JSON.stringify(data.difficulty));
-      // updateLocalStorage("highlightedText_rhythm", JSON.stringify(data.rhythm));
-
-      // analyzeSpinner.hidden = true;
     });
   }
 
-  function sendRequestsSentiment(editor, preference = "", options = {}) {
+  function sendRequestsSentiment(savedEditor, preference = "", options = {}) {
     const request = {
-      input: editor,
-      options: options, // lemmafyAll, uniqueOnly
+      input: savedEditor,
+      options, // lemmafyAll, uniqueOnly
     };
 
     postRequest(endpointHedonometer, request).then((data) => {
@@ -582,16 +617,18 @@ window.onload = function () {
       // Store in Local Storage
       updateLocalStorage("hedonometer", happinessScore);
 
-      // TODO Modals, scoring, emojis etc.
+      // TODO Modals, scoring, emojis etc. Chart.js
 
       // Formatted text somehow? With span.emoji::after { content: ":)";}
+      // Save formatted TEXT to Local Storage
+      updateLocalStorage("highlightedText_sentiment", JSON.stringify(data.outputObj));
     });
   }
 
-  function sendRequestsCorrections(editor, preference = "", options = {}) {
+  function sendRequestsCorrections(savedEditor, preference = "", options = {}) {
     const request = {
-      input: editor,
-      options: options,
+      input: savedEditor,
+      options,
     };
     postRequest(endpointCorrections, request).then((data) => {
       // Fill in DOM
@@ -665,7 +702,7 @@ window.onload = function () {
       "Det er Skade at Degnen ikke er i Byen, thi der er saa meget Latin i min Søns Brev, som jeg ikke forstaar", // Ludvid Holberg - Erasmus Montanus
       "Gud skjenke os Alle et glædeligt Nytaar! og bevare vor gode Hr. Søren! han slukkede Lyset iaftes, og Moder siger, han lever ikke til næste Nytaar; men det har vel intet at betyde", // St St Blicher - Brudstykker af en Landsbydegns Dagbog
       "Hvad er en Digter? Et ulykkeligt Menneske, der gjemmer dybe Qvaler i sit Hjerte, men hvis Læber ere dannede saaledes, at idet Sukket eller Skriget strømme ud over dem, lyde de som skjøn Musik", // Kierkegaard
-      "Den Luft, der laa under Lindetræernes Kroner, havde vugget sig frem over den brune Hede og de tørstige Marker, den var blevet baget af Solen og støvet af Vejene, men nu var den renset af det tætte Løvhang, svalet de kjølige Lindeblade, og Duften af Lindens gule Blomster havde gjort den fugtig og givet den Fylde", // JP Jacobsen - Fru Marie Grubbe
+      "Den Luft, der laa under Lindetræernes Kroner, havde vugget sig frem over den brune Hede og de tørstige Marker, den var blevet baget af Solen og støvet af Vejene, men nu var den renset af det tætte Løvhang, svalet de kjølige Lindeblade, og Duften af Lindens gule Blo  ter havde gjort den fugtig og givet den Fylde", // JP Jacobsen - Fru Marie Grubbe
     ];
     return placerholderArray[Math.floor(Math.random() * placerholderArray.length)];
   }
@@ -712,24 +749,14 @@ window.onload = function () {
     speakingtime.innerText = "🤷‍♂️";
   }
 
-  function removeEmptyBlocks() {
-    editor.save().then((savedData) => {
-      for (let i = 0; i < savedData.blocks.length; i++) {
-        if (savedData[i].data.text === "") {
-          savedData.blocks.delete[i];
-        }
-      }
-      editor.render(savedData);
-    });
-  }
-
   function removeHTML(text) {
     return text.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/gi, " ");
   }
 
   function dataChecker(input) {
+    let dataToBeChecked = input;
     try {
-      input = input.toString();
+      dataToBeChecked = input.toString();
     } catch (err) {
       console.error("Input must be able to be coerced by the toString() method", err);
       return input;
@@ -737,22 +764,24 @@ window.onload = function () {
 
     if (input === undefined || typeof input === "undefined" || input === "undefined") {
       return "🤷‍♂️";
-    } else {
-      return input;
     }
+    return dataToBeChecked;
   }
 
   // Popover
   function initializePopovers() {
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('.editor [data-bs-toggle="popover"]'));
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-      return new bootstrap.Popover(popoverTriggerEl, {
-        trigger: "hover focus",
-        placement: "auto",
-        container: "#editorjs",
-        html: true,
-      });
-    });
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('.editor [data-bs-toggle="popover"]'));
+    // eslint-disable-next-line no-unused-vars
+    const popoverList = popoverTriggerList.map(
+      (popoverTriggerEl) =>
+        // eslint-disable-next-line no-undef
+        new bootstrap.Popover(popoverTriggerEl, {
+          trigger: "hover focus",
+          placement: "auto",
+          container: "#editorjs",
+          html: true,
+        })
+    );
   }
 
   setInterval(initializePopovers(), 5000);

@@ -14,21 +14,36 @@
         <div class="d-flex" id="audience">
           <h6 class="goals-header">Publikum</h6>
           <div class="goals-options">
-            <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-primary active">Anders And</button>
-              <button type="button" class="btn btn-outline-primary">Helle Helle</button>
-              <button type="button" class="btn btn-outline-primary">Martin Krasnik</button>
+            <div class="btn-group btn-group-sm ms-2" role="group">
+              <button type="button" class="btn btn-goals" id="aud1">Anders And</button>
+              <button type="button" class="btn btn-goals" id="aud2">Helle Helle</button>
+              <button type="button" class="btn btn-goals" id="aud3">Martin Krasnik</button>
+            </div>
+            <div class="ms-2 row g-0">
+              <div class="col-2">
+                <img src="assets/andersand.jpg" class="img-thumbnail img-aud me-2 my-2" id="anders" />
+              </div>
+
+              <div class="col-9 ms-1 my-2 d-flex">
+                <small id="audDescription">
+                  Korte sætninger. Simple ord. Lav varians. En tekst, som et barn kunne læse uden problemer.</small
+                >
+              </div>
             </div>
           </div>
         </div>
+
         <hr />
         <div class="d-flex justify-content-start" id="formality">
           <h6 class="goals-header">Formalitet</h6>
           <div class="goals-options">
-            <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-primary active">Uformel</button>
-              <button type="button" class="btn btn-outline-primary">Neutral</button>
-              <button type="button" class="btn btn-outline-primary">Formel</button>
+            <div class="btn-group btn-group-sm ms-2" role="group">
+              <button type="button" class="btn btn-goals">Uformel</button>
+              <button type="button" class="btn btn-goals">Neutral</button>
+              <button type="button" class="btn btn-goals">Formel</button>
+            </div>
+            <div class="ms-2 row g-0">
+              <small id="formalityDescription"> Ingen slang og buzzwords.</small>
             </div>
           </div>
         </div>

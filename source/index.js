@@ -1,18 +1,29 @@
-//TODO TypeScript
-//TODO Fuzzy search Hedonometer
+/* eslint-disable import/extensions */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-console */
+/* eslint-disable import/no-unresolved */
+// TODO TypeScript
+// TODO Separate out loaders, API etc.
 
 // * Server-related libraries
+
+const path = require("path");
 const express = require("express");
 const compression = require("compression");
 const cors = require("cors");
+const Fuse = require("fuse.js");
+
+global.appRoot = path.resolve(__dirname);
 
 // * Other Libraries
-const TextParser = require("./js/text.js").TextParser;
-const TextHighlighter = require("./js/analysis.js").TextHighlighter;
-const dict = require(__dirname + "/js/array.js");
-
-const fs = require("fs");
 const papa = require("papaparse");
+const fs = require("fs");
+const { TextHighlighter } = require("./js/analysis.js");
+const { TextParser } = require("./js/text.js");
+const { TextMath } = require("./js/math.js");
+const { dict } = require("./js/array");
+const LongWords = require("./api/lw");
+const SentenceDifficulty = require("./api/sentencediff");
 
 // * Server setup
 const app = express();
@@ -21,63 +32,199 @@ app.use(compression());
 app.use(cors());
 
 const PORT = 3000;
-app.listen(PORT, function () {
+app.listen(PORT, () => {
   console.log(`Server started on ${PORT}`);
 });
 
-const path = require("path");
-global.appRoot = path.resolve(__dirname);
-
-let stopord;
-fs.readFile(`${appRoot}/data/stopord.csv`, "utf8", function (err, csv) {
+const stopord = fs.readFile(`${global.appRoot}/data/stopord.csv`, "utf8", (err, csv) => {
   if (err) return console.log(err);
-  stopord = papa.parse(csv, { fastMode: true }).data;
-  console.log("stopord parsed...", stopord.length);
+  return papa.parse(csv, { fastMode: true }).data;
 });
 
-let hedonometerFile;
-fs.readFile(`${appRoot}/data/hedonometer.csv`, "utf8", function (err, csv) {
+let fuse;
+const hedonometerFile = fs.readFile(`${global.appRoot}/data/hedonometer.csv`, "utf8", (err, csv) => {
   if (err) return console.log(err);
-  hedonometerFile = papa.parse(csv, { fastMode: true }).data;
-  console.log("hedonometerFile parsed ...", hedonometerFile.length);
+  const file = papa.parse(csv, { fastMode: true }).data;
+
+  const list = file.map((x) => ({
+    id: x[0],
+    english: x[1],
+    danish: x[3],
+    mean: x[4],
+    sigma: x[5],
+  }));
+  const options = {
+    includeScore: true,
+    threshold: 0.6,
+    // Search in `author` and in `tags` array
+    keys: ["danish"],
+  };
+  fuse = new Fuse(list, options);
+  return file;
 });
 
-let lemmaFile;
 const lemmaDict = {};
-fs.readFile(`${appRoot}/data/lemmas.csv`, "utf8", function (err, csv) {
+fs.readFile(`${global.appRoot}/data/lemmas.csv`, "utf8", (err, csv) => {
   if (err) return console.log(err);
-  lemmaFile = papa.parse(csv, { fastMode: true }).data;
-  for (const key of lemmaFile) {
-    lemmaDict[key[0]] = key[1];
+  const file = papa.parse(csv, { fastMode: true }).data;
+  Object.entries(file).forEach((key, value) => {
+    lemmaDict[key] = value;
+  });
+  return file;
+});
+
+const frequencyFile = fs.readFile(`${global.appRoot}/data/frequency-ex.csv`, "utf8", (err, csv) => {
+  if (err) return console.log(err);
+  return papa.parse(csv).data;
+});
+
+const misspelllingDict = {};
+fs.readFile(`${global.appRoot}/data/misspellings.csv`, "utf8", (err, csv) => {
+  if (err) return console.log(err);
+  const misspellingsFile = papa.parse(csv).data;
+  Object.entries(misspellingsFile).forEach((key) => {
+    // eslint-disable-next-line prefer-destructuring
+    misspelllingDict[key[1][0]] = key[1][1];
+  });
+  console.log("misspellingsFile parsed...", misspellingsFile.length);
+});
+
+// * Auxillary functions
+
+/**
+ * Count all the paragraph blocks in EditorJS (Headers & Lists not included)
+ * @param  {[Array]}   editorBlocks An array of blocks from an EditorJS object
+ * @return {[Number]}               Number of paragraphs
+ */
+function countParagraphs(editorBlocks) {
+  return editorBlocks.filter((x) => x.type === "paragraph").length;
+}
+
+/**
+ * Extracts all text from the request
+ * @param  {[String]}         type  (Optional) Specify the type of the input
+ * @param  {[Object/String]}  input Either an EditorJS Object or a string
+ * @return {[String]}               One string containing all text
+ */
+function extractFullText(type = "undefined", input) {
+  // If no type specified, one will be defined
+  if (type === "undefined") type = typeof input;
+
+  // Extract from EditorJS
+  if (type === "object") {
+    let output = "";
+    try {
+      for (let i = 0; i < input.length; i += 1) {
+        const specificBlock = input[i];
+        const typeOfBlock = specificBlock.type;
+
+        if (typeOfBlock === "list") {
+          const noOfItems = specificBlock.data.items.length;
+          for (let item = 0; item < noOfItems; item += 1) {
+            output += specificBlock.data.items[i];
+          }
+        } else {
+          output += specificBlock.data.text;
+        }
+
+        // Add whitespace after block
+        output += " ";
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    return output;
   }
-  console.log("lemmaFile parsed...", lemmaFile.length);
-});
+  // Regular string, e.g. people using the API
+  if (type === "string") {
+    return String(input);
+  }
+  // Something else; try to convert to string; if impossible, return error
+  try {
+    const convertToString = input.toString();
+    return convertToString;
+  } catch (err) {
+    console.error("Input must either be an EditorJS object or a value with a toString() method", err);
+    return "Fejl";
+  }
+}
 
-let frequencyFile;
-fs.readFile(`${appRoot}/data/frequency-ex.csv`, "utf8", function (err, csv) {
-  if (err) return console.log(err);
-  frequencyFile = papa.parse(csv).data;
-  console.log("frequencyFile parsed...", frequencyFile.length);
-});
-
-// * End points
-app.get("/api/metrics", textMetrics);
-app.post("/api/metrics", textMetrics);
-
-app.get("/api/hedonometer", rateHappiness);
-app.post("/api/hedonometer", rateHappiness);
-
-app.get("/api/vocab", wordVocab);
-app.post("/api/vocab", wordVocab);
-
-app.get("/api/sentence", sentenceEvaluateDifficulty);
-app.post("/api/sentence", sentenceEvaluateDifficulty);
-
-app.get("/api/rhythm", sentenceEvaluateRhythm);
-app.post("/api/rhythm", sentenceEvaluateRhythm);
-
-app.get("/api/retmintekst", retMinTekst);
-app.post("/api/retmintekst", retMinTekst);
+/**
+ * Based on length of a sentence, this provides the HTML output
+ * Returns the new sentence and its "length category"
+ * @param  {[String]} s         The input sentence to be wrapped in tags
+ * @param  {[Number]} length    The length of the sentence (in number of words)
+ */
+function assignSentenceByLength(s, length) {
+  if (length <= 3) {
+    return {
+      newSentence: `<span class="s1to3">${s}</span>`,
+      s1to3: 1,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  }
+  if (length <= 6) {
+    return {
+      newSentence: `<span class="s4to6">${s}</span>`,
+      s1to3: 0,
+      s4to6: 1,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  }
+  if (length <= 10) {
+    return {
+      newSentence: `<span class="s7to10">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 1,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  }
+  if (length <= 18) {
+    return {
+      newSentence: `<span class="s11to18">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 1,
+      s19to26: 0,
+      s26plus: 0,
+    };
+  }
+  if (length <= 26) {
+    return {
+      newSentence: `<span class="s19to26">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 1,
+      s26plus: 0,
+    };
+  }
+  if (length > 26) {
+    return {
+      newSentence: `<span class="s26plus">${s}</span>`,
+      s1to3: 0,
+      s4to6: 0,
+      s7to10: 0,
+      s11to18: 0,
+      s19to26: 0,
+      s26plus: 1,
+    };
+  }
+  return { newSentence: `${s}`, s1to3: 0, s4to6: 0, s7to10: 0, s11to18: 0, s19to26: 0, s26plus: 0 };
+}
 
 // * Main functions
 function retMinTekst(req, res) {
@@ -86,12 +233,11 @@ function retMinTekst(req, res) {
   console.log("Corrections API :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
-  const input = req.body.input;
-  const blocks = input.blocks;
-  const inputType = typeof input;
-  const options = req.body.options;
+  const { input } = req.body;
+  const { blocks } = input;
+  // const { options } = req.body;
 
-  const outputObject = {
+  const errs = {
     korrekthed: 0,
     originalitet: 0,
     klarhed: 0,
@@ -99,39 +245,45 @@ function retMinTekst(req, res) {
   };
 
   // Loop through block (ALso count types of mistakes)
-  input.blocks.forEach((block, index) => {
+  input.blocks.forEach((block) => {
     // Prepare text block
     const parsedText = new TextParser(block.data.text);
     parsedText.removeHTML();
 
     // 1A: findAndReplaceLight w/ mispellings file
-    // TODO
+    const findSpellingErrors = new TextHighlighter(parsedText.text, misspelllingDict);
+    findSpellingErrors.findAndReplaceLight(); // Has ID codes in it
+    const newText = findSpellingErrors.text;
+    const misspelledReplacements = findSpellingErrors.replacements;
 
     // 1B: findAndReplace w/ regular file
-    const highlightedText = new TextHighlighter(parsedText.text, dict.dict);
-    const errObject = highlightedText.findAndReplace();
+    const highlightedText = new TextHighlighter(newText.text, dict.dict);
+    const found = highlightedText.findAndReplace();
     highlightedText.reconvertText();
 
+    // Misspellings
+    const finalText = new TextHighlighter(highlightedText.text);
+    finalText.reconvertTextLight(misspelledReplacements);
+
     // Reupload highlighted text
-    block.data.text = highlightedText.text;
+    block.data.text = finalText.text;
 
     // Count errors
-    outputObject.korrekthed = outputObject.korrekthed + errObject.Generelt + errObject.Stavefejl + errObject.Grammatik;
-    outputObject.klarhed =
-      outputObject.klarhed + errObject.Fyldeord + errObject.Dobbeltkonfekt + errObject["Typisk anvendt forkert"];
-    outputObject.originalitet = outputObject.originalitet + errObject.Anglicisme + errObject.Kliche;
-    outputObject.udtryk = outputObject.udtryk + errObject.Buzzword + errObject.Formelt;
+    errs.korrekthed += found.Generelt + found.Stavefejl + found.Grammatik;
+    errs.klarhed += found.Fyldeord + found.Dobbeltkonfekt + found["Typisk anvendt forkert"];
+    errs.originalitet += found.Anglicisme + found.Kliche;
+    errs.udtryk += found.Buzzword + found.Formelt;
   });
 
   // Prepare return obj
-  let output = input;
+  const output = input;
   output.blocks = blocks;
 
   const returnJSON = {
-    korrekthed: outputObject.korrekthed,
-    klarhed: outputObject.klarhed,
-    originalitet: outputObject.originalitet,
-    udtryk: outputObject.udtryk,
+    korrekthed: errs.korrekthed,
+    klarhed: errs.klarhed,
+    originalitet: errs.originalitet,
+    udtryk: errs.udtryk,
     formattedText: output,
   };
 
@@ -149,13 +301,12 @@ function textMetrics(req, res) {
   console.log("Text Metrics API :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
-  const input = req.body.input;
-  const blocks = input.blocks;
-  const inputType = typeof input;
-  const options = req.body.options;
+  const { input } = req.body;
+  const { blocks } = input;
+  const { options } = req.body;
 
   // Extract full text from object
-  let textForAnalysis = extractFullText(inputType, blocks);
+  let textForAnalysis = extractFullText(typeof input, blocks);
 
   // Preparation - Convert to TextParser object && clean HTML
   textForAnalysis = new TextParser(textForAnalysis);
@@ -172,29 +323,11 @@ function textMetrics(req, res) {
   textForAnalysis.calcSentenceVariance(); // Calculate sentence variance & std deviation
   textForAnalysis.calcLix(); // Calculate LIX & the associated difficulty
   textForAnalysis.calcTime(); // Calculate reading & speaking time
-  const paragraphs = countParagraphs(input);
+  const paragraphs = countParagraphs(input.blocks);
   const normalsider = Number(textForAnalysis.chars / 2400).toPrecision(2);
 
-  // Highlighted output - Loop through EditorJS object
-  let highlightedObject = input;
-  for (let i = 0; i < input.blocks.length; i++) {
-    const block = input.blocks[i];
-    const text = block.data.text;
-
-    const highlightedText = new TextHighlighter(text);
-    highlightedText.findAndReplaceLight(
-      textForAnalysis.longWords, // replacementArray
-      "Langt ord",
-      "Ord på over 6 bogstaver trækker dit LIX-tal op",
-      "longword"
-    );
-
-    highlightedText.reconvertTextLight();
-
-    highlightedObject.blocks[i].data.text = highlightedText.text;
-  }
-
   // JSON
+  // TODO Object shorthand syntax
   const returnJSON = {
     words: textForAnalysis.wordCount,
     longWords: textForAnalysis.longWordCount,
@@ -210,10 +343,8 @@ function textMetrics(req, res) {
     audience: textForAnalysis.lixAudience,
     readingtime: textForAnalysis.timeToRead,
     speakingtime: textForAnalysis.timeToSpeak,
-    outputText: highlightedObject,
-    arrLongWords: textForAnalysis.longWords,
-    paragraphs: paragraphs,
-    normalsider: normalsider,
+    paragraphs,
+    normalsider,
   };
 
   console.log(returnJSON);
@@ -225,19 +356,54 @@ function textMetrics(req, res) {
   console.log(`The operation took ... ${endTime - currentTime}ms`);
 }
 
+app.post("/api/longwords", async (req, res) => {
+  // Time stamp
+  const currentTime = new Date();
+  console.log("Long Words API :: Received by the server at ...", currentTime.toLocaleTimeString());
+
+  const { input } = req.body;
+  const output = input;
+
+  let arrOfLongWords = [];
+  let noOfLongWords = 0;
+
+  // Call to service layer.
+  input.blocks.forEach((block, index) => {
+    const threshold = 6;
+    const { text } = block.data;
+    const lw = new LongWords(text).highlightAllLongWords(threshold).getAllLongWords(threshold);
+
+    output.blocks[index].data.text = lw.formatted;
+    noOfLongWords += lw.noOfLongWords;
+    arrOfLongWords = arrOfLongWords.concat(lw.longWords);
+  });
+
+  const returnJSON = {
+    output,
+    noOfLongWords,
+    arrOfLongWords,
+  };
+
+  res.json(returnJSON).end();
+
+  // Time stamp
+  const endTime = new Date();
+  console.log("Long Words API :: Completed by the server at ...", endTime.toLocaleTimeString());
+  console.log(`The operation took ... ${endTime - currentTime}ms`);
+});
+
 function rateHappiness(req, res) {
   // Time stamp
   const currentTime = new Date();
   console.log("Hedonometer API :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
-  const input = req.body.input;
-  const blocks = input.blocks;
-  const inputType = typeof input;
-  const options = req.body.options; // uniqueOnly; lemmafyText;
+  const { input } = req.body;
+  const { blocks } = input;
+  const { options } = req.body; // uniqueOnly; lemmafyText;
 
   // Extract full text from object
-  let textForAnalysis = extractFullText(inputType, blocks);
+  let textForAnalysis = extractFullText(typeof input, blocks);
 
   // Preparation - Convert to TextParser object && clean
   textForAnalysis = new TextParser(textForAnalysis)
@@ -251,7 +417,6 @@ function rateHappiness(req, res) {
   // * Optional Remove 'stopord' from the text
   if (options.removeStopwords) textForAnalysis.removeAllStopord(stopord);
 
-  // Get words --- and sort?
   textForAnalysis.getWords();
 
   // * Optional - Remove duplicate words
@@ -262,9 +427,8 @@ function rateHappiness(req, res) {
 
   // * Get all words also in the hedonometer file, their associated values, and the avg score
   let happyWords = textForAnalysis.rateHappyWords(hedonometerFile);
-  const happyValues = happyWords.map(function (v, i) {
-    return v[1]; // Takes out the value component only
-  });
+  // Takes out the value component only
+  const happyValues = happyWords.map((v) => v[1]);
 
   // Why again? We remove uniques early on for performance; then lemmafy; then recheck quick in case any of the lemmas are duplicate
   if (options.uniqueOnly && options.lemmafyText) {
@@ -276,18 +440,68 @@ function rateHappiness(req, res) {
   // * Sort by value
   happyWords.sort(TextParser.compareSecondColumn);
 
-  // * Calculate Sum & Score
-  // TODO Better scoring, this will bias towards mean
+  // * Calculate Sum, Score, and MSE
   const happySum = happyValues.reduce((pv, cv) => parseFloat(pv) + parseFloat(cv), 0);
   const happyScore = (happySum / happyValues.length).toPrecision(2);
+  const happyMSE = TextMath.mse(happyValues);
   const emoji = TextParser.convertValToEmoji(happyScore);
+
+  // * Optional - Assigns emojis to each word in text using the :after pseud-class
+  const output = input;
+  output.blocks.forEach((block) => {
+    const text = new TextParser(block.data.text);
+    text.removeHTML().removeDoubleSpacing().trimText().getWords();
+
+    text.words.forEach((word, index) => {
+      // Check the word against the hedonometer file [Cols: ID, Original, EN, DA, Val, Std]
+      const foundValue = hedonometerFile.filter((v) => v[3] === word);
+
+      // Check if there is a match
+      let html = "";
+      if (foundValue.length > 0 && foundValue !== undefined) {
+        const score = foundValue[0][4];
+
+        if (score < 2) {
+          html = `<span class='two'><abbr title="attribute">${word}</abbr></span>`;
+        } else if (score < 3) {
+          html = `<span class='three'>${word}</span>`;
+        } else if (score < 4) {
+          html = `<span class='four'>${word}</span>`;
+        } else if (score < 5) {
+          html = `<span class='five'>${word}</span>`;
+        } else if (score < 6) {
+          html = `<span class='six'><abbr title="attribute">${word}</abbr></span>`;
+        } else if (score < 7) {
+          html = `<span class='seven'>${word}</span>`;
+        } else if (score < 8) {
+          html = `<span class='eight'>${word}</span>`;
+        } else if (score < 9) {
+          html = `<span class='nine'>${word}</span>`;
+        } else {
+          html = word;
+        }
+
+        // this.happy.push([foundValue[0][3], foundValue[0][4], foundValue[0][5]]);
+      } else {
+        // Fuzzy search
+        // const result = fuse.search(word)[0];
+        html = word;
+      }
+      text.words[index] = html;
+    });
+
+    text.text = text.words.join(" ");
+    text.removeDoubleSpacing();
+    block.data.text = text.text;
+  });
 
   // ! Send back JSON w/ scoring and words
   const returnJSON = {
-    happyWords: happyWords,
-    happyScore: happyScore,
-    emoji: emoji,
-    outputText: "",
+    happyWords,
+    happyScore,
+    happyMSE,
+    emoji,
+    output,
   };
 
   // console.log(returnJSON);
@@ -307,20 +521,19 @@ function wordVocab(req, res) {
   console.log("Vocab API :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
-  const input = req.body.input;
-  const blocks = input.blocks;
-  const inputType = typeof input;
-  const options = req.body.options; // Threshold, stopord,
+  const { input } = req.body;
+  const { blocks } = input;
+  const { options } = req.body; // Threshold, stopord,
 
-  let threshold = options.threshold;
+  let { threshold } = options;
   try {
-    threshold = ParseInt(threshold);
+    threshold = Math.floor(Number(threshold));
   } catch (err) {
     threshold = 5000;
   }
 
   // Extract full text from object
-  let textForAnalysis = extractFullText(inputType, blocks);
+  let textForAnalysis = extractFullText(typeof input, blocks);
 
   // Preparation - Convert to TextParser object && clean away HTML
   textForAnalysis = new TextParser(textForAnalysis);
@@ -335,12 +548,13 @@ function wordVocab(req, res) {
   const allWords = textForAnalysis.words.length;
 
   // Get all REPEAT words (Do not include stopord file)
-  let repeatWords = textForAnalysis.getFrequentWords().frequentlyUsedWords;
+  const repeatWords = textForAnalysis.getFrequentWords().frequentlyUsedWords;
 
   // Get all unique words (Words that are only used once!)
   const frequencyMap = TextParser.generateFrequencyMap(textForAnalysis.words);
 
   // Delete if they have more than 1 occurence
+  // eslint-disable-next-line no-restricted-syntax
   for (const key in frequencyMap) {
     if (Object.prototype.hasOwnProperty.call(frequencyMap, key)) {
       const element = Number(frequencyMap[key]);
@@ -361,14 +575,14 @@ function wordVocab(req, res) {
   }
 
   // Get & count all rare words (word that are not in the top [threshold])
-  const rareWords = textForAnalysis.getRareWords(frequencyFile, options.threshold).rareWords;
+  const { rareWords } = textForAnalysis.getRareWords(frequencyFile, threshold);
 
   // Highlighted output for FREQUENTLY USED WORDS - Loop through EditorJS object
-  let highlightedObject = input;
+  const output = input;
   if (textForAnalysis.frequentlyUsedWords.length > 0) {
-    for (let i = 0; i < input.blocks.length; i++) {
+    for (let i = 0; i < input.blocks.length; i += 1) {
       const block = input.blocks[i];
-      const text = block.data.text;
+      const { text } = block.data;
 
       const highlightedText = new TextHighlighter(text);
       highlightedText.findAndReplaceLight(
@@ -380,7 +594,7 @@ function wordVocab(req, res) {
 
       highlightedText.reconvertTextLight();
 
-      highlightedObject.blocks[i].data.text = highlightedText.text;
+      output.blocks[i].data.text = highlightedText.text;
     }
   }
 
@@ -388,12 +602,12 @@ function wordVocab(req, res) {
   const returnJSON = {
     numAllWords: allWords,
     numRareWords: rareWords.length,
-    rareWords: rareWords,
+    rareWords,
     numUniqueWords: uniqueWords.length,
-    uniqueWords: uniqueWords,
+    uniqueWords,
     numFrequentlyUsed: repeatWords.length,
     frequentlyUsed: repeatWords,
-    outputObject: highlightedObject,
+    output,
   };
 
   console.log(returnJSON);
@@ -406,14 +620,29 @@ function wordVocab(req, res) {
 }
 
 // * API that takes a string or object as input and returns highlighted sentences plus other stuff
+app.post("/api/sentence", async (req, res) => {
+  // Time stamp
+  const currentTime = new Date();
+  console.log("Sentence API (Difficulty) :: Received by the server at ...", currentTime.toLocaleTimeString());
+
+  // Get request input & options
+  const { input } = req.body;
+  // const { options } = req.body;
+
+  input.blocks.forEach((block) => {
+    const evaluateSentences = new SentenceDifficulty(block.data.text);
+    console.log(evaluateSentences);
+  });
+});
+
 function sentenceEvaluateDifficulty(req, res) {
   // Time stamp
   const currentTime = new Date();
   console.log("Sentence API (Difficulty) :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
-  const input = req.body.input;
-  const options = req.body.options;
+  const { input } = req.body;
+  // const { options } = req.body;
 
   let [all, easy, hard, veryhard] = [0, 0, 0, 0];
 
@@ -425,7 +654,7 @@ function sentenceEvaluateDifficulty(req, res) {
     all += textForAnalysis.sentenceCount;
 
     // Loop through sentences in block b
-    for (let index = 0; index < textForAnalysis.sentenceCount; index++) {
+    for (let index = 0; index < textForAnalysis.sentenceCount; index += 1) {
       const sentence = textForAnalysis.sentences[index];
       const parsedSentence = new TextParser(sentence);
       parsedSentence.removeHTML().removeNonLetters().removePunctuation().trimText();
@@ -437,10 +666,10 @@ function sentenceEvaluateDifficulty(req, res) {
 
       // ** Assign difficulty **
       if (sentenceDifficulty === "hard") {
-        hard++;
+        hard += 1;
         textForAnalysis.sentences[index] = `<span class='hard'>${sentence}</span>`;
       } else if (sentenceDifficulty === "veryhard") {
-        veryhard++;
+        veryhard += 1;
         textForAnalysis.sentences[index] = `<span class='veryhard'>${sentence}</span>`;
       }
     }
@@ -454,9 +683,9 @@ function sentenceEvaluateDifficulty(req, res) {
   const returnJSON = {
     sentenceCount: all,
     // * Sentence difficulty
-    easy: easy,
-    hard: hard,
-    veryhard: veryhard,
+    easy,
+    hard,
+    veryhard,
     // * Formatted objects
     difficulty: input,
   };
@@ -476,8 +705,8 @@ function sentenceEvaluateRhythm(req, res) {
   console.log("Sentence API (Rhythm) :: Received by the server at ...", currentTime.toLocaleTimeString());
 
   // Get request input & options
-  const input = req.body.input;
-  const options = req.body.options;
+  const { input } = req.body;
+  // const { options } = req.body;
 
   let [s1to3, s4to6, s7to10, s11to18, s19to26, s26plus] = [0, 0, 0, 0, 0, 0];
   let all = 0;
@@ -490,7 +719,7 @@ function sentenceEvaluateRhythm(req, res) {
     all += textForAnalysis.sentenceCount;
 
     // Loop through sentences in block b
-    for (let index = 0; index < textForAnalysis.sentenceCount; index++) {
+    for (let index = 0; index < textForAnalysis.sentenceCount; index += 1) {
       const sentence = textForAnalysis.sentences[index];
       const parsedSentence = new TextParser(sentence);
       parsedSentence.removeHTML().removeNonLetters().removePunctuation().trimText();
@@ -515,12 +744,12 @@ function sentenceEvaluateRhythm(req, res) {
   const returnJSON = {
     sentenceCount: all,
     // * Sentence lengths
-    s1to3: s1to3,
-    s4to6: s4to6,
-    s7to10: s7to10,
-    s11to18: s11to18,
-    s19to26: s19to26,
-    s26plus: s26plus,
+    s1to3,
+    s4to6,
+    s7to10,
+    s11to18,
+    s19to26,
+    s26plus,
     // * Formatted objects
     rhythm: input,
   };
@@ -534,189 +763,20 @@ function sentenceEvaluateRhythm(req, res) {
   console.log("The operation took ...", endTime - currentTime);
 }
 
-// * Auxillary functions
+// * End points
+app.get("/api/metrics", textMetrics);
+app.post("/api/metrics", textMetrics);
 
-/**
- * Count all the paragraph blocks in EditorJS (Headers & Lists not included)
- * @param  {[Array]}   editorBlocks An array of blocks from an EditorJS object
- * @return {[Number]}               Number of paragraphs
- */
-function countParagraphs(editorBlocks) {
-  let paragraphs = 0;
-  for (let i = 0; i < editorBlocks.length; i++) {
-    if (editorBlocks[i].type === "paragraph") paragraphs++;
-  }
+app.get("/api/hedonometer", rateHappiness);
+app.post("/api/hedonometer", rateHappiness);
 
-  return paragraphs;
-}
+app.get("/api/vocab", wordVocab);
+app.post("/api/vocab", wordVocab);
 
-/**
- * Takes as input an editorJS object and corrects punctuation (i.e. adding periods to sentences if they don't have one)
- * @param  {[Object]}   editorJsObject A full editorJS object
- * @param  {[Function]} applyFunction  A function to be applied on all text parts
- * @param  {[Array]}    arrArgs        Array with arguments for the function
- * @return {[Object]}                  Updated editorJS object
- */
-function traverseEditorJS(editorJsObject, applyFunction, arrArgs) {
-  if (typeof editorJsObject !== "object") {
-    console.error("Error: Unable to modify blocks; not an object");
-    return {};
-  }
+app.get("/api/sentence", sentenceEvaluateDifficulty);
 
-  let newBlocks = editorJsObject.blocks;
-  // Loop through each block
-  for (let i = 0; i < newBlocks.length; i++) {
-    const specificBlock = newBlocks[i];
-    const typeOfBlock = specificBlock.type;
+app.get("/api/rhythm", sentenceEvaluateRhythm);
+app.post("/api/rhythm", sentenceEvaluateRhythm);
 
-    switch (typeOfBlock) {
-      case "list":
-        const noOfItems = specificBlock.data.items.length;
-        for (let item = 0; item < noOfItems; item++) {
-          specificBlock.data.items[item] = applyFunction(specificBlock.data.items[item], arrArgs);
-        }
-        newBlocks[i] = specificBlock;
-        break;
-
-      case "paragraph":
-        specificBlock.data.text = applyFunction(specificBlock.data.text, arrArgs);
-        newBlocks[i] = specificBlock;
-        break;
-
-      case "header":
-        specificBlock.data.text = applyFunction(specificBlock.data.text, arrArgs);
-        newBlocks[i] = specificBlock;
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  let newEditorJSObject = editorJsObject;
-  newEditorJSObject.blocks = newBlocks;
-  return newEditorJSObject;
-}
-
-/**
- * Extracts all text from the request
- * @param  {[String]}         type  (Optional) Specify the type of the input
- * @param  {[Object/String]}  input Either an EditorJS Object or a string
- * @return {[String]}               One string containing all text
- */
-function extractFullText(type = "undefined", input) {
-  // If no type specified, one will be defined
-  if (type === "undefined") type = typeof input;
-
-  // Extract from EditorJS
-  if (type === "object") {
-    let output = new String();
-    try {
-      for (let i = 0; i < input.length; i++) {
-        const specificBlock = input[i];
-        const typeOfBlock = specificBlock.type;
-
-        if (typeOfBlock === "list") {
-          const noOfItems = specificBlock.data.items.length;
-          for (let item = 0; item < noOfItems; item++) {
-            output += specificBlock.data.items[i];
-          }
-        } else {
-          output += specificBlock.data.text;
-        }
-
-        // Add whitespace after block
-        output += " ";
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
-    return output;
-  }
-  // Regular string, e.g. people using the API
-  else if (type === "string") {
-    return String(input);
-  } else {
-    // Something else; try to convert to string; if impossible, return error
-    try {
-      const convertToString = input.toString();
-      return convertToString;
-    } catch (err) {
-      console.error("Input must either be an EditorJS object or a value with a toString() method", err);
-      return "Fejl";
-    }
-  }
-}
-
-/**
- * Based on length of a sentence, this provides the HTML output
- * Returns the new sentence and its "length category"
- * @param  {[String]} s         The input sentence to be wrapped in tags
- * @param  {[Number]} length    The length of the sentence (in number of words)
- */
-function assignSentenceByLength(s, length) {
-  if (length <= 3) {
-    return {
-      newSentence: `<span class="s1to3">${s}</span>`,
-      s1to3: 1,
-      s4to6: 0,
-      s7to10: 0,
-      s11to18: 0,
-      s19to26: 0,
-      s26plus: 0,
-    };
-  } else if (length <= 6) {
-    return {
-      newSentence: `<span class="s4to6">${s}</span>`,
-      s1to3: 0,
-      s4to6: 1,
-      s7to10: 0,
-      s11to18: 0,
-      s19to26: 0,
-      s26plus: 0,
-    };
-  } else if (length <= 10) {
-    return {
-      newSentence: `<span class="s7to10">${s}</span>`,
-      s1to3: 0,
-      s4to6: 0,
-      s7to10: 1,
-      s11to18: 0,
-      s19to26: 0,
-      s26plus: 0,
-    };
-  } else if (length <= 18) {
-    return {
-      newSentence: `<span class="s11to18">${s}</span>`,
-      s1to3: 0,
-      s4to6: 0,
-      s7to10: 0,
-      s11to18: 1,
-      s19to26: 0,
-      s26plus: 0,
-    };
-  } else if (length <= 26) {
-    return {
-      newSentence: `<span class="s19to26">${s}</span>`,
-      s1to3: 0,
-      s4to6: 0,
-      s7to10: 0,
-      s11to18: 0,
-      s19to26: 1,
-      s26plus: 0,
-    };
-  } else if (length > 26) {
-    return {
-      newSentence: `<span class="s26plus">${s}</span>`,
-      s1to3: 0,
-      s4to6: 0,
-      s7to10: 0,
-      s11to18: 0,
-      s19to26: 0,
-      s26plus: 1,
-    };
-  } else {
-    return { newSentence: `${s}`, s1to3: 0, s4to6: 0, s7to10: 0, s11to18: 0, s19to26: 0, s26plus: 0 };
-  }
-}
+app.get("/api/retmintekst", retMinTekst);
+app.post("/api/retmintekst", retMinTekst);

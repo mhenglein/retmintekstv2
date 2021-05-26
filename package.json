@@ -1,7 +1,7 @@
 {
   "name": "retmintekst",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "description": "Automatisk redskab til at forbedre dansk tekst",
   "main": "source/index.js",
   "dependencies": {
@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "fuse.js": "^6.4.6",
+    "morgan": "^1.10.0",
     "papaparse": "^5.3.0"
   },
   "scripts": {
@@ -28,6 +29,13 @@
   },
   "homepage": "https://github.com/mhenglein/retmintekst-app#readme",
   "devDependencies": {
-    "@types/node": "^15.0.1"
+    "@types/express": "^4.17.12",
+    "@types/node": "^15.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.3"
   }
 }
