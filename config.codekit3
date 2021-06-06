@@ -83420,18 +83420,7 @@
       "oAP" : "\/build\/.htaccess",
       "oF" : 0
     },
-    "\/source\/api\/lw.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 0,
-      "mi" : 0,
-      "oA" : 0,
-      "oAP" : "\/build\/api\/lw.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/source\/api\/sentencediff.ts" : {
+    "\/source\/api\/checkPronouns.ts" : {
       "cDF" : 0,
       "ft" : 128,
       "jxM" : 0,
@@ -83440,10 +83429,77 @@
       "moR" : 0,
       "moT" : 2,
       "oA" : 0,
-      "oAP" : "\/build\/api\/sentencediff.js",
+      "oAP" : "\/build\/api\/checkPronouns.js",
       "oF" : 0,
       "rC" : 0,
       "tEC" : 5
+    },
+    "\/source\/api\/evaluateVocabulary.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 0,
+      "oAP" : "\/build\/api\/evaluateVocabulary.js",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/source\/api\/rateSentiment.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 0,
+      "oAP" : "\/build\/api\/rateSentiment.js",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/source\/api\/sentenceDifficulty.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 0,
+      "oAP" : "\/build\/api\/sentenceDifficulty.js",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/source\/api\/sentenceRhythm.ts" : {
+      "cDF" : 0,
+      "ft" : 128,
+      "jxM" : 0,
+      "ma" : 0,
+      "mi" : 0,
+      "moR" : 0,
+      "moT" : 2,
+      "oA" : 0,
+      "oAP" : "\/build\/api\/sentenceRhythm.js",
+      "oF" : 0,
+      "rC" : 0,
+      "tEC" : 5
+    },
+    "\/source\/api\/showLongwords.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 0,
+      "oA" : 0,
+      "oAP" : "\/build\/api\/showLongwords.js",
+      "oF" : 0,
+      "sC" : 0,
+      "tS" : 0
     },
     "\/source\/assets\/agil.png" : {
       "ft" : 32768,
