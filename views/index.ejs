@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="da">
+  <%- include("_head") %>
+  <body>
+    <main class="wrapper">
+      <!-- * Page Content :: Nav + Editor -->
+
+      <!-- * Toast -->
+      <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3" style="z-index: 9999">
+        <div class="toast" id="warningToast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <svg
+              class="bd-placeholder-img rounded me-2"
+              width="20"
+              height="20"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              preserveAspectRatio="xMidYMid slice"
+              focusable="false"
+            >
+              <rect width="100%" height="100%" fill="#880808"></rect>
+            </svg>
+            <strong class="me-auto">Fejl!</strong>
+            <small>Netop nu</small>
+          </div>
+          <div class="toast-body">
+            Vores praktikant, Kenned, er faldet i søvn ved bordet og har ramt stikkontakten til serveren. Prøv igen
+            senere.
+            <div class="mt-2 pt-2 border-top">
+              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Luk</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section id="content">
+        <!-- * Nav incl. bottom menu -->
+        <%- include("_nav") %>
+
+        <!-- * Editor -->
+        <div class="editor" id="editorjs"></div>
+      </section>
+
+      <!-- * Sidebar -->
+      <section id="sidebar" class="border-start"><%- include("_sidebar") %></section>
+
+      <!-- * Modals -->
+      <section id="modals"><%- include("_modals") %></section>
+    </main>
+
+    <!-- ! Scripts -->
+    <!-- Bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script
+      defer
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- jQuery Custom Scroller CDN -->
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+
+    <!-- Chart.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Own scripts -->
+    <script defer src="scripts.js"></script>
+
+    <noscript>Du kan desværre ikke anvende RetMinTekst uden JavaScript slået til.</noscript>
+  </body>
+</html>

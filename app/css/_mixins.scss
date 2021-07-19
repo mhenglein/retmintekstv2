@@ -1,0 +1,15 @@
+// Mixin for the span tags in the editor
+@mixin highlight($color, $z: 1) {
+  transition: background 0.5s;
+  background-color: $color;
+  z-index: $z;
+  position: relative;
+  padding: 0px 3px 0 3px;
+}
+
+// Mixin for the list group items in the sidebar
+@mixin lg-item($color, $bg-color, $border-color: none) {
+  color: $color;
+  background-color: $bg-color;
+  border-color: $border-color;
+}
