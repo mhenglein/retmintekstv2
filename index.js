@@ -1,11 +1,21 @@
+const express = require("express");
+const compression = require("compression");
+const session = require("express-session");
+const morgan = require("morgan");
+const chalk = require("chalk");
+const dotenv = require("dotenv");
+const MongoStore = require("connect-mongo"); //(session);
+const mongoose = require("mongoose");
 const path = require("path");
 const fs = require("fs");
 const papa = require("papaparse");
 const Fuse = require("fuse.js");
-const express = require("express");
-const compression = require("compression");
 const cors = require("cors");
-const morgan = require("morgan");
+
+/**
+ * Load environment variables from .env file, where API keys and passwords are configured.
+ */
+dotenv.config({ path: ".env" });
 
 // Toolbox
 const { TextHighlighter } = require(__dirname + "/app/lib/analysis.js");
@@ -21,29 +31,73 @@ const CheckPronouns = require(__dirname + "/app/lib/checkPronouns");
 const RateSentiment = require(__dirname + "/app/lib/rateSentiment");
 const GetTextMetrics = require(__dirname + "/app/lib/getTextMetrics");
 
-// Server setup
+/**
+ * Create Express server.
+ */
 const app = express();
-app.use(cors());
-app.use(morgan("tiny"));
-morgan(":method :url :status");
-app.use(express.json());
-app.use(compression());
 
-app.use(express.static(path.join(__dirname, "public")));
+/**
+ * Connect to MongoDB.
+ */
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useUnifiedTopology", true);
+mongoose.connect(process.env.MONGODB_URI);
+mongoose.connection.on("error", (err) => {
+  console.error(err);
+  console.log("%s MongoDB connection error. Please make sure MongoDB is running.", chalk.red("✗"));
+  process.exit();
+});
+mongoose.connection.once("open", (err, res) => {
+  console.log("%s MongoDB successfully connected at %s", chalk.green("✓"), process.env.MONGODB_URI);
+});
+
+/**
+ * Express configuration.
+ */
+app.set("host", process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0");
+app.set("port", process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 4000);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(compression());
+app.use(cors());
+app.use(morgan("dev")); //  morgan(":method :url :status");
+app.use(express.json());
+app.use(
+  session({
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+    cookie: { maxAge: 1209600000 }, // two weeks in milliseconds
+    store: new MongoStore({
+      mongoUrl: process.env.MONGODB_URI,
+      autoReconnect: true,
+    }),
+  })
+);
 
-app.get("/status", (req, res) => {
-  console.log("Status request received ... ");
-  res.status(200).end();
-});
-app.head("/status", (req, res) => {
-  res.status(200).end();
+app.use("/", express.static(path.join(__dirname, "public"), { maxAge: 31557600000 }));
+app.use("/js", express.static(path.join(__dirname, "node_modules/tailwind/dist"), { maxAge: 31557600000 }));
+
+app.post("/updatepreferences", (req, res, next) => {
+  res.session.darkmode = true;
+  req.session.save((err) => {
+    if (err) console.log(err);
+    if (!err) res.send(req.session.user); // YOU WILL GET THE UUID IN A JSON FORMAT
+  }); //THIS SAVES THE SESSION.
+  console.log(req.session);
+
+  // req.session.user = {
+  //   uuid: "12234-2345-2323423",
+  // }; //THIS SETS AN OBJECT - 'USER'
+  // req.session.save((err) => {
+  //   if (err) console.log(err);
+  //   if (!err) res.send(req.session.user); // YOU WILL GET THE UUID IN A JSON FORMAT
+  // }); //THIS SAVES THE SESSION.
 });
 
 const stopordFile = fs.readFileSync(__dirname + "/app/data/stopord.csv", "utf8");
-// global.appRoot = path.resolve(__dirname);
-// `${global.appRoot}/data/stopord.csv`
 
 const stopord = papa.parse(stopordFile, { fastMode: true }).data;
 
@@ -83,18 +137,12 @@ const files = {
   misspellings,
 };
 
-const PORT = process.env.PORT || 3000;
-
 app.get("/", (req, res) => {
   res.render("index");
 });
 
 app.get("/api", (req, res) => {
   res.render("api");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server started on ${PORT}`);
 });
 
 app.post("/api/textmetrics", (req, res) => {
@@ -189,7 +237,7 @@ app.post("/api/sentence-difficulty", async (req, res) => {
 
 app.post("/api/sentence-rhythm", async (req, res) => {
   const { input, options } = req.body;
-  const evaluateSentences = new SentenceRhythm(input).assessSentenceRhythms();
+  const evaluateSentences = new SentenceRhythm(input).SentenceRhythms();
 
   const returnJSON = {
     returnText: evaluateSentences.formatted,
@@ -255,4 +303,25 @@ app.post("/api/evaluatevocab", async (req, res) => {
   };
 
   res.json(returnJSON).end();
+});
+
+/**
+ * Error Handler.
+ */
+if (process.env.NODE_ENV === "development") {
+  // only use in development
+  app.use(errorHandler());
+} else {
+  app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send("Server Error");
+  });
+}
+
+/**
+ * Start Express server.
+ */
+app.listen(app.get("port"), () => {
+  console.log("%s App is running at http://localhost:%d in %s mode", chalk.green("✓"), app.get("port"), app.get("env"));
+  console.log("  Press CTRL-C to stop\n");
 });

@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
 const { TextParser } = require(__dirname + "/text.js");
 const { TextMath } = require(__dirname + "/math.js");
 
