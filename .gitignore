@@ -121,3 +121,6 @@ config.codekit3
 .vscode
 settings.json
 .DS_Store
+
+/config
+/test
