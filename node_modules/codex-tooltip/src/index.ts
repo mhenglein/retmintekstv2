@@ -1,4 +1,4 @@
-import {TooltipContent, TooltipOptions} from '../index';
+import { TooltipContent, TooltipOptions } from '../types';
 
 /**
  *
