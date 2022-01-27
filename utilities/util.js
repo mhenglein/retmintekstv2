@@ -1,10 +1,85 @@
-/* eslint-disable no-console */
+const { TextParser } = require("../utilities/text.js");
+
+module.exports.cleanString = function cleanString(s, options) {
+  if (!s) return null;
+  s = s.toString();
+
+  const parser = new TextParser(s);
+
+  if (!options) {
+    // Assume the full monty
+    parser.removeHTML();
+    parser.removeNonLetters();
+    parser.removeDoubleSpacing();
+    parser.trimText();
+  } else {
+    if (options.removeHTML) parser.removeHTML();
+    if (options.removeHTMLexceptFormatting) parser.removeHTMLexceptFormatting();
+    if (options.removeNonLetters) parser.removeNonLetters();
+    if (options.removeDoubleSpacing) parser.removeDoubleSpacing();
+    if (options.trimText) parser.trimText();
+  }
+
+  const { text } = parser;
+  return text;
+};
+
+// TODO fjerner tegnsætning??
+module.exports.cleanEditor = function cleanEditor(editor, options) {
+  if (!editor) return;
+  if (typeof editor !== "object") return;
+  if (!editor.blocks) return;
+
+  editor.blocks.forEach((block, index) => {
+    const { text } = block.data;
+    const s = this.cleanString(text, options) || "";
+
+    editor.blocks[index].data.text = s;
+  });
+
+  return editor;
+};
+
+module.exports.createEditorJS = function createEditorJS(text, options) {
+  if (!text) return null;
+
+  const arrText = text.split("\n");
+  const now = +new Date();
+
+  const editor = {
+    time: now,
+    blocks: [],
+    version: "2.24.0",
+  };
+
+  arrText.forEach((s) => {
+    const block = {
+      type: "paragraph",
+      data: {
+        text: s,
+      },
+    };
+    editor.blocks.push(block);
+  });
+
+  return editor;
+};
+
+module.exports.isEditorJS = function isEditorJS(editor) {
+  if (!editor) return false;
+  if (typeof editor !== "object") return false;
+  if (!editor.blocks) return false;
+  if (!editor.time) return false;
+  if (!editor.version) return false;
+  return true;
+};
+
 /**
  * Count all the paragraph blocks in EditorJS (Headers & Lists not included)
  * @param  {[Array]}   editorBlocks An array of blocks from an EditorJS object
  * @return {[Number]}               Number of paragraphs
  */
-module.exports = function countParagraphs(editorBlocks) {
+module.exports.countParagraphs = function countParagraphs(editorBlocks) {
   return editorBlocks.filter((x) => x.type === "paragraph").length;
 };
 
@@ -14,49 +89,17 @@ module.exports = function countParagraphs(editorBlocks) {
  * @param  {[Object/String]}  input Either an EditorJS Object or a string
  * @return {[String]}               One string containing all text
  */
-module.exports = function extractFullText(type = "undefined", input) {
-  // If no type specified, one will be defined
-  let providedType = type;
-  if (type === "undefined") providedType = typeof input;
+module.exports.extractText = function extractText(editor) {
+  if (!editor) return null;
+  let output = "";
+  editor.blocks.forEach((block) => {
+    const { text } = block.data;
+    output += text;
 
-  // Extract from EditorJS
-  if (providedType === "object") {
-    let output = "";
-    try {
-      for (let i = 0; i < input.length; i += 1) {
-        const specificBlock = input[i];
-        const typeOfBlock = specificBlock.type;
-
-        if (typeOfBlock === "list") {
-          const noOfItems = specificBlock.data.items.length;
-          for (let item = 0; item < noOfItems; item += 1) {
-            output += specificBlock.data.items[i];
-          }
-        } else {
-          output += specificBlock.data.text;
-        }
-
-        // Add whitespace after block
-        output += " ";
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
-    return output;
-  }
-  // Regular string, e.g. people using the API
-  if (type === "string") {
-    return String(input);
-  }
-  // Something else; try to convert to string; if impossible, return error
-  try {
-    const convertToString = input.toString();
-    return convertToString;
-  } catch (err) {
-    console.error("Input must either be an EditorJS object or a value with a toString() method", err);
-    return "Fejl";
-  }
+    // Add whitespace after block
+    output += " ";
+  });
+  return output;
 };
 
 /**
@@ -65,7 +108,7 @@ module.exports = function extractFullText(type = "undefined", input) {
  * @param  {[String]} s         The input sentence to be wrapped in tags
  * @param  {[Number]} length    The length of the sentence (in number of words)
  */
-module.exports = function assignSentenceByLength(s, length) {
+module.exports.assignSentenceByLength = function assignSentenceByLength(s, length) {
   if (length <= 3) {
     return {
       newSentence: `<span class="s1to3">${s}</span>`,

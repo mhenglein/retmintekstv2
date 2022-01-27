@@ -13,6 +13,10 @@ $yellow: #ffae00;
 $yellow-border-bottom-color: $yellow;
 $yellow-bg: #ffebc0dc;
 
+$green: #3cff003a;
+$green-border-bottom-color: $green;
+$green-bg: #237f07b5;
+
 $blue: rgb(74, 110, 224);
 $blue-border-bottom-color: $blue;
 $blue-bg: rgb(153, 194, 255);
@@ -60,15 +64,15 @@ $nine: "[🤩]";
 
 // Sidebar
 :root {
-  --sidebarWidth: 250px; //CSS variable
+  --sidebarWidth: 500px; //CSS variable
   @media (max-width: 1200px) {
-    --sidebarWidth: 225px; //CSS variable
+    --sidebarWidth: 450px; //CSS variable
   }
   @media (max-width: 992) {
-    --sidebarWidth: 200px; //CSS variable
+    --sidebarWidth: 400px; //CSS variable
   }
   @media (max-width: 768) {
-    --sidebarWidth: 175px; //CSS variable
+    --sidebarWidth: 350px; //CSS variable
   }
 }
 

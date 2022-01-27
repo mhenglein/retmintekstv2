@@ -1,30 +1,39 @@
 <!-- ! Top menu -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light ms-3 sticky-top border-bottom">
+<nav class="navbar navbar-expand-lg ms-3 mt-2">
   <div class="container-fluid justify-content-start">
     <!-- Brand -->
-    <a href="/index.html" class="navbar-brand">🤖 <span class="hide-on-mobile">RetMinTekst</span> </a>
+    <a href="/index.html" class="navbar-brand me-5 text-white">🤖 <span class="hide-on-mobile">RetMinTekst</span> </a>
 
     <!-- Action -->
-    <button type="button" id="analyzeBtn" class="btn btn-sm btn-nav btn-analyze text-nowrap">
-      Analysér
+    <button type="button" id="analyzeBtn" class="btn btn-nav teal text-nowrap mx-3">
+      🤔 Analysér
       <div class="spinner-border spinner-border-sm mx-1" hidden id="spinner"></div>
     </button>
 
+    <!-- Action -->
+    <button type="button" id="gptBtn" class="btn btn-nav teal text-nowrap">
+      ✨ Generer <span class="hide-on-mobile">tekst</span>
+      <div class="spinner-border spinner-border-sm mx-1" hidden id="spinner2"></div>
+    </button>
+
     <!-- Clear -->
-    <button class="btn btn-sm btn-nav btn-remove text-nowrap" id="removeMarkupBtn">
+    <button class="btn text-white text-nowrap ms-3" id="removeMarkupBtn">
       Fjern <span class="hide-on-mobile">rettelser</span>
     </button>
 
+    <!-- Restore -->
+    <button class="btn text-white text-nowrap me-auto" id="restoreBtn">Genskab</button>
+
     <!-- Intro -->
-    <ul class="navbar-nav me-auto">
+    <!-- <ul class="navbar-nav me-auto">
       <li class="nav-item">
         <a class="nav-link" href="/kom-igang.html">Intro</a>
       </li>
-    </ul>
+    </ul> -->
 
     <!-- Show assistant -->
     <button type="button" id="showSidebar" class="btn btn-sm px-2 btn-outline-success">
-      Vis <span class="hide-on-mobile">assistenten</span>
+      Vis/skjul <span class="hide-on-mobile">assistenten</span>
     </button>
   </div>
 </nav>
@@ -32,21 +41,22 @@
 <!-- ! Bottom menu -->
 <nav id="bottom-menu" class="fixed-bottom partial-width d-flex flex-wrap">
   <div class="blue-menu">
-    <span class="tag" id="btnCorrections">Forslag</span>
+    <span class="tag" id="btnCorrections" name="text-metrics">Forslag</span>
+    <!-- TODO Ikke text metrics -->
   </div>
   <div class="green-menu">
-    <span class="tag" id="btnVocab">Ordforråd</span>
+    <span class="tag" id="btnVocab" name="evaluate-vocab">Ordforråd</span>
   </div>
   <div class="yellow-menu">
-    <span class="tag" id="btnReadability">Læsbarhed</span>
+    <span class="tag" id="btnReadability" name="sentence-difficulty">Læsbarhed</span>
   </div>
   <div class="red-menu">
-    <span class="tag" id="btnTextrhythm">Tekstrytme</span>
+    <span class="tag" id="btnTextrhythm" name="sentence-rhythm">Tekstrytme</span>
   </div>
   <div class="darkblue-menu">
-    <span class="tag" id="btnSentiment">Sentiment</span>
+    <span class="tag" id="btnSentiment" name="rate-sentiment">Sentiment</span>
   </div>
   <div class="grey-menu">
-    <span class="tag" id="btnSentences">Sætning<span class="hide-on-mobile">sanalyse</span></span>
+    <span class="tag" id="btnSentences" name="correct-text">Sætning<span class="hide-on-mobile">sanalyse</span></span>
   </div>
 </nav>

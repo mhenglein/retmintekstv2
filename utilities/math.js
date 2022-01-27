@@ -1,1 +1,24 @@
-function calcAvg(c){return c.length>0?c.reduce(((c,e)=>c+e))/c.length:0}function calcMSE(c){if(c.length>0){const e=calcAvg(c);return c.reduce(((c,n)=>c+(n-e)**2),0)/c.length}return 0}function calcVariance(c){if(c.length>0){const e=calcAvg(c);return c.reduce(((c,n)=>c+(n-e)**2),0)/(c.length-1)}return 0}module.exports.TextMath={calcAvg:calcAvg,calcMSE:calcMSE,calcVariance:calcVariance};
+function calcAvg(arr) {
+    if (arr.length > 0)
+        return arr.reduce((sum, val) => sum + val) / arr.length;
+    return 0;
+}
+function calcMSE(arr) {
+    if (arr.length > 0) {
+        const avg = calcAvg(arr);
+        return arr.reduce((sum, val) => sum + (val - avg) ** 2, 0) / arr.length;
+    }
+    return 0;
+}
+function calcVariance(arr) {
+    if (arr.length > 0) {
+        const avg = calcAvg(arr);
+        return arr.reduce((acc, val) => acc + (val - avg) ** 2, 0) / (arr.length - 1);
+    }
+    return 0;
+}
+module.exports.TextMath = {
+    calcAvg,
+    calcMSE,
+    calcVariance,
+};

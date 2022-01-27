@@ -1,30 +1,18 @@
 const express = require("express");
 const compression = require("compression");
 const session = require("express-session");
-const morgan = require("morgan");
-const errorhandler = require("errorhandler");
 const chalk = require("chalk");
-const dotenv = require("dotenv");
-const MongoStore = require("connect-mongo"); //(session);
+const dotenv = require("dotenv").config({ path: "config/.env" });
+const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const path = require("path");
-
 const cors = require("cors");
 
-/**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-dotenv.config({ path: ".env" });
-
 // Controllers
-const ShowLongWords = require("./controllers/showLongwords");
-const SentenceDifficulty = require("./controllers/sentenceDifficulty");
-const SentenceRhythm = require("./controllers/sentenceRhythm");
-const EvaluateVocabulary = require("./controllers/evaluateVocabulary"); // {}
-const CheckPronouns = require("./controllers/checkPronouns");
-const RateSentiment = require("./controllers/rateSentiment");
-const GetTextMetrics = require("./controllers/getTextMetrics");
-const TextCorrections = require("./controllers/textCorrections");
+const apiController = require("./controllers/api");
+
+// Utility modules
+const util = require(__dirname + "/utilities/util.js");
 
 /**
  * Create Express server.
@@ -54,26 +42,88 @@ app.set("view engine", "ejs");
 app.use(compression());
 app.use(cors());
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("combined"));
-}
-
-app.use(express.json({ limit: "50mb" }));
-
 app.use(
   session({
     resave: false,
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
     cookie: { maxAge: 1209600000 }, // two weeks in milliseconds
-    store: new MongoStore({
+    store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
-      autoReconnect: true,
     }),
   })
 );
 
 app.use("/", express.static(path.join(__dirname, "public"), { maxAge: 31557600000 }));
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+
+// Standard process for all incoming requests
+app.use("*", async (req, res, next) => {
+  console.log("Req body", req.body);
+
+  // [1] Request contains body
+  if (!req.body) return next();
+
+  // [2] Body has an input
+  if (!req.body.input) req.body.input = "";
+
+  // [3] Body has options object
+  if (!req.body.options) req.body.options = {};
+
+  // [4] Ascertain type of input
+  const { input, options } = req.body;
+  const type = typeof input;
+  console.log({ type }, { input });
+
+  // [A] Input is a string
+  if (type === "string") {
+    // Clean text string
+    const text = util.cleanString(input);
+
+    // Add to req
+    req.text = text || "";
+
+    // Create EditorJS object from String
+    const editorjs = util.createEditorJS(text, options);
+    req.editor = editorjs || {};
+
+    return next();
+  }
+
+  // [B] Input is an object
+  if (type === "object") {
+    // Does object look like an EditorJS object?
+    const isEditorJS = util.isEditorJS(input);
+
+    if (!isEditorJS) return res.redirect("/error");
+
+    // Does editor has blocks with length > 0?
+    const hasBlocks = input.blocks.length > 0;
+
+    // Clean editor
+    const editorjs = util.cleanEditor(input);
+
+    // Set editor
+    req.editor = editorjs;
+
+    // Extract full text from editor
+    const text = util.extractText(editorjs);
+    console.log(text);
+
+    // Add to req
+    req.text = text || "";
+
+    return next();
+  }
+
+  // [C] Input is not a string or object
+  return res.redirect("/error");
+
+  // At the end, we should be able to access req.text and req.editor from all routes.
+});
 
 /* GET routes */
 app.get("/", (req, res) => {
@@ -84,34 +134,45 @@ app.get("/api", (req, res) => {
   res.render("api");
 });
 
-/* API routes */
-app.post("/api/getTextMetrics", GetTextMetrics);
-app.post("/api/longwords", ShowLongWords);
-app.post("/api/sentence-difficulty", SentenceDifficulty);
-app.post("/api/sentence-rhythm", SentenceRhythm);
-app.post("/api/checkpronouns", CheckPronouns);
-app.post("/api/ratesentiment", RateSentiment);
-app.post("/api/evaluatevocab", EvaluateVocabulary);
-app.post("/api/retmintekst", TextCorrections);
+app.post("/api/gpt", async (req, res) => {
+  const { prompt, options } = req.body;
+  const { Configuration, OpenAIApi } = require("openai");
 
-// User requests etc.
-// LOGIN routes
-// app.post("/updatepreferences", (req, res, next) => {
-//   res.session.darkmode = true;
-//   req.session.save((err) => {
-//     if (err) console.log(err);
-//     if (!err) res.send(req.session.user); // YOU WILL GET THE UUID IN A JSON FORMAT
-//   }); //THIS SAVES THE SESSION.
-//   console.log(req.session);
-// });
+  const max_tokens = options.max_tokens || 16;
+  const temperature = options.temperature || 0.4;
+
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  const openai = new OpenAIApi(configuration);
+
+  const completion = await openai.createCompletion("text-curie-001", {
+    prompt,
+    max_tokens,
+    temperature,
+  });
+
+  return res.json({ completion: completion.data.choices[0].text }).end();
+});
+
+/* API routes */
+app.post("/api/clean", apiController.clean);
+// app.post("/api/all-metrics", apiController.sidebarData);
+
+app.post("/api/text-metrics", apiController.getTextMetrics); // Generelt
+app.post("/api/correct-text", apiController.textCorrections); // Tekstforslag (Rettelser)
+app.post("/api/evaluate-vocab", apiController.evaluateVocab); // Ordforråd
+app.post("/api/longwords", apiController.showLongwords); // LIX & Lange ord
+app.post("/api/sentence-rhythm", apiController.sentenceRhythm); // Tekstrytme
+app.post("/api/rate-sentiment", apiController.rateSentiment); // Sentiment
+app.post("/api/sentence-difficulty", apiController.sentenceDifficulty); // Sætningsanalyse
+
+// app.post("/api/checkpronouns", apiController.checkPronouns);
 
 /**
  * Error Handler.
  */
-if (process.env.NODE_ENV === "development") {
-  // only use in development
-  app.use(errorhandler());
-} else {
+{
   app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).send("Server Error");
@@ -125,5 +186,3 @@ app.listen(app.get("port"), () => {
   console.log("%s App is running at http://localhost:%d in %s mode", chalk.green("✓"), app.get("port"), app.get("env"));
   console.log("  Press CTRL-C to stop\n");
 });
-
-module.exports = app;

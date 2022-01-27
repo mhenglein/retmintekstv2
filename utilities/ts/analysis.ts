@@ -28,7 +28,7 @@ class TextHighlighter {
     this.text = s.toString();
     this.original = s.toString();
     this.dict = dict;
-    this.id = Number(Math.floor(100000000 + Math.random() * 900000000));
+    this.id = Number(Math.floor(100000000 + Math.random() * 900000000)); // uuid instead
     this.formatting = [];
     this.replacements = [];
     this.errors = {};
@@ -37,10 +37,11 @@ class TextHighlighter {
   /**
    * Removes HTML tags except (<b>, <i>, and <a>) and entities (such as non-breaking space, &nbsp;)
    */
-  removeHTMLexceptFormatting() {
-    this.text = this.text.replace(/<\/?[^bia/][^>]*(>|$)/g, " ").trim();
-    return this;
-  }
+  // TODO This is in the Parser?
+  // removeHTMLexceptFormatting() {
+  //   this.text = this.text.replace(/<\/?[^bia/][^>]*(>|$)/g, " ").trim();
+  //   return this;
+  // }
 
   removeAndStoreFormatting() {
     // Requires that all HTML has been removed (Except formatting)
@@ -100,7 +101,8 @@ class TextHighlighter {
         const checkIfMatch = regex.test(this.text);
         // Only proceed if there is a match
         if (checkIfMatch) {
-          const textMatch = RegExp["$&"].trim();
+          // const textMatch = RegExp["$&"].trim();
+          const textMatch = RegExp.lastMatch;
           const textForPopoverTitle: string = textMatch.replace(/[.,/#!?"'$%^&*;:{}=_`~()]/g, "");
           const popoverTitle: string = `${replacementType} <span class='badge bg-${css} ms-2'>${textForPopoverTitle}</span>`;
           const replacementString = ` <span class="${css}" data-bs-toggle="popover" data-bs-original-title="${popoverTitle}" data-bs-html="true" data-bs-content="${popoverText}">${textMatch}</span> `;
@@ -215,7 +217,6 @@ class TextHighlighter {
     return this;
   }
 
-  // TODO Move to client?
   reconvertText() {
     if (this.replacements.length === 0) this.findAndReplace();
 

@@ -2,10 +2,9 @@ const { TextParser } = require("../utilities/text.js");
 const { TextHighlighter } = require("../utilities/analysis.js");
 
 const misspellings = require("../data/misspellings.json");
+const dict = require("../data/db.json");
 
-module.exports = (req, res) => {
-  const { input, options } = req.body;
-
+module.exports = function correctText(input, options) {
   const parsedText = new TextParser(input).removeHTML();
 
   // 1A: findAndReplaceLight w/ mispellings file
@@ -28,6 +27,5 @@ module.exports = (req, res) => {
     returnText: finalText.text,
     // errors,
   };
-
-  res.json(returnJSON).end();
+  return returnJSON;
 };

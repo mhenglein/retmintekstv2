@@ -1,19 +1,7 @@
 const { TextParser } = require("../utilities/text.js");
 const { TextHighlighter } = require("../utilities/analysis.js");
 
-module.exports = async (req, res) => {
-  const { input, options } = req.body;
-  const checkPronouns = new CheckPronouns(input).countPronouns();
-
-  const returnJSON = {
-    returnText: checkPronouns.formatted,
-    noOfPronouns: checkPronouns.noOfPronouns,
-  };
-
-  res.json(returnJSON).end();
-};
-
-class CheckPronouns {
+module.exports = class CheckPronouns {
   constructor(s) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -36,4 +24,4 @@ class CheckPronouns {
     this.noOfPronouns = filterOnlyPronouns.length;
     return this;
   }
-}
+};

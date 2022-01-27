@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="da">
   <%- include("_head") %>
-  <body>
+  <body class="home">
     <main class="wrapper">
       <!-- * Page Content :: Nav + Editor -->
 
@@ -38,46 +38,32 @@
         <%- include("_nav") %>
 
         <!-- * Editor -->
-        <div class="editor" id="editorjs"></div>
+        <div class="row my-5">
+          <div class="col-10 mx-auto border rounded bg-white px-5 pt-4 mb-5 shadow-sm">
+            <div id="editorjs"></div>
+          </div>
+        </div>
       </section>
 
       <!-- * Sidebar -->
-      <section id="sidebar" class="border-start"><%- include("_sidebar") %></section>
+      <section id="sidebar" class="shadow-lg"><%- include("_sidebar") %></section>
 
       <!-- * Modals -->
       <section id="modals"><%- include("_modals") %></section>
     </main>
 
     <!-- ! Scripts -->
-    <!-- Bootstrap -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-      async
-      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-      crossorigin="anonymous"
-    ></script>
-
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script
-      async
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
+    <!-- Own scripts -->
+    <script async src="scripts.js"></script>
 
     <!-- jQuery Custom Scroller CDN -->
-    <script
+    <!-- <script
       async
       src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"
-    ></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+    ></script> -->
 
     <!-- Chart.js -->
     <script async src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Own scripts -->
-    <script async src="scripts.js"></script>
 
     <noscript>Du kan desværre ikke anvende RetMinTekst uden JavaScript slået til.</noscript>
   </body>

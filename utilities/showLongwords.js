@@ -1,25 +1,7 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
 const { TextParser } = require("../utilities/text.js");
 const { TextHighlighter } = require("../utilities/analysis.js");
 
-module.exports = async (req, res) => {
-  const { input, options } = req.body;
-
-  // Call to service layer.
-  const threshold = options?.threshold || 6;
-  const lw = new ShowLongWords(input).highlightAllLongWords(threshold).getAllLongWords(threshold);
-
-  const returnJSON = {
-    returnText: lw.formatted,
-    noOfLongWords: lw.noOfLongWords,
-    arrOfLongWords: lw.longWords,
-  };
-
-  res.json(returnJSON).end();
-};
-
-class ShowLongWords {
+module.exports = class ShowLongWords {
   constructor(text) {
     if (typeof text === "undefined" || !text.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -54,4 +36,4 @@ class ShowLongWords {
     this.formatted = highlighted.text;
     return this;
   }
-}
+};

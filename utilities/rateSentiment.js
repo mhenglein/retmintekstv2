@@ -1,36 +1,19 @@
 const { TextParser } = require("../utilities/text.js");
 const { TextMath } = require("../utilities/math.js");
 
-module.exports = async (req, res) => {
-  const { input, options } = req.body;
+// Data files
+const stopord = require("../data/stopord.json");
+const lemmas = require("../data/lemmas.json");
+const hedonometer = require("../data/hedonometer.json");
 
-  // TODO Skip (vs remove) stopwords
-  // if (options === {}) {
-  //   options.removeStopwords = true;
-  // }
-  const rateSentiment = new RateSentiment(input, options)
-    .rateHappiness()
-    .calculateHappyMetrics()
-    .augmentTextWithEmojis();
-
-  const returnJSON = {
-    returnText: rateSentiment.formatted,
-    emoji: rateSentiment.emoji,
-    happinessScore: rateSentiment.happinessScore,
-    happinessMSE: rateSentiment.happinessMSE,
-  };
-  res.json(returnJSON).end();
-};
-
-class RateSentiment {
-  constructor(s, options, files) {
+module.exports = class RateSentiment {
+  constructor(s, options) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
     }
 
     this.text = s.toString();
     this.options = options;
-    this.files = files;
     this.happyWords = [];
   }
 
@@ -43,18 +26,18 @@ class RateSentiment {
       .convLowerCase()
       .trimText();
 
-    if (this.options?.removeStopwords) parsedText.removeAllStopord(this.files.stopord);
+    if (this.options?.removeStopwords) parsedText.removeAllStopord(stopord);
     this.words = parsedText.getWords().words;
     if (this.options?.uniqueOnly) parsedText.getUniqueWords();
-    if (this.options?.lemmafyText) parsedText.lemmafyText(this.files.lemmas);
+    if (this.options?.lemmafyText) parsedText.lemmafyText(lemmas);
 
     // No hedonometer file provided, bail
-    if (this.files?.hedonometer.length === 0) return this;
+    if (hedonometer.length === 0) return this;
 
     // Loop through each of the words
     this.words.forEach((word) => {
       // Check the word against the hedonometer file [Cols: ID, Original, EN, DA, Val, Std]
-      const foundValue = this.files.hedonometer.filter((v) => v[3] === word);
+      const foundValue = hedonometer.filter((v) => v[3] === word);
 
       // Check if there is a match
       if (foundValue.length > 0 && foundValue !== undefined) {
@@ -90,7 +73,7 @@ class RateSentiment {
     const parsedText = new TextParser(text).removeHTML().removeDoubleSpacing().trimText().getWords();
     parsedText.words.forEach((word, index) => {
       // Check the word against the hedonometer file [Cols: ID, Original, EN, DA, Val, Std]
-      const foundValue = this.files?.hedonometer.filter((v) => v[3] === word);
+      const foundValue = hedonometer.filter((v) => v[3] === word);
       if (foundValue.length > 0 && foundValue !== undefined) {
         const score = foundValue[0][4];
 
@@ -122,4 +105,4 @@ class RateSentiment {
     this.formatted = parsedText.text;
     return this;
   }
-}
+};

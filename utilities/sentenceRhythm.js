@@ -1,20 +1,6 @@
 const { TextParser } = require("../utilities/text.js");
 
-module.exports = async (req, res) => {
-  const { input, options } = req.body;
-  const evaluateSentences = new SentenceRhythm(input).SentenceRhythms();
-
-  const returnJSON = {
-    returnText: evaluateSentences.formatted,
-    noAllSentences: evaluateSentences.noAllSentences,
-    errors: evaluateSentences.errors,
-  };
-
-  console.log(returnJSON);
-  res.json(returnJSON).end();
-};
-
-class SentenceRhythm {
+module.exports = class SentenceRhythm {
   constructor(s) {
     if (typeof s === "undefined" || !s.toString)
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -26,7 +12,7 @@ class SentenceRhythm {
     this.noAllSentences = this.sentences.length;
     this.formattedSentences = [];
 
-    this.errors = {
+    this.sentenceLength = {
       s1to3: 0,
       s4to6: 0,
       s7to10: 0,
@@ -52,7 +38,7 @@ class SentenceRhythm {
       const formattedSentence = sentenceEval.newSentence;
 
       this.formattedSentences.push(formattedSentence);
-      this.errors[String(sentenceEval.sentenceType)] += 1;
+      this.sentenceLength[String(sentenceEval.sentenceType)] += 1;
     });
 
     this.formatted = this.formattedSentences.join("");
@@ -104,4 +90,4 @@ class SentenceRhythm {
     }
     return { newSentence: `${s}`, sentenceType: "" };
   }
-}
+};

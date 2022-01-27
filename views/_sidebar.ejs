@@ -1,259 +1,434 @@
-<div class="sidebar-top">
-  <div class="hide-assistant" id="sidebarCollapse">
-    <i class="fas fa-list"></i><span class="sidebar-tag ms-2">Skjul assistent</span>
+<div class="row g-0 vh-100">
+  <!-- Sidebar 1 -->
+  <div class="col-lg-5 col-6">
+    <div class="row d-flex justify-content-start">
+      <div id="topics" class="mt-2 ms-3 fw-bold">
+        <span class="badge rounded-pill bg-secondary px-2">...</span> emner
+      </div>
+    </div>
+    <div class="row">
+      <div id="topics-content" class="p-3">
+        <ul class="list-group"></ul>
+      </div>
+    </div>
   </div>
-  <div class="full-report">
-    Fuld oversigt <span class="report-grade circle mx-1">12 </span><br /><small class="report-details"
-      >Se alle detaljer</small
-    >
-  </div>
+  <!-- Sidebar 2 -->
+  <div class="col-lg-7 g-0 col-6 shadow border-start ps-0 ms-0">
+    <div class="ms-2 my-1"><span id="connection" class="small font-monospace">🟢 Forbindelse til serveren! </span></div>
+    <div class="accordion" id="accordion">
+      <!-- GENERELT -->
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingGenerelt">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseGenerelt"
+            aria-expanded="false"
+            aria-controls="collapseGenerelt"
+          >
+            ⚪️ Generelt
+          </button>
+        </h2>
+        <div
+          id="collapseGenerelt"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingGenerelt"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom" id="generelt">
+            <ul class="list-unstyled" id="genereltSubmenu">
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Afsnit</a><span id="paragraphs" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
 
-  <div class="goals-section" data-bs-toggle="modal" data-bs-target="#goalsModal">Juster målsætning</div>
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Normalsider</a><span id="normalsider" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a>Sætninger</a><span id="sentences" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Ord</a><span id="words" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Tegn <br /><small>(u. mellemrum)</small> </a
+                ><span id="chars" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Tegn <br /><small>(m. mellemrum)</small></a
+                ><span id="charsplus" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Læsetid</a><span id="readingtime" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Oplæsningstid</a><span id="speakingtime" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingForslag">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseForslag"
+            aria-expanded="true"
+            aria-controls="collapseForslag"
+          >
+            🔵 Tekstforslag
+          </button>
+        </h2>
+        <div
+          id="collapseForslag"
+          class="accordion-collapse collapse show"
+          aria-labelledby="headingForslag"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom" id="tekstforslag">
+            <ul class="list-unstyled" id="forslagSubmenu">
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#korrekthedModal"
+              >
+                <a href="#"><span class="red">Korrekthed</span></a
+                ><span id="korrekthed" class="stat badge text-dark rounded-pill">10</span>
+              </li>
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#originalitetModal"
+              >
+                <a href="#"><span class="yellow">Originalitet</span></a
+                ><span id="originalitet" class="stat badge text-dark rounded-pill">10</span>
+              </li>
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#klarhedModal"
+              >
+                <a href="#"><span class="blue">Klarhed</span></a
+                ><span id="klarhed" class="stat badge text-dark rounded-pill">10</span>
+              </li>
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#udtrykModal"
+              >
+                <a href="#"><span class="purple">Udtryk</span></a
+                ><span id="udtryk" class="stat badge text-dark rounded-pill">10</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ordforråd -->
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingOrdforråd">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#ordforråd"
+            aria-expanded="false"
+            aria-controls="ordforråd"
+          >
+            🟢 Ordforråd
+          </button>
+        </h2>
+        <div
+          id="ordforråd"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingOrdforråd"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom">
+            <ul class="list-unstyled" id="vocabSubmenu">
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#uniqueModal"
+              >
+                <a href="#">Unikke ord</a>
+                <span id="unique" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#rareModal"
+              >
+                <a href="#">Sjældent forekommende ord</a>
+                <span id="rare" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#frequentModal"
+              >
+                <a href="#"><span class="red">Gengangerord</span></a>
+                <span id="frequent" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Læsbarhed -->
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingLæsbarhed">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#læsbarhed"
+            aria-expanded="false"
+            aria-controls="læsbarhed"
+          >
+            🟡 LIX & Lange ord
+          </button>
+        </h2>
+        <div
+          id="læsbarhed"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingLæsbarhed"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom">
+            <ul
+              class="list-unstyled"
+              id="lixSubmenu"
+              data-bs-toggle="modal"
+              data-bs-target="#lixModal"
+              aria-expanded="false"
+            >
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#lixModal"
+              >
+                <a href="#">LIX</a>
+                <span id="lix" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#lixModal"
+              >
+                <a href="#">Sværhedsgrad</a>
+                <span id="difficulty">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#lixModal"
+              >
+                <a href="#">Publikum</a>
+                <span id="audience">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#lixModal"
+              >
+                <a href="#"><span class="longword">Lange ord</span></a>
+                <span id="longwords" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tekstrytme -->
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingTekstrytme">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#tekstrytme"
+            aria-expanded="false"
+            aria-controls="tekstrytme"
+          >
+            🔴 Tekstrytme
+          </button>
+        </h2>
+        <div
+          id="tekstrytme"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingTekstrytme"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom">
+            <ul
+              class="list-unstyled"
+              id="rhythmSubmenu"
+              data-bs-toggle="modal"
+              data-bs-target="#rhythmModal"
+              aria-expanded="false"
+            >
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Gnst. sætningslængde</a>
+                <span id="sentenceLength2" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#">Sætningsvarians</a>
+                <span id="variance" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#"><span class="s1to3">1-3 ord</span></a>
+                <span id="s1to3" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#"><span class="s4to6">4-6 ord</span> </a>
+                <span id="s4to6" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#"><span class="s7to10">7-10 ord</span> </a>
+                <span id="s7to10" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#"><span class="s11to18">11-18 ord</span></a>
+                <span id="s11to18" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#"><span class="s19to26">19-26 ord</span></a>
+                <span id="s19to26" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li class="d-flex justify-content-between align-items-center">
+                <a href="#"><span class="s26plus">26+ ord</span></a>
+                <span id="s26plus" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sentiment -->
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingSentiment">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sentiment"
+            aria-expanded="false"
+            aria-controls="sentiment"
+          >
+            🟠 Sentiment
+          </button>
+        </h2>
+        <div
+          id="sentiment"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingSentiment"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom">
+            <ul class="list-unstyled" id="sentimentSubmenu">
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#hedonometerModal"
+              >
+                <a href="#">Glædesbarometer</a>
+                <span id="hedonometer" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sætningsanalyse -->
+      <div class="accordion-item border-none">
+        <h2 class="accordion-header" id="headingSætningsanalyse">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sætningsanalyse"
+            aria-expanded="false"
+            aria-controls="sætningsanalyse"
+          >
+            🟣 Sætningsanalyse
+          </button>
+        </h2>
+        <div
+          id="sætningsanalyse"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingSætningsanalyse"
+          data-bs-parent="#accordion"
+        >
+          <div class="accordion-body border-bottom">
+            <ul class="list-unstyled" id="sentenceSubmenu">
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#sentenceModal"
+              >
+                <a href="#">Lette sætninger</a>
+                <span id="easy" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#sentenceModal"
+              >
+                <a href="#"><span class="hard">Svære sætninger</span></a>
+                <span id="hard" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#sentenceModal"
+              >
+                <a href="#"><span class="veryhard">Meget svære sætninger</span></a>
+                <span id="veryhard" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#lenghtsModal"
+              >
+                <a href="#">Gnst. ordlængde</a>
+                <span id="wordLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+
+              <li
+                class="d-flex justify-content-between align-items-center border-bottom"
+                data-bs-toggle="modal"
+                data-bs-target="#lenghtsModal"
+              >
+                <a href="#">Gnst. sætningslængde</a>
+                <span id="sentenceLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<ul class="list-unstyled components">
-  <!-- * FORSLAG -->
-  <li class="border-top">
-    <a href="#forslagSubmenu" id="forslagHeader" data-bs-toggle="collapse" aria-expanded="false" role="button">
-      Forslag <span class="badge text-dark stat ms-2" id="totalErr">0</span>
-    </a>
-    <ul class="collapse list-unstyled" id="forslagSubmenu">
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#korrekthedModal"
-      >
-        <a href="#"><span class="red">Korrekthed</span></a
-        ><span id="korrekthed" class="stat badge text-dark rounded-pill">10</span>
-      </li>
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#originalitetModal"
-      >
-        <a href="#"><span class="yellow">Originalitet</span></a
-        ><span id="originalitet" class="stat badge text-dark rounded-pill">10</span>
-      </li>
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#klarhedModal"
-      >
-        <a href="#"><span class="blue">Klarhed</span></a
-        ><span id="klarhed" class="stat badge text-dark rounded-pill">10</span>
-      </li>
-      <li
-        class="d-flex justify-content-between align-items-center border-bottom"
-        data-bs-toggle="modal"
-        data-bs-target="#udtrykModal"
-      >
-        <a href="#"><span class="purple">Udtryk</span></a
-        ><span id="udtryk" class="stat badge text-dark rounded-pill">10</span>
-      </li>
-    </ul>
-  </li>
-
-  <!-- * ORDFORRÅD -->
-  <li>
-    <a href="#vocabSubmenu" id="vocabHeader" data-bs-toggle="collapse" aria-expanded="false" role="button">Ordforråd</a>
-    <ul class="collapse list-unstyled" id="vocabSubmenu">
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#uniqueModal"
-      >
-        <a href="#">Unikke ord</a>
-        <span id="unique" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#rareModal">
-        <a href="#">Sjældent forekommende ord</a>
-        <span id="rare" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li
-        class="d-flex justify-content-between align-items-center border-bottom"
-        data-bs-toggle="modal"
-        data-bs-target="#frequentModal"
-      >
-        <a href="#">Gengangerord</a>
-        <span id="frequent" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-    </ul>
-  </li>
-
-  <!-- * LÆSBARHED -->
-  <li>
-    <a href="#readabilitySubmenu" id="readabilityHeader" data-bs-toggle="collapse" aria-expanded="false">Læsbarhed</a>
-    <ul class="collapse list-unstyled" id="readabilitySubmenu">
-      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
-        <a href="#">LIX</a>
-        <span id="lix" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
-        <a href="#">Sværhedsgrad</a>
-        <span id="difficulty" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
-        <a href="#">Publikum</a>
-        <span id="audience" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#lixModal">
-        <a href="#"><span class="longword">Lange ord</span></a>
-        <span id="longwords" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#sentenceModal"
-      >
-        <a href="#">Lette sætninger</a>
-        <span id="easy" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#sentenceModal"
-      >
-        <a href="#"><span class="hard">Svære sætninger</span></a>
-        <span id="hard" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#sentenceModal"
-      >
-        <a href="#"><span class="veryhard">Meget svære sætninger</span></a>
-        <span id="veryhard" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li
-        class="d-flex justify-content-between align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#lenghtsModal"
-      >
-        <a href="#">Gnst. ordlængde</a>
-        <span id="wordLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li
-        class="d-flex justify-content-between align-items-center border-bottom"
-        data-bs-toggle="modal"
-        data-bs-target="#lenghtsModal"
-      >
-        <a href="#">Gnst. sætningslængde</a>
-        <span id="sentenceLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-    </ul>
-  </li>
-
-  <!-- * TEKSTRYTME -->
-  <li id="rhythmList">
-    <a href="#rhythmSubmenu" id="rhythmHeader" data-bs-toggle="collapse" aria-expanded="false">Tekstrytme</a>
-    <ul
-      class="collapse list-unstyled"
-      id="rhythmSubmenu"
-      data-bs-toggle="modal"
-      data-bs-target="#rhythmModal"
-      aria-expanded="false"
-    >
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Gnst. sætningslængde</a>
-        <span id="sentenceLength2" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Sætningsvarians</a>
-        <span id="variance" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#"><span class="s1to3">1-3 ord</span></a>
-        <span id="s1to3" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#"><span class="s4to6">4-6 ord</span> </a>
-        <span id="s4to6" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#"><span class="s7to10">7-10 ord</span> </a>
-        <span id="s7to10" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#"><span class="s11to18">11-18 ord</span></a>
-        <span id="s11to18" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#"><span class="s19to26">19-26 ord</span></a>
-        <span id="s19to26" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#"><span class="s26plus">26+ ord</span></a>
-        <span id="s26plus" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-    </ul>
-  </li>
-
-  <!-- * SENTIMENT -->
-  <li>
-    <a href="#sentimentSubmenu" id="sentimentHeader" data-bs-toggle="collapse" aria-expanded="false">Sentiment</a>
-    <ul class="collapse list-unstyled" id="sentimentSubmenu">
-      <li
-        class="d-flex justify-content-between align-items-center border-bottom"
-        data-bs-toggle="modal"
-        data-bs-target="#hedonometerModal"
-      >
-        <a href="#">Glædesbarometer</a>
-        <span id="hedonometer" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-    </ul>
-  </li>
-
-  <!-- * GENERELT -->
-  <li>
-    <a href="#genereltSubmenu" id="genereltHeader" data-bs-toggle="collapse" aria-expanded="false">Generelt</a>
-    <ul class="collapse list-unstyled" id="genereltSubmenu">
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Afsnit</a><span id="paragraphs" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Normalsider</a><span id="normalsider" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a>Sætninger</a><span id="sentences" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Ord</a><span id="words" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Tegn <br /><small>(u. mellemrum)</small> </a
-        ><span id="chars" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Tegn <br /><small>(m. mellemrum)</small></a
-        ><span id="charsplus" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
-      </li>
-
-      <li class="d-flex justify-content-between align-items-center">
-        <a href="#">Læsetid</a><span id="readingtime" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
-      </li>
-      <li class="d-flex justify-content-between align-items-center border-bottom">
-        <a href="#">Oplæsningstid</a><span id="speakingtime" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
-      </li>
-    </ul>
-  </li>
-</ul>
