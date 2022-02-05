@@ -1,6 +1,7 @@
 import * as util from "./util";
-import { Alert, Button, Collapse, Dropdown, Modal, Popover, Tab, Toast, Tooltip } from "bootstrap";
-import $ from "jquery";
+
+// import { Alert, Button, Collapse, Dropdown, Modal, Popover, Tab, Toast, Tooltip } from "bootstrap";
+// import $ from "jquery";
 import EditorJS from "@editorjs/editorjs";
 
 // ! On init
@@ -68,18 +69,18 @@ const editor = new EditorJS({
 });
 
 // Add listeners to bottom menu
-const bottomMenu = util.getBottomMenu();
-bottomMenu.forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    // Update the view setting
-    util.updateSettings(btn);
+// const bottomMenu = util.getBottomMenu();
+// bottomMenu.forEach((btn) => {
+//   btn.addEventListener("click", async () => {
+//     // Update the view setting
+//     util.updateSettings(btn);
 
-    // Initiate the analyze page
-    const response = await analyzePage();
+//     // Initiate the analyze page
+//     const response = await analyzePage();
 
-    // editor.render(JSON.parse(localStorage.formatted));
-  });
-});
+//     // editor.render(JSON.parse(localStorage.formatted));
+//   });
+// });
 
 async function analyzePage() {
   console.trace("Analyzing page ...");
@@ -94,20 +95,22 @@ async function analyzePage() {
   const options = JSON.parse(localStorage.options) || {};
   const { view = "correct-text" } = options;
 
-  console.log(view, `Sending to ... /api/${view}`);
+  console.log(`🔉 Sending to ... /api/${view}`);
   const response = await util.postRequest(`./api/${view}`, { input: saved, options });
+  console.log("✅ Received response!", response);
   localStorage.formatted = JSON.stringify(response.editor);
 
-  // Render editor
-  await editor.render(response.editor);
+  // Render editor, if there is an editor response
+  if (response.editor) await editor.render(response.editor);
+  console.log(response.editor);
 
   // Update Sidebar 1
-  util.updateResultsSidebar(response.sidebar.results);
+  if (response.sidebar) util.updateSidebar(response.sidebar, view);
 
   // Enable the editor ...
   util.readEditSwitch(editor, spinner, "edit");
 
-  // Re
+  // Re-init
   initializePopovers();
 
   return response;
@@ -116,30 +119,9 @@ async function analyzePage() {
 // Remove markup from page
 async function removeMarkup() {
   // Save and render to remove markup, apparently.
-
   const saved = await editor.save();
   await editor.render(saved);
   localStorage.editor = JSON.stringify(saved);
-  // console.log("Removing markup ...");
-  // const saved = await editor.save();
-  // const options = { removeHTML: true };
-
-  // // Send to server ...(But this is slow, remove the async/await??)
-  // saved.blocks.forEach(async (block) => {
-  //   const { text } = block.data;
-  //   const response = await util.postRequest("/api/clean", { input: text, options });
-  //   console.log({ response });
-  //   const result = await response.json();
-  //   block.data.text = result;
-  // });
-
-  // // Saved backup to Local Storage
-  // localStorage.editor = saved;
-
-  // // Render the editor
-  // await editor.render(saved);
-
-  // // util.resetSidebar();
 }
 
 async function restoreData() {
@@ -197,15 +179,44 @@ async function generateNextSentence() {
 function initializePopovers() {
   const popoverTriggerList = [].slice.call(document.querySelectorAll('#editorjs [data-bs-toggle="popover"]'));
   popoverTriggerList.map((popoverTriggerEl) => {
-    new Popover(popoverTriggerEl, {
+    new bootstrap.Popover(popoverTriggerEl, {
       trigger: "hover focus",
       placement: "auto",
       html: true,
+      // template: `
+      // <div class="popover" role="tooltip">
+      //   <div class="popover-arrow"></div>
+      //   <h3 class="popover-header"></h3>
+      //   <div class="popover-body"></div>
+      // </div>
+      //   `,
+      // sanitize: true,
     });
   });
 }
 
-// Sidebar
+// Sidebar :: Add an event listener to all. If clicked, update the view setting and fire analyzePage().
+const headings = ["Generelt", "Forslag", "Ordforråd", "Læsbarhed", "Tekstrytme", "Sentiment", "Sætningsanalyse"];
+headings.forEach((heading) => {
+  const dom = document.querySelector(`#heading${heading} > button`);
+  dom.addEventListener("click", async () => {
+    console.log(`👆 ${heading} clicked ...`);
+
+    // Only run if sidebar is not already open
+    const collapse = document.querySelector(`#heading${heading} + .accordion-collapse`);
+    if (!collapse.classList.contains("show")) {
+      // Update options with view
+      const options = localStorage.options ? JSON.parse(localStorage.options) || {} : {};
+      options.view = dom.getAttribute("name");
+      localStorage.options = JSON.stringify(options);
+
+      // Run analyze page
+      await analyzePage();
+    }
+  });
+});
+
+// TODO
 const btnShowSidebar = document.querySelector("#showSidebar");
 const sectionSidebar = document.querySelector("#sidebar");
 const sectionContent = document.querySelector("#content");

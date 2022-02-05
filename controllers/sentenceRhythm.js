@@ -1,6 +1,32 @@
 const { TextParser } = require("../utilities/text.js");
 
-module.exports = class SentenceRhythm {
+module.exports = async (req, res) => {
+  const { text, editor, options } = req;
+
+  if (!editor) return;
+
+  editor.blocks.forEach((block, index) => {
+    const { text } = block.data;
+    const evaluateSentences = new SentenceRhythm(text, options).assessSentenceRhythms();
+    editor.blocks[index].data.text = evaluateSentences.formatted;
+  });
+
+  const lengths = new SentenceRhythm(text, options).assessSentenceRhythms().sentenceLength;
+  const metrics = new GetTextMetrics(text, options).calcAvgLengths().calcSentenceVariance();
+
+  const sidebar = Object.assign({}, lengths);
+  sidebar.avgSentenceLength = metrics.avgSentenceLength;
+  sidebar.variance = metrics.sentenceVariance;
+
+  return res
+    .json({
+      editor,
+      sidebar,
+    })
+    .end();
+};
+
+class SentenceRhythm {
   constructor(s) {
     if (typeof s === "undefined" || !s.toString)
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -41,7 +67,7 @@ module.exports = class SentenceRhythm {
       this.sentenceLength[String(sentenceEval.sentenceType)] += 1;
     });
 
-    this.formatted = this.formattedSentences.join("");
+    this.formatted = this.formattedSentences.join(" ");
     return this;
   }
 
@@ -90,4 +116,4 @@ module.exports = class SentenceRhythm {
     }
     return { newSentence: `${s}`, sentenceType: "" };
   }
-};
+}

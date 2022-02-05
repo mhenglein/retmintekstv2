@@ -116,13 +116,43 @@ module.exports.TextParser = class TextParser {
   }
 
   getSentences() {
-    this.sentences = this.text
-      .replace(/[.?!:;](\s|$)/g, "$1|x") //  Add |x to all sentence stoppers (hyphen not included)
-      .split("|x") // Split by |x
-      .filter((x) => x.length > 0);
+    let text = this.text;
 
-    console.log(this.text);
-    this.sentenceCount = this.sentences.length;
+    text = text.replace(/\.(?=\s([A-ZÆØÅ]|$|\n))/g, ". |x"); //Regex that takes care of P.J.
+
+    text = text.replaceAll("! ", "! |x");
+    text = text.replaceAll("? ", "? |x");
+    // text = text.replaceAll(": ", ": |x");
+    // text = text.replaceAll("; ", "; |x");
+
+    this.sentences = text.split(" |x");
+    this.sentences = this.sentences.map((x) => x.trim());
+
+    // const regex = RegExp("/([^.!?]+[.!?]+)|([^.!?]+$)", "g");
+
+    // const matches = [...text.matchAll(regex)];
+    // console.log(matches);
+
+    // this.sentences = text.split("|x");
+
+    // this.sentences = this.text
+    //   .replace(/[.?!:;](\s|$)/g, "$1|x") //  Add |x to all sentence stoppers (hyphen not included)
+    //   .split("|x") // Split by |x
+    //   .filter((x) => x.length > 0);
+
+    // console.log(this.text);
+    // this.sentenceCount = this.sentences.length;
+
+    // const regexp = /[.?!:;](\s|$)/g;
+    // const matches = this.text.matchAll(regexp);
+
+    // for (const match of matches) {
+    //   console.log(match);
+    //   console.log(match.index);
+    // }
+
+    // const sentences = this.text.match(/([^\.!\?]+[\.!\?]+)|([^\.!\?]+$)/g) || [];
+    // this.sentences = sentences.filter((x) => x.length > 0);
 
     return this;
   }

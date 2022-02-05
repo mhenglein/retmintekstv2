@@ -1,6 +1,6 @@
 <div class="row g-0 vh-100">
   <!-- Sidebar 1 -->
-  <div class="col-lg-5 col-6">
+  <div id="sidebar1" class="col-lg-5 col-6">
     <div class="row d-flex justify-content-start">
       <div id="topics" class="mt-2 ms-3 fw-bold">
         <span class="badge rounded-pill bg-secondary px-2">...</span> emner
@@ -13,7 +13,7 @@
     </div>
   </div>
   <!-- Sidebar 2 -->
-  <div class="col-lg-7 g-0 col-6 shadow border-start ps-0 ms-0">
+  <div id="sidebar2" class="col-lg-7 g-0 col-6 shadow border-start ps-0 ms-0">
     <div class="ms-2 my-1"><span id="connection" class="small font-monospace">🟢 Forbindelse til serveren! </span></div>
     <div class="accordion" id="accordion">
       <!-- GENERELT -->
@@ -22,6 +22,7 @@
           <button
             class="accordion-button collapsed"
             type="button"
+            name="text-metrics"
             data-bs-toggle="collapse"
             data-bs-target="#collapseGenerelt"
             aria-expanded="false"
@@ -47,28 +48,28 @@
               </li>
 
               <li class="d-flex justify-content-between align-items-center">
-                <a>Sætninger</a><span id="sentences" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+                <a>Sætninger</a><span id="sentenceCount" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
               </li>
 
               <li class="d-flex justify-content-between align-items-center">
-                <a href="#">Ord</a><span id="words" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+                <a href="#">Ord</a><span id="wordCount" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
               </li>
 
               <li class="d-flex justify-content-between align-items-center">
                 <a href="#">Tegn <br /><small>(u. mellemrum)</small> </a
-                ><span id="chars" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+                ><span id="charsNoSpaces" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
               </li>
 
               <li class="d-flex justify-content-between align-items-center">
                 <a href="#">Tegn <br /><small>(m. mellemrum)</small></a
-                ><span id="charsplus" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+                ><span id="charsWithSpaces" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
               </li>
 
               <li class="d-flex justify-content-between align-items-center">
-                <a href="#">Læsetid</a><span id="readingtime" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+                <a href="#">Læsetid</a><span id="readingTime" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
               </li>
               <li class="d-flex justify-content-between align-items-center">
-                <a href="#">Oplæsningstid</a><span id="speakingtime" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
+                <a href="#">Oplæsningstid</a><span id="speakingTime" class="stat badge text-dark rounded-pill">🤷‍♀️</span>
               </li>
             </ul>
           </div>
@@ -78,8 +79,9 @@
       <div class="accordion-item border-none">
         <h2 class="accordion-header" id="headingForslag">
           <button
-            class="accordion-button"
+            class="accordion-button collapsed"
             type="button"
+            name="correct-text"
             data-bs-toggle="collapse"
             data-bs-target="#collapseForslag"
             aria-expanded="true"
@@ -90,7 +92,7 @@
         </h2>
         <div
           id="collapseForslag"
-          class="accordion-collapse collapse show"
+          class="accordion-collapse collapse"
           aria-labelledby="headingForslag"
           data-bs-parent="#accordion"
         >
@@ -139,6 +141,7 @@
           <button
             class="accordion-button collapsed"
             type="button"
+            name="evaluate-vocab"
             data-bs-toggle="collapse"
             data-bs-target="#ordforråd"
             aria-expanded="false"
@@ -149,6 +152,7 @@
         </h2>
         <div
           id="ordforråd"
+          name="evaluate-vocab"
           class="accordion-collapse collapse"
           aria-labelledby="headingOrdforråd"
           data-bs-parent="#accordion"
@@ -170,7 +174,7 @@
                 data-bs-target="#rareModal"
               >
                 <a href="#">Sjældent forekommende ord</a>
-                <span id="rare" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+                <span id="uncommon" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
               </li>
 
               <li
@@ -179,7 +183,7 @@
                 data-bs-target="#frequentModal"
               >
                 <a href="#"><span class="red">Gengangerord</span></a>
-                <span id="frequent" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+                <span id="overused" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
               </li>
             </ul>
           </div>
@@ -192,6 +196,7 @@
           <button
             class="accordion-button collapsed"
             type="button"
+            name="longwords"
             data-bs-toggle="collapse"
             data-bs-target="#læsbarhed"
             aria-expanded="false"
@@ -260,6 +265,7 @@
           <button
             class="accordion-button collapsed"
             type="button"
+            name="sentence-rhythm"
             data-bs-toggle="collapse"
             data-bs-target="#tekstrytme"
             aria-expanded="false"
@@ -284,7 +290,7 @@
             >
               <li class="d-flex justify-content-between align-items-center">
                 <a href="#">Gnst. sætningslængde</a>
-                <span id="sentenceLength2" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
+                <span id="avgSentenceLength" class="stat badge text-dark rounded-pill">🤷‍♂️</span>
               </li>
               <li class="d-flex justify-content-between align-items-center">
                 <a href="#">Sætningsvarians</a>
@@ -330,6 +336,7 @@
           <button
             class="accordion-button collapsed"
             type="button"
+            name="rate-sentiment"
             data-bs-toggle="collapse"
             data-bs-target="#sentiment"
             aria-expanded="false"
@@ -365,6 +372,7 @@
           <button
             class="accordion-button collapsed"
             type="button"
+            name="sentence-difficulty"
             data-bs-toggle="collapse"
             data-bs-target="#sætningsanalyse"
             aria-expanded="false"
@@ -418,7 +426,7 @@
               </li>
 
               <li
-                class="d-flex justify-content-between align-items-center border-bottom"
+                class="d-flex justify-content-between align-items-center"
                 data-bs-toggle="modal"
                 data-bs-target="#lenghtsModal"
               >

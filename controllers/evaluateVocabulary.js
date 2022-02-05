@@ -4,8 +4,46 @@ const { TextHighlighter } = require("../utilities/analysis.js");
 const stopord = require("../data/stopord.json");
 const freq = require("../data/frequency.json");
 
+module.exports = async (req, res) => {
+  const { editor, text, options } = req;
+
+  console.log("Incoming received in evaluateVocab");
+
+  if (!editor || !text) return res.json({ msg: "Error" }).end();
+
+  // Sidebar stats
+  const vocab = new EvaluateVocabulary(text, options)
+    .generateFrequencyMap()
+    .findOverusedWords()
+    .findUncommonWords()
+    .findUniqueWords()
+    .createObjectOfResults();
+
+  // Highlighter per block
+  editor.blocks.forEach((block, index) => {
+    const { text } = block.data;
+    const evaluteVocab = new EvaluateVocabulary(text, options).highlightOverusedWords(text, vocab.overusedWords);
+    editor.blocks[index].data.text = evaluteVocab.formatted;
+  });
+
+  const returnJSON = {
+    editor,
+    sidebar: {
+      results: vocab.results || {},
+      numUncommonWords: vocab.uncommonWords?.length || 0,
+      numUniqueWords: vocab.uniqueWords?.length || 0,
+      numOverusedWords: vocab.overusedWords?.length || 0,
+      uncommonWords: vocab.uncommonWords,
+      uniqueWords: vocab.uniqueWords,
+      overusedWords: vocab.overusedWords,
+    },
+  };
+
+  return res.json(returnJSON).end();
+};
+
 // TODO No numbers in unique words
-module.exports = class EvaluateVocabulary {
+class EvaluateVocabulary {
   constructor(s, options) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -187,4 +225,4 @@ module.exports = class EvaluateVocabulary {
     this.results = obj;
     return this;
   }
-};
+}

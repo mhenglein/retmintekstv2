@@ -2,6 +2,8 @@ const { TextParser } = require("../utilities/text.js");
 
 module.exports.cleanString = function cleanString(s, options) {
   if (!s) return null;
+  console.log({ s });
+
   s = s.toString();
 
   const parser = new TextParser(s);
@@ -9,7 +11,6 @@ module.exports.cleanString = function cleanString(s, options) {
   if (!options) {
     // Assume the full monty
     parser.removeHTML();
-    parser.removeNonLetters();
     parser.removeDoubleSpacing();
     parser.trimText();
   } else {
@@ -92,8 +93,9 @@ module.exports.countParagraphs = function countParagraphs(editorBlocks) {
 module.exports.extractText = function extractText(editor) {
   if (!editor) return null;
   let output = "";
-  editor.blocks.forEach((block) => {
+  editor.blocks.forEach((block, index) => {
     const { text } = block.data;
+    console.log(index, text);
     output += text;
 
     // Add whitespace after block

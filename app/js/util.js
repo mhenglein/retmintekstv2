@@ -1,27 +1,4 @@
-import { Alert, Button, Collapse, Dropdown, Modal, Popover, Tab, Toast, Tooltip } from "bootstrap";
-import { response } from "express";
-
-// ! DOM
-// Get array of all DOM elements that have an id
-export function getAllIds() {
-  const fullDOMwithId = document.querySelectorAll("*[id]");
-  const allIds = [];
-  fullDOMwithId.forEach((el) => {
-    allIds.push(el.id);
-  });
-  return allIds;
-}
-
-// Return all DOMs in the bottom menu
-export function getBottomMenu() {
-  const btnCorrections = document.getElementById("btnCorrections");
-  const btnVocab = document.getElementById("btnVocab");
-  const btnReadability = document.getElementById("btnReadability");
-  const btnTextrhythm = document.getElementById("btnTextrhythm");
-  const btnSentiment = document.getElementById("btnSentiment");
-  const btnSentences = document.getElementById("btnSentences");
-  return [btnVocab, btnCorrections, btnVocab, btnReadability, btnTextrhythm, btnSentiment, btnSentences];
-}
+// import { Alert, Button, Collapse, Dropdown, Modal, Popover, Tab, Toast, Tooltip } from "bootstrap";
 
 // Upon clicking a DOM element, get its name and store it in the option JSON (saved in Local Storage, and also on the server)
 export function updateSettings(dom) {
@@ -35,13 +12,13 @@ export function updateSettings(dom) {
 export function initToasts() {
   const toastElList = [].slice.call(document.querySelectorAll(".toast"));
   const toastList = toastElList.map(function (toastEl) {
-    return new Toast(toastEl, {});
+    return new bootstrap.Toast(toastEl, {});
   });
 }
 
 export function showWarning(delay = 5000) {
   const warningToast = document.querySelector("#warningToast");
-  const newToast = new Toast(warningToast, { delay: delay });
+  const newToast = new bootstrap.Toast(warningToast, { delay: delay });
   newToast.show();
 }
 // ! LOCAL STORAGE
@@ -176,19 +153,6 @@ export function generatePlaceholder() {
   return placerholderArray[Math.floor(Math.random() * placerholderArray.length)];
 }
 
-function extractFullText(savedEditor) {
-  let output = "";
-  savedEditor.blocks.forEach((block) => {
-    let { text } = block.data;
-    text = text.trim();
-    const rightmostCharacter = text.slice(text.length - 1);
-    const endsWithPunctuation = rightmostCharacter.match(/[.?!:;](\s|$)/gi);
-    if (endsWithPunctuation === null) text += ". ";
-    output += ` ${text}`;
-  });
-  return output.trim();
-}
-
 // ! SIDEBAR
 export function resetSidebar() {
   const sidebarList = document.getElementById("sidebarList");
@@ -198,7 +162,7 @@ export function resetSidebar() {
   });
 }
 
-export function updateResultsSidebar(results, view) {
+export function updateSidebar(sidebar, view) {
   // evaluate-vocab
   // text-metrics
   // sentence-difficulty
@@ -209,12 +173,36 @@ export function updateResultsSidebar(results, view) {
   // spelling
   // sentence-difficulty
 
-  if (!results) return null;
+  if (!sidebar) return null;
+  console.log({ view });
 
   switch (view) {
     case "evaluate-vocab":
-      updateVocab(results);
+      updateVocab(sidebar);
+      break;
 
+    case "text-metrics":
+      updateMetrics(sidebar);
+      break;
+
+    case "sentence-difficulty":
+      updateDifficulty(sidebar);
+      break;
+
+    case "longwords":
+      updateLongwords(sidebar);
+      break;
+
+    case "sentence-rhythm":
+      updateRhythm(sidebar);
+      break;
+
+    case "rate-sentiment":
+      updateSentiment(sidebar);
+      break;
+
+    case "correct-text":
+      updateCorrectText(sidebar);
       break;
 
     default:
@@ -222,8 +210,119 @@ export function updateResultsSidebar(results, view) {
   }
 }
 
-function updateVocab(results) {
-  const values = Object.values(results);
+export function updateRhythm(sidebar) {
+  console.log(typeof sidebar);
+  if (!sidebar) return;
+
+  // Sidebar 1?
+
+  // Sidebar 2
+  const entries = Object.entries(sidebar);
+  entries.forEach(([key, value]) => {
+    console.log({ key, value });
+    const span = document.getElementById(key);
+    if (span) span.innerText = value;
+  });
+}
+
+export function updateMetrics(results) {
+  // Get sidebar results back
+  // Assume that ID is the same as OBJECT KEY
+
+  if (!results) return null;
+
+  const val = Object.entries(results);
+  val.forEach((entry) => {
+    const [key, value] = entry;
+    const span = document.getElementById(key);
+    if (span) {
+      span.innerText = value;
+    }
+  });
+}
+
+export function updateCorrectText(sidebar) {
+  if (!sidebar) return;
+  const summary = {
+    korrekthed: sidebar.Stavefejl + sidebar["Typisk anvendt forkert"] + sidebar.Grammatik + sidebar.Generelt,
+    klarhed: sidebar.Fyldeord + sidebar.Dobbeltkonfekt,
+    originalitet: sidebar.Kliche + sidebar.Anglicisme,
+    udtryk: sidebar.Buzzword + sidebar.Formelt,
+  };
+
+  console.log({ summary });
+
+  const val = Object.entries(summary);
+
+  val.forEach((entry) => {
+    const [key, value] = entry;
+    const id = key.toLowerCase();
+    const span = document.getElementById(id);
+    if (span) span.innerText = value;
+  });
+}
+
+function updateSentiment(sidebar) {
+  if (!sidebar) return;
+
+  // Sidebar 1
+  if (sidebar.happyWords) {
+    const arr = Array.from(sidebar.happyWords);
+    console.log({ arr });
+
+    const div = document.getElementById("topics-content");
+    let html = `<ul class="list-group list-group-flush">`;
+
+    const title = document.querySelector("#topics > span");
+    title.innerText = arr.length || "...";
+
+    arr.forEach((result) => {
+      html += `<li class="list-group-item list-group-item-flash">
+        <span class="badge rounded-pill bg-white text-dark border">${result[0]} (${result[1]})</span>
+        </li>`;
+    });
+
+    html += `</ul>`;
+
+    div.innerHTML = html;
+  }
+
+  // Sidebar 2
+  document.getElementById("hedonometer").innerText = String(`${sidebar.emoji} - ${sidebar.happinessScore}/9`);
+}
+
+function updateLongwords(sidebar) {
+  // Sidebar 1
+  const arr = sidebar.arrOfLongWords;
+  console.log({ arr });
+  const div = document.getElementById("topics-content");
+  let html = `<ul class="list-group list-group-flush">`;
+
+  const title = document.querySelector("#topics > span");
+  title.innerText = arr.length || "...";
+
+  arr.forEach((result) => {
+    html += `<li class="list-group-item list-group-item-flash">
+        <span class="badge badge-pill bg-yellow">${result}</span>
+        </li>`;
+  });
+
+  html += `</ul>`;
+
+  div.innerHTML = html;
+
+  // Sidebar 2
+  document.getElementById("lix").innerText = sidebar.lix;
+  document.getElementById("difficulty").innerText = sidebar.difficulty;
+  document.getElementById("audience").innerText = sidebar.audience;
+  document.getElementById("longwords").innerText = sidebar.noOfLongWords;
+}
+
+function updateVocab(sidebar) {
+  console.log({ sidebar });
+
+  // Sidebar 1
+  const values = Object.values(sidebar.results);
   const div = document.getElementById("topics-content");
   let html = `<ul class="list-group list-group-flush">`;
 
@@ -251,43 +350,34 @@ function updateVocab(results) {
   html += `</ul>`;
 
   div.innerHTML = html;
-  return;
+
+  // Sidebar 2
+  document.getElementById("unique").innerText = sidebar.numUniqueWords || "...";
+  document.getElementById("uncommon").innerText = sidebar.numUncommonWords || "...";
+  document.getElementById("overused").innerText = sidebar.numOverusedWords || "...";
 }
 
 // ! MODALS
-export function updateModals() {
-  const uniqueWordsList = document.getElementById("uniqueWordsList");
-  const rareWordsList = document.getElementById("rareWordsList");
-  const frequentWordsList = document.getElementById("frequentWordsList");
+// export function updateModals() {
+//   const uniqueWordsList = document.getElementById("uniqueWordsList");
+//   const rareWordsList = document.getElementById("rareWordsList");
+//   const frequentWordsList = document.getElementById("frequentWordsList");
 
-  uniqueWordsList.innerHTML = "";
-  const allUniqueWords = JSON.parse(localStorage.getItem("uniqueWords"));
-  allUniqueWords.forEach((word) => {
-    uniqueWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
-  });
+//   uniqueWordsList.innerHTML = "";
+//   const allUniqueWords = JSON.parse(localStorage.getItem("uniqueWords"));
+//   allUniqueWords.forEach((word) => {
+//     uniqueWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
+//   });
 
-  rareWordsList.innerHTML = "";
-  const allUncommonWords = localStorage.getItem("uncommonWords");
-  allUncommonWords.forEach((word) => {
-    rareWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
-  });
+//   rareWordsList.innerHTML = "";
+//   const allUncommonWords = localStorage.getItem("uncommonWords");
+//   allUncommonWords.forEach((word) => {
+//     rareWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
+//   });
 
-  frequentWordsList.innerHTML = "";
-  const allOverusedWords = localStorage.getItem("overusedWords");
-  allOverusedWords.forEach((word) => {
-    frequentWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
-  });
-}
-
-// ! Resolvers
-export function resolveOverallHappinessScore(data) {
-  const hedonometer = document.getElementById("hedonometer");
-  const happinessScore = String(`${data.emoji} - ${dataChecker(data.happinessScore)}/9`);
-  hedonometer.innerText = happinessScore;
-  updateLocalStorage("hedonometer", happinessScore);
-}
-
-function resolveHedonometer(outcome) {
-  //   editorStructure.blocks[index].data.text = outcome.returnText;
-  updateLocalStorage("highlightedText_sentiment", JSON.stringify(outcome));
-}
+//   frequentWordsList.innerHTML = "";
+//   const allOverusedWords = localStorage.getItem("overusedWords");
+//   allOverusedWords.forEach((word) => {
+//     frequentWordsList.innerHTML += `<span class='badge text-dark stat mx-2'>${word}</span>`;
+//   });
+// }

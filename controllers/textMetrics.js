@@ -4,7 +4,55 @@ const { TextMath } = require("../utilities/math.js");
 // Data files
 const stopord = require("../data/stopord.json");
 
-module.exports = class GetTextMetrics {
+module.exports = (req, res) => {
+  const { text, editor, options } = req;
+
+  const textMetrics = new GetTextMetrics(text, options).calcLix().calcSentenceVariance().calcAvgLengths().calcTime();
+
+  const {
+    wordCount,
+    longWordsCount,
+    lix,
+    difficulty,
+    audience,
+    readingTime,
+    speakingTime,
+    normalsider,
+    charsWithSpaces,
+    charsNoSpaces,
+    sentenceCount,
+    avgSentenceLength,
+    avgWordLength,
+    sentenceVariance,
+  } = textMetrics;
+
+  const paragraphs = editor.blocks.length;
+
+  const returnJSON = {
+    sidebar: {
+      paragraphs,
+      wordCount,
+      longWordsCount,
+      lix,
+      difficulty,
+      audience,
+      readingTime,
+      speakingTime,
+      normalsider,
+      charsWithSpaces,
+      charsNoSpaces,
+      sentenceCount,
+      avgSentenceLength,
+      avgWordLength,
+      sentenceVariance,
+    },
+  };
+
+  console.log(returnJSON);
+  return res.json(returnJSON).end();
+};
+
+class GetTextMetrics {
   constructor(s, options) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -123,4 +171,4 @@ module.exports = class GetTextMetrics {
     this.speakingTime = minTommss(timeToSpeakDecimal);
     return this;
   }
-};
+}

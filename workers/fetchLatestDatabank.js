@@ -31,7 +31,7 @@ class GoogleBot {
           regex: row.Regex,
           type: row.Type,
           tooltip: row.Tooltip,
-          case: row.Case,
+          i: row.Case,
           b_left: row.b_left,
           b_right: row.b_right,
         };
@@ -42,7 +42,7 @@ class GoogleBot {
     // Final sanity check
     const arrDB = _.compact(_.uniqBy(arr, "tekst"));
 
-    fs.writeFileSync("./app/data/db.json", JSON.stringify(arrDB));
+    fs.writeFileSync("./data/db.json", JSON.stringify(arrDB));
   }
 }
 

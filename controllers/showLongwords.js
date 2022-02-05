@@ -1,7 +1,35 @@
 const { TextParser } = require("../utilities/text.js");
 const { TextHighlighter } = require("../utilities/analysis.js");
 
-module.exports = class ShowLongWords {
+module.exports = async (req, res) => {
+  const { text, editor, options } = req;
+
+  const threshold = options?.threshold || 6;
+
+  editor.blocks.forEach((block, index) => {
+    const { text } = block.data;
+    const lws = new ShowLongWords(text, threshold).highlightAllLongWords();
+    editor.blocks[index].data.text = lws.formatted;
+  });
+
+  const lw = new ShowLongWords(text).highlightAllLongWords(threshold).getAllLongWords(threshold);
+  const metrics = new GetTextMetrics(text).calcLix();
+
+  const returnJSON = {
+    editor,
+    sidebar: {
+      noOfLongWords: lw.noOfLongWords,
+      arrOfLongWords: lw.longWords,
+      lix: metrics.lix,
+      audience: metrics.audience,
+      difficulty: metrics.difficulty,
+    },
+  };
+
+  res.json(returnJSON).end();
+};
+
+class ShowLongWords {
   constructor(text) {
     if (typeof text === "undefined" || !text.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -36,4 +64,4 @@ module.exports = class ShowLongWords {
     this.formatted = highlighted.text;
     return this;
   }
-};
+}

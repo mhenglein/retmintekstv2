@@ -185,7 +185,6 @@ class TextHighlighter {
         const firstPartOfString: string = ` <span class="${css}" 
         data-bs-toggle="popover" 
         data-bs-original-title="${popoverTitle}"
-        data-bs-html="true" 
         data-bs-content="${popover}"> `;
 
         const stringContent: string = textMatch;

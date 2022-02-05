@@ -1,3 +1,27 @@
+function extractFullText(savedEditor) {
+  let output = "";
+  savedEditor.blocks.forEach((block) => {
+    let { text } = block.data;
+    text = text.trim();
+    const rightmostCharacter = text.slice(text.length - 1);
+    const endsWithPunctuation = rightmostCharacter.match(/[.?!:;](\s|$)/gi);
+    if (endsWithPunctuation === null) text += ". ";
+    output += ` ${text}`;
+  });
+  return output.trim();
+}
+
+// Return all DOMs in the bottom menu
+export function getBottomMenu() {
+  const btnCorrections = document.getElementById("btnCorrections");
+  const btnVocab = document.getElementById("btnVocab");
+  const btnReadability = document.getElementById("btnReadability");
+  const btnTextrhythm = document.getElementById("btnTextrhythm");
+  const btnSentiment = document.getElementById("btnSentiment");
+  const btnSentences = document.getElementById("btnSentences");
+  return [btnVocab, btnCorrections, btnVocab, btnReadability, btnTextrhythm, btnSentiment, btnSentences];
+}
+
 // Sidebars
 // const btnCollapseSidebar = document.querySelector("#sidebarCollapse");
 const btnShowSidebar = document.querySelector("#showSidebar");

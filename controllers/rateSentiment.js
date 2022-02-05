@@ -6,7 +6,33 @@ const stopord = require("../data/stopord.json");
 const lemmas = require("../data/lemmas.json");
 const hedonometer = require("../data/hedonometer.json");
 
-module.exports = class RateSentiment {
+module.exports = async (req, res) => {
+  const { text, editor, options } = req;
+
+  editor.blocks.forEach((block, index) => {
+    const { text } = block.data;
+    const rateSentiment = new RateSentiment(text, options).augmentTextWithEmojis();
+    editor.blocks[index].data.text = rateSentiment.formatted;
+  });
+
+  const happyMetrics = new RateSentiment(text, options).rateHappiness().calculateHappyMetrics();
+  const sidebar = {
+    happyWords: happyMetrics.happyWords,
+    happinessScore: happyMetrics.happinessScore,
+    happinessMSE: happyMetrics.happinessMSE,
+    emoji: happyMetrics.emoji,
+  };
+
+  const returnJSON = {
+    editor,
+    sidebar,
+  };
+
+  console.log(returnJSON);
+  res.json(returnJSON).end();
+};
+
+class RateSentiment {
   constructor(s, options) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -37,11 +63,11 @@ module.exports = class RateSentiment {
     // Loop through each of the words
     this.words.forEach((word) => {
       // Check the word against the hedonometer file [Cols: ID, Original, EN, DA, Val, Std]
-      const foundValue = hedonometer.filter((v) => v[3] === word);
+      const foundValue = hedonometer.filter((v) => v.danish === word)[0];
 
       // Check if there is a match
-      if (foundValue.length > 0 && foundValue !== undefined) {
-        this.happyWords.push([foundValue[0][3], foundValue[0][4], foundValue[0][5]]);
+      if (foundValue && Object.keys(foundValue).length > 0) {
+        this.happyWords.push([foundValue.danish, foundValue.mean, foundValue.sigma]);
       }
     });
     return this;
@@ -49,18 +75,17 @@ module.exports = class RateSentiment {
 
   calculateHappyMetrics() {
     const happyValues = this.happyWords.map((v) => Number(v[1])); // Mean
+    // // Why again? We remove uniques early on for performance; then lemmafy; then recheck quick in case any of the lemmas are duplicate
+    // // if (this.options?.uniqueOnly && this.options?.lemmafyText) {
+    // //   // Convert to Set and then back to Array
+    // //   const set = new Set(this.happyWords.map((x) => JSON.stringify(x)));
+    // //   this.happyWords = Array.from(set).map((x) => JSON.parse(x));
+    // // }
 
-    // Why again? We remove uniques early on for performance; then lemmafy; then recheck quick in case any of the lemmas are duplicate
-    // if (this.options?.uniqueOnly && this.options?.lemmafyText) {
-    //   // Convert to Set and then back to Array
-    //   const set = new Set(this.happyWords.map((x) => JSON.stringify(x)));
-    //   this.happyWords = Array.from(set).map((x) => JSON.parse(x));
-    // }
+    // // * Sort by value
+    // // this.happyWords.sort(TextParser.compareSecondColumn);
 
-    // * Sort by value
-    // this.happyWords.sort(TextParser.compareSecondColumn);
-
-    // * Calculate Sum, Score, and MSE
+    // // * Calculate Sum, Score, and MSE
     this.happinessScore = TextMath.calcAvg(happyValues).toPrecision(2);
     this.happinessMSE = TextMath.calcMSE(happyValues).toPrecision(2);
     this.emoji = TextParser.convertValToEmoji(this.happinessScore);
@@ -105,4 +130,4 @@ module.exports = class RateSentiment {
     this.formatted = parsedText.text;
     return this;
   }
-};
+}

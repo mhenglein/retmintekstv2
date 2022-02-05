@@ -1,6 +1,21 @@
 const { TextParser } = require("../utilities/text.js");
 
-module.exports = class SentenceDifficulty {
+module.exports = async (req, res) => {
+  const { input, options } = req.body;
+  const evaluateSentences = new SentenceDifficulty(input);
+
+  const returnJSON = {
+    returnText: evaluateSentences.formattedText,
+    noAllSentences: evaluateSentences.noAllSentences,
+    noEasySentences: evaluateSentences.noEasySentences,
+    noHardSentences: evaluateSentences.noHardSentences,
+    noVeryHardSentences: evaluateSentences.noVeryHardSentences,
+  };
+
+  res.json(returnJSON).end();
+};
+
+class SentenceDifficulty {
   constructor(s) {
     if (typeof s === "undefined" || !s.toString) {
       throw new Error("Function requires strings and values that can be coerced into a string with toString()");
@@ -64,4 +79,4 @@ module.exports = class SentenceDifficulty {
     }
     return "easy";
   }
-};
+}
