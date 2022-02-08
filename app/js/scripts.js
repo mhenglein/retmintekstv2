@@ -1,6 +1,6 @@
 import * as util from "./util";
 
-// import { Alert, Button, Collapse, Dropdown, Modal, Popover, Tab, Toast, Tooltip } from "bootstrap";
+import { Alert, Button, Collapse, Dropdown, Modal, Popover, Tab, Toast, Tooltip } from "bootstrap";
 // import $ from "jquery";
 import EditorJS from "@editorjs/editorjs";
 
@@ -17,7 +17,6 @@ const spinner2 = document.getElementById("spinner2");
 
 // Popovers & Toasts
 setInterval(initializePopovers(), 1000);
-// initializePopovers();
 util.initToasts();
 
 // ! Editor
@@ -67,20 +66,6 @@ const editor = new EditorJS({
   placeholder: util.generatePlaceholder(),
   data: editorData,
 });
-
-// Add listeners to bottom menu
-// const bottomMenu = util.getBottomMenu();
-// bottomMenu.forEach((btn) => {
-//   btn.addEventListener("click", async () => {
-//     // Update the view setting
-//     util.updateSettings(btn);
-
-//     // Initiate the analyze page
-//     const response = await analyzePage();
-
-//     // editor.render(JSON.parse(localStorage.formatted));
-//   });
-// });
 
 async function analyzePage() {
   console.trace("Analyzing page ...");
@@ -183,14 +168,6 @@ function initializePopovers() {
       trigger: "hover focus",
       placement: "auto",
       html: true,
-      // template: `
-      // <div class="popover" role="tooltip">
-      //   <div class="popover-arrow"></div>
-      //   <h3 class="popover-header"></h3>
-      //   <div class="popover-body"></div>
-      // </div>
-      //   `,
-      // sanitize: true,
     });
   });
 }
@@ -216,15 +193,13 @@ headings.forEach((heading) => {
   });
 });
 
-// TODO
+// TODO : Connection between content area and sidebars
 const btnShowSidebar = document.querySelector("#showSidebar");
 const sectionSidebar = document.querySelector("#sidebar");
 const sectionContent = document.querySelector("#content");
-const btmMenu = document.querySelector("#bottom-menu");
 
 btnShowSidebar.addEventListener("click", () => {
   sectionSidebar.classList.toggle("mobile");
   sectionContent.classList.toggle("mobile");
-  btmMenu.classList.toggle("mobile");
   btnShowSidebar.classList.toggle("mobile");
 });

@@ -1,10 +1,9 @@
 const util = require("../utilities/util.js");
-
+const Text = require("../models/Text.js");
+const chalk = require("chalk");
 // Standard process for all incoming requests
 module.exports = function (app) {
   app.use("*", async (req, res, next) => {
-    console.log("Req body", req.body);
-
     // [1] Request contains body
     if (!req.body) return next();
 
@@ -17,7 +16,6 @@ module.exports = function (app) {
     // [4] Ascertain type of input
     const { input, options } = req.body;
     const type = typeof input;
-    console.log({ type }, { input });
 
     // [A] Input is a string
     if (type === "string") {
@@ -69,11 +67,14 @@ module.exports = function (app) {
   app.use("*", async (req, res, next) => {
     // Save req.text to database
     if (req.text) {
-      const { text, editor } = req;
-      const { id } = editor;
+      const { text } = req;
+      const textSample = new Text({
+        text: text,
+      });
 
-      // Save to database
-      const doc = await util.saveToDatabase(id, text);
+      await textSample.save();
     }
+
+    next();
   });
 };

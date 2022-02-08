@@ -2,7 +2,6 @@ const { TextParser } = require("../utilities/text.js");
 
 module.exports.cleanString = function cleanString(s, options) {
   if (!s) return null;
-  console.log({ s });
 
   s = s.toString();
 
@@ -95,7 +94,6 @@ module.exports.extractText = function extractText(editor) {
   let output = "";
   editor.blocks.forEach((block, index) => {
     const { text } = block.data;
-    console.log(index, text);
     output += text;
 
     // Add whitespace after block

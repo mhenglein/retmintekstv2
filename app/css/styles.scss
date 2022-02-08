@@ -36,10 +36,13 @@ body {
 }
 
 .editor {
+  // On smaller screens, reduce the margins and take up more place on the screen
   @media (max-width: 768px) {
     width: 80vw;
     margin-left: 2rem;
   }
+
+  // On larger screens, have a bit more air
   width: 60vw;
   margin-left: 4rem;
 }
@@ -56,17 +59,19 @@ body {
 }
 
 // ! SIDEBAR
-// Sidebar
+// Sidebar: As the width available decreases, the sidebar area shrinks.
 :root {
-  --sidebarWidth: 500px; //CSS variable
-  @media (max-width: 1200px) {
-    --sidebarWidth: 450px; //CSS variable
+  @media screen and (min-width: 1200px) {
+    --sidebarWidth: 400px;
   }
-  @media (max-width: 992) {
-    --sidebarWidth: 400px; //CSS variable
+  @media screen and (min-width: 992) {
+    --sidebarWidth: 350px;
   }
-  @media (max-width: 768) {
-    --sidebarWidth: 350px; //CSS variable
+  @media screen and (min-width: 768) {
+    --sidebarWidth: 300px;
+  }
+  @media screen and (max-width: 768) {
+    --sidebarWidth: 250px;
   }
 }
 
@@ -75,6 +80,7 @@ body {
   transition: all 0.3s;
 }
 
+// Sidebar button
 #showSidebar {
   // position: fixed;
   // top: 4%;
@@ -103,10 +109,42 @@ body {
   background-color: white;
 }
 
-// ! .mobile
-// Add .mobile to hide sidebar
+// Each sidebar subsection (e.g. "Afsnit")
+#sidebar ul li {
+  padding: 10px;
+  font-size: 0.9rem;
+  display: block;
+}
+
+#sidebar ul li:hover {
+  background: #eee;
+}
+// Adding .mobile hides sidebar by pushing it off-screen
 #sidebar.mobile {
   margin-right: calc(-1 * var(--sidebarWidth)) !important;
+}
+
+// // TODO
+// On small screens ...
+@media (max-width: 768px) {
+  // Hide the first sidebar
+  #sidebar1 {
+    display: none;
+    width: 0% !important;
+  }
+
+  // Show the second sidebar with width 100%
+  #sidebar2 {
+    width: 100% !important;
+  }
+}
+
+//Sidebar new
+// rgba(18,12,24,1);
+
+// ! EDITOR vs SIDEBAR
+#content {
+  width: calc(100% - var(--sidebarWidth)); // Default: Make room for sidebar
 }
 
 // And show the full area
@@ -114,61 +152,50 @@ body {
   width: 100% !important;
 }
 
-#sidebar .sidebar-header {
-  padding: 40px 20px 5px 20px;
+// ! NAVBAR
+.subtle-border {
+  border-bottom: 2px solid #1c274f38;
 }
 
-#sidebar.components {
-  font-weight: 100;
+.navbar-toggler {
+  background-color: white !important;
 }
 
-#sidebar ul p {
-  color: #fff;
-  padding: 10px;
+.main-nav {
+  border-bottom: 2px solid transparent;
+}
+.navbar {
+  border: none;
 }
 
-#sidebar ul li a {
-  padding: 10px;
-  font-size: 0.9rem;
-  display: block;
+.navbar-btn {
+  box-shadow: none;
+  outline: none !important;
+  border: none;
 }
 
-#sidebar ul li a:hover {
-  background: #fff;
-}
-
-// TODO
-@media (max-width: 768px) {
-  #sidebar {
-    margin-right: calc(-1 * var(--sidebarWidth));
+.nav-item {
+  border-bottom: 2px solid transparent;
+  transition: ease 0.3s;
+  &:hover {
+    border-bottom: 4px solid #6a49fe;
+    margin-bottom: -4px;
   }
-  #sidebar.mobile {
-    margin-right: 0;
-  }
-  #sidebarCollapse span {
-    display: none;
+  &:active {
+    border-bottom: 4px solid #6a49fe;
+    margin-bottom: -4px;
   }
 }
 
-// ! EDITOR vs SIDEBAR
-#content {
-  // @media (max-width: 768px) {
-  //   width: 100%; // Hide sidebar on small screens
-  // }
-  width: calc(100% - var(--sidebarWidth)); // Default: Make room for sidebar
-}
+// .nav-link {
+//   font-size: 0.75rem;
+//   margin-left: 0.25rem;
+//   @media (max-width: 768px) {
+//     font-size: 0.65rem;
+//   }
+// }
 
-// ! LIST GROUP
-.list-group {
-  overflow-y: scroll;
-  max-height: 100vh !important;
-  background-color: white;
-}
-
-.list-group-min {
-  min-height: 70vh !important;
-}
-
-.border-none {
-  border: none !important;
+.navbar-brand {
+  font-size: 1rem !important;
+  font-weight: 400;
 }

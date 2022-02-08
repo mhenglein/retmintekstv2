@@ -21,6 +21,15 @@ export function showWarning(delay = 5000) {
   const newToast = new bootstrap.Toast(warningToast, { delay: delay });
   newToast.show();
 }
+
+// TODO
+export function showSuccess(delay = 2500) {
+  analyzeBtn.innerText = "Opdateret!";
+  setTimeout(function () {
+    analyzeBtn.innerText = "Analysér";
+  }, delay);
+}
+
 // ! LOCAL STORAGE
 // Update local storage (Just added a try/catch)
 export function updateLocalStorage(identifier, value) {

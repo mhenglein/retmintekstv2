@@ -1,10 +1,10 @@
-const winston = require("winston");
-require("winston-mongodb");
+// module.exports = function(logger) {
 
-module.exports = function (err, req, res, next) {
-  winston.error(err.message, err);
+// function error(err, req, res, next) {
+//   logger.error(err.message, err);
 
-  res.status(500).send({
-    error: err.message,
-  });
-};
+//   res.status(500).send({
+//     error: err.message,
+//   });
+// };
+// }

@@ -1,18 +1,25 @@
 const { TextParser } = require("../utilities/text.js");
 
 module.exports = async (req, res) => {
-  const { input, options } = req.body;
-  const evaluateSentences = new SentenceDifficulty(input);
+  const { text, editor, options } = req;
 
-  const returnJSON = {
-    returnText: evaluateSentences.formattedText,
+  if (!editor) return;
+
+  editor.blocks.forEach((block, index) => {
+    const { text } = block.data;
+    const evaluateSentences = new SentenceDifficulty(text, options);
+    editor.blocks[index].data.text = evaluateSentences.formattedText;
+  });
+
+  const evaluateSentences = new SentenceDifficulty(text);
+  const sidebar = {
     noAllSentences: evaluateSentences.noAllSentences,
     noEasySentences: evaluateSentences.noEasySentences,
     noHardSentences: evaluateSentences.noHardSentences,
     noVeryHardSentences: evaluateSentences.noVeryHardSentences,
   };
 
-  res.json(returnJSON).end();
+  return res.json({ editor, sidebar }).end();
 };
 
 class SentenceDifficulty {

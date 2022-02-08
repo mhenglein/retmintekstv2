@@ -1,5 +1,6 @@
 const winston = require("winston");
 require("winston-mongodb");
+require("dotenv").config({ path: "config/.env" });
 
 module.exports = function () {
   const logger = winston.createLogger({
@@ -7,6 +8,7 @@ module.exports = function () {
     format: winston.format.json(),
     transports: [
       new winston.transports.File({ filename: "logs/error.log", level: "error" }),
+      // new winston.transports.Console({ format: winston.format.colorize() }),
       new winston.transports.MongoDB({
         db: process.env.MONGODB_URI,
         options: {
@@ -32,7 +34,7 @@ module.exports = function () {
   if (process.env.NODE_ENV !== "production") {
     logger.add(
       new winston.transports.Console({
-        format: format.combine(format.colorize(), format.simple()),
+        format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
       })
     );
   }

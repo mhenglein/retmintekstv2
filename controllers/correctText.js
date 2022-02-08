@@ -7,7 +7,6 @@ const chalk = require("chalk");
 
 module.exports = (req, res) => {
   const { text, editor, options } = req;
-
   editor.blocks.forEach((block, index) => {
     const { text } = block.data;
     const correctedText = correctText(text, options);

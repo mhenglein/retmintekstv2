@@ -7,6 +7,8 @@ const showLongwords = require("../controllers/showLongwords");
 const sentenceRhythm = require("../controllers/sentenceRhythm");
 const textMetrics = require("../controllers/textMetrics");
 const clean = require("../controllers/api");
+const userController = require("../controllers/user");
+const passportConfig = require("../config/passport");
 
 module.exports = function (app) {
   /* GET routes */
@@ -29,16 +31,14 @@ module.exports = function (app) {
       apiKey: process.env.OPENAI_API_KEY,
     });
     const openai = new OpenAIApi(configuration);
-    const response = await openai.listFineTunes();
-    console.log(response.data);
 
-    // const completion = await openai.createCompletion("curie:ft-personal-2022-01-31-07-12-21", {
-    //   prompt,
-    //   max_tokens,
-    //   temperature,
-    // });
+    const completion = await openai.createCompletion("curie:ft-personal-2022-01-31-07-12-21", {
+      prompt,
+      max_tokens,
+      temperature,
+    });
 
-    // return res.json({ completion: completion.data.choices[0].text }).end();
+    return res.json({ completion: completion.data.choices[0].text }).end();
   });
 
   /* API routes */
@@ -51,4 +51,11 @@ module.exports = function (app) {
   app.post("/api/rate-sentiment", rateSentiment); // Sentiment
   app.post("/api/sentence-difficulty", sentenceDifficulty); // Sætningsanalyse
   // app.post("/api/checkpronouns", apiController.checkPronouns);
+
+  // User routes
+  app.get("/login", passportConfig.checkNotAuthenticated, userController.getLogin);
+  app.post("/login", userController.postLogin);
+  app.get("/logout", userController.logout);
+  app.get("/signup", passportConfig.checkNotAuthenticated, userController.getSignup);
+  app.post("/signup", userController.postSignup);
 };

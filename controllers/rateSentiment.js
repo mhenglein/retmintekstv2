@@ -28,7 +28,6 @@ module.exports = async (req, res) => {
     sidebar,
   };
 
-  console.log(returnJSON);
   res.json(returnJSON).end();
 };
 

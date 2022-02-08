@@ -48,7 +48,6 @@ module.exports = (req, res) => {
     },
   };
 
-  console.log(returnJSON);
   return res.json(returnJSON).end();
 };
 
@@ -172,3 +171,5 @@ class GetTextMetrics {
     return this;
   }
 }
+
+module.exports.GetTextMetrics = GetTextMetrics;

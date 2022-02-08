@@ -1,5 +1,6 @@
 const { TextParser } = require("../utilities/text.js");
 const { TextHighlighter } = require("../utilities/analysis.js");
+const { GetTextMetrics } = require("./textMetrics.js");
 
 module.exports = async (req, res) => {
   const { text, editor, options } = req;

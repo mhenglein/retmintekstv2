@@ -7,8 +7,6 @@ const freq = require("../data/frequency.json");
 module.exports = async (req, res) => {
   const { editor, text, options } = req;
 
-  console.log("Incoming received in evaluateVocab");
-
   if (!editor || !text) return res.json({ msg: "Error" }).end();
 
   // Sidebar stats

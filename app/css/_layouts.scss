@@ -1,27 +1,3 @@
-/* NAVBAR */
-.navbar {
-  border: none;
-}
-
-.navbar-btn {
-  box-shadow: none;
-  outline: none !important;
-  border: none;
-}
-
-.nav-link {
-  font-size: 0.75rem;
-  margin-left: 0.25rem;
-  @media (max-width: 768px) {
-    font-size: 0.65rem;
-  }
-}
-
-.navbar-brand {
-  font-size: 1rem !important;
-  font-weight: 400;
-}
-
 .grey {
   background-color: $grey !important;
 }
