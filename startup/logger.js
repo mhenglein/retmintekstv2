@@ -28,7 +28,7 @@ module.exports = function () {
         },
       }),
     ],
-    rejectionHandlers: [new winston.transports.File({ filename: "rejections.log" })],
+    rejectionHandlers: [new winston.transports.File({ filename: "logs/rejections.log" })],
   });
 
   if (process.env.NODE_ENV !== "production") {
