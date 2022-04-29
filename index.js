@@ -7,8 +7,8 @@ const express = require("express");
 const compression = require("compression");
 const cors = require("cors");
 const passport = require("passport");
-// const MongoStore = require("connect-mongo");
-// const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const session = require("express-session");
 const path = require("path");
 const flash = require("express-flash");
 
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 //   })
 // );
 
-// app.use(flash());
+app.use(flash());
 
 // app.use(passport.initialize());
 // app.use(passport.session());
