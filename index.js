@@ -1,5 +1,4 @@
 const chalk = require("chalk");
-const morgan = require("morgan");
 const errorhandler = require("errorhandler");
 const notifier = require("node-notifier");
 require("dotenv").config({ path: "config/.env" });
