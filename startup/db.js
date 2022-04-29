@@ -16,4 +16,6 @@ module.exports = function () {
   mongoose.connection.once("open", (err, res) => {
     console.log("%s MongoDB successfully connected at %s", chalk.green("✓"), process.env.MONGODB_URI);
   });
+
+  
 };

@@ -11978,8 +11978,18 @@ body {
   }
 }
 
-#sidebar1,
-#sidebar2 {
+#sidebar {
+  background-color: rgba(18, 12, 24, 0.664);
+}
+
+#sidebar {
+  width: var(--sidebarWidth);
+  border-left: rgba(28, 19, 38, 0.5) solid 2px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 999;
   transition: all 0.3s;
 }
 
@@ -11997,17 +12007,6 @@ body {
   #showSidebar {
     font-size: 0.52rem;
   }
-}
-
-#sidebar {
-  width: var(--sidebarWidth);
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  z-index: 999;
-  transition: all 0.3s;
-  background-color: white;
 }
 
 #sidebar ul li {
@@ -12034,6 +12033,25 @@ body {
     width: 100% !important;
   }
 }
+.list-group-item {
+  border: 0s;
+  background-color: inherit;
+  color: #eee;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.accordion-item,
+.accordion-button {
+  border-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  background-color: inherit;
+  color: #eee;
+}
+
 #content {
   width: calc(100% - var(--sidebarWidth));
 }
@@ -12080,4 +12098,8 @@ body {
 .navbar-brand {
   font-size: 1rem !important;
   font-weight: 400;
+}
+
+.modal {
+  opacity: 0.8;
 }

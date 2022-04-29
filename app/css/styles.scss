@@ -75,9 +75,21 @@ body {
   }
 }
 
-#sidebar1,
-#sidebar2 {
+#sidebar {
+  background-color: rgba(18, 12, 24, 0.664);
+}
+
+// * Sidebar section
+#sidebar {
+  width: var(--sidebarWidth);
+  border-left: rgba(28, 19, 38, 0.5) solid 2px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 999;
   transition: all 0.3s;
+  // background-color: white;
 }
 
 // Sidebar button
@@ -97,18 +109,6 @@ body {
   animation-delay: 5s;
 }
 
-// * Sidebar section
-#sidebar {
-  width: var(--sidebarWidth);
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  z-index: 999;
-  transition: all 0.3s;
-  background-color: white;
-}
-
 // Each sidebar subsection (e.g. "Afsnit")
 #sidebar ul li {
   padding: 10px;
@@ -119,6 +119,7 @@ body {
 #sidebar ul li:hover {
   background: #eee;
 }
+
 // Adding .mobile hides sidebar by pushing it off-screen
 #sidebar.mobile {
   margin-right: calc(-1 * var(--sidebarWidth)) !important;
@@ -141,6 +142,27 @@ body {
 
 //Sidebar new
 // rgba(18,12,24,1);
+
+// ! LIST GROUP
+.list-group-item {
+  border: 0s;
+  background-color: inherit;
+  color: #eee;
+}
+
+.border-none {
+  border: none !important;
+}
+
+// ! ACCORDION
+.accordion-item,
+.accordion-button {
+  border-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  background-color: inherit;
+  color: #eee;
+}
 
 // ! EDITOR vs SIDEBAR
 #content {
@@ -198,4 +220,9 @@ body {
 .navbar-brand {
   font-size: 1rem !important;
   font-weight: 400;
+}
+
+// ! MODALS
+.modal {
+  opacity: 0.8;
 }

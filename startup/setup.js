@@ -1,8 +1,9 @@
+require("dotenv").config({ path: "config/.env" });
 const express = require("express");
 const compression = require("compression");
 const cors = require("cors");
 const passport = require("passport");
-const dotenv = require("dotenv").config({ path: "config/.env" });
+
 const MongoStore = require("connect-mongo");
 const session = require("express-session");
 const path = require("path");
@@ -54,13 +55,7 @@ module.exports = function () {
 
   app.use((req, res, next) => {
     // After successful login, redirect back to the intended page
-    if (
-      !req.user &&
-      req.path !== "/login" &&
-      req.path !== "/signup" &&
-      !req.path.match(/^\/auth/) &&
-      !req.path.match(/\./)
-    ) {
+    if (!req.user && req.path !== "/login" && req.path !== "/signup" && !req.path.match(/^\/auth/) && !req.path.match(/\./)) {
       req.session.returnTo = req.originalUrl;
     } else if (req.user && (req.path === "/account" || req.path.match(/^\/api/))) {
       req.session.returnTo = req.originalUrl;
