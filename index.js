@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 //   })
 // );
 
-app.use(flash());
+// app.use(flash());
 
 // app.use(passport.initialize());
 // app.use(passport.session());
