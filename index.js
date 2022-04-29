@@ -30,17 +30,17 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: false }));
 
 // Session storage
-app.use(
-  session({
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create session until something stored
-    secret: process.env.SESSION_SECRET,
-    cookie: { maxAge: 1209600000 }, // two weeks in milliseconds
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-    }),
-  })
-);
+// app.use(
+//   session({
+//     resave: false, // don't save session if unmodified
+//     saveUninitialized: false, // don't create session until something stored
+//     secret: process.env.SESSION_SECRET,
+//     cookie: { maxAge: 1209600000 }, // two weeks in milliseconds
+//     store: MongoStore.create({
+//       mongoUrl: process.env.MONGODB_URI,
+//     }),
+//   })
+// );
 
 app.use(flash());
 
@@ -84,7 +84,7 @@ if (process.env.NODE_ENV !== "production") {
   }
 } else {
   app.use(function error(err, req, res, next) {
-    logger.error(err.message, err);
+    // logger.error(err.message, err);
 
     res.status(500).send({
       error: err.message,
@@ -104,7 +104,7 @@ if (process.env.NODE_ENV !== "production") {
 app.listen(app.get("port"), () => {
   console.log("%s App is running at http://localhost:%d in %s mode", chalk.green("✓"), app.get("port"), app.get("env"));
   console.log("Press CTRL-C to stop\n");
-  logger.info(`${chalk.green("✓")} App is running`);
+  // logger.info(`${chalk.green("✓")} App is running`);
 });
 
 module.exports = app;
