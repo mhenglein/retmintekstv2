@@ -65,10 +65,10 @@ app.use((req, res, next) => {
 
 app.use(express.static("public", { maxAge: 31557600000 }));
 
-const logger = require("./startup/logger")();
-require("./startup/db")();
-require("./startup/morgan")(app);
-require("./startup/incoming")(app);
+// const logger = require("./startup/logger")();
+// require("./startup/db")();
+// require("./startup/morgan")(app);
+// require("./startup/incoming")(app);
 require("./startup/routes")(app);
 
 // Error Handler.
