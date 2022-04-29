@@ -1,7 +1,6 @@
 {
   "name": "retmintekst",
   "version": "1.0.0",
-  "type": "commonjs",
   "description": "Automatisk redskab til at forbedre dansk tekst",
   "main": "index.js",
   "engines": {

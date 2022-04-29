@@ -1,9 +1,8 @@
 /**
  * Connect to MongoDB.
  */
-
+require("dotenv").config({ path: "config/.env" });
 const mongoose = require("mongoose");
-const dotenv = require("dotenv").config({ path: "config/.env" });
 const chalk = require("chalk");
 
 module.exports = function () {
@@ -13,9 +12,7 @@ module.exports = function () {
     console.log("%s MongoDB connection error. Please make sure MongoDB is running.", chalk.red("✗"));
     process.exit();
   });
-  mongoose.connection.once("open", (err, res) => {
-    console.log("%s MongoDB successfully connected at %s", chalk.green("✓"), process.env.MONGODB_URI);
+  mongoose.connection.once("open", function () {
+    console.log("%s MongoDB successfully connected.", chalk.green("✓"));
   });
-
-  
 };
