@@ -8,7 +8,7 @@ const compression = require("compression");
 const cors = require("cors");
 const passport = require("passport");
 const MongoStore = require("connect-mongo");
-const session = require("express-session");
+// const session = require("express-session");
 const path = require("path");
 const flash = require("express-flash");
 
