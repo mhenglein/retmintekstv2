@@ -4,10 +4,11 @@
   "description": "Automatisk redskab til at forbedre dansk tekst",
   "main": "index.js",
   "engines": {
-    "node": "17.3"
+    "node": "17.3.0"
   },
   "scripts": {
     "start": "node index.js",
+    "npm:restart": "rm package-lock.json; rm -rf node_modules; npm i",
     "publish": "git add . && git commit -m \"Update\" && git push && git push heroku main",
     "deploy": "npm run build && npm publish",
     "data:rebuild": "node workers/createDataFiles.js",
